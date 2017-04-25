@@ -9,242 +9,39 @@ $title = Configure::read('c_site_title');
 <?php
 echo $this->Html->css('common');
 echo $this->Html->css('navi');
-echo $this->Html->css('product');
-echo $this->Html->css('form');
-echo $this->Html->css('newslist');
-echo $this->Html->css('bottommenu');
+// echo $this->Html->css('product');
+// echo $this->Html->css('form');
+// echo $this->Html->css('newslist');
+// echo $this->Html->css('bottommenu');
+// echo $this->Html->css('search');
 ?>
 </head>
 <body>
-	<div id='contain'
-		style='width: 1002px; background: url(effect/source/bg/1262661247.gif) repeat-y; margin: 0px auto; padding: 0px'>
-
-		<div id='top'
-			style='width: 1002px; height: 483px; background: url(effect/source/bg/1262918621.gif)'>
-
-
-			<!-- 图片/FLASH -->
-
-			<div id='pdv_16283' class='pdv_class' title=''
-				style='width: 1002px; height: 379px; top: 102px; left: 0px; z-index: 2'>
-				<div id='spdv_16283' class='pdv_top'
-					style='overflow: hidden; width: 100%; height: 100%'>
-					<div class="pdv_border"
-						style="margin: 0; padding: 0; height: 100%; border: 0px solid; background:;">
-						<div
-							style="height: 25px; margin: 1px; display: none; background:;">
-							<div
-								style="float: left; margin-left: 12px; line-height: 25px; font-weight: bold; color:">
-
-							</div>
-							<div style="float: right; margin-right: 10px; display: none">
-								<a href="-1" style="line-height: 25px; color:">更多</a>
-							</div>
-						</div>
-						<div style="padding: 0px">
-
-
-					<?php echo $this->Html->image('navi-top.png');?>
-
-						</div>
-					</div>
-
-				</div>
-			</div>
-
-			<!-- 二级下拉菜单102 -->
-
-			<div id='pdv_17180' class='pdv_class'
-				style='width: 858px; height: 28px; top: 117px; left: 76px; z-index: 3'>
-				<div id='spdv_17180' class='pdv_top'
-					style='overflow: hidden; width: 100%; height: 100%'>
-					<div class="pdv_border"
-						style="margin: 0; padding: 0; height: 100%; border: 0px solid; background:;">
-						<div
-							style="height: 25px; margin: 1px; display: none; background:;">
-							<div
-								style="float: left; margin-left: 12px; line-height: 25px; font-weight: bold; color:">
-								导航菜单</div>
-							<div style="float: right; margin-right: 10px; display: none">
-								<a href="-1" style="line-height: 25px; color:">更多</a>
-							</div>
-						</div>
-						<div style="padding: 0px">
-
-							<script type="text/javascript" src="menu/js/dropmenu103.js"></script>
-							<ul id="dropmenu">
-
-								<li><a href="index.php">网站首页</a></li>
-
-								<li><a href="page/html/company.php">公司概况</a></li>
-
-								<li><a href="product/class/">产品中心</a></li>
-
-								<li><a href="news/class/">新闻动态</a></li>
-
-								<li><a href="page/quality/goal.php">质量体系</a></li>
-
-								<li><a href="job/index.php">人才招聘</a></li>
-
-								<li><a href="page/html/display.php">企业风采</a></li>
-
-								<li><a href="page/contact/contact.php">联系我们</a></li>
-
-								<li class="menuright"></li>
-							</ul>
-							<div class="clear"></div>
-
-						</div>
-					</div>
-
-				</div>
-			</div>
-
-			<!-- 网站标志 -->
-
-			<div id='pdv_10806' class='pdv_class' title=''
-				style='width: 435px; height: 59px; top: 30px; left: 24px; z-index: 6'>
-				<div id='spdv_10806' class='pdv_top'
-					style='overflow: hidden; width: 100%; height: 100%'>
-					<div class="pdv_border"
-						style="margin: 0; padding: 0; height: 100%; border: 0px solid; background:;">
-						<div
-							style="height: 25px; margin: 1px; display: none; background:;">
-							<div
-								style="float: left; margin-left: 12px; line-height: 25px; font-weight: bold; color:">
-
-							</div>
-							<div style="float: right; margin-right: 10px; display: none">
-								<a href="-1" style="line-height: 25px; color:">更多</a>
-							</div>
-						</div>
-						<div style="padding: 0px">
-
-
-							<a href="#"><?php echo $this->Html->image('logo.png');	?></a>
-
-
-						</div>
-					</div>
-
-				</div>
-			</div>
-
-			<!-- 全站搜索表单 -->
-
-			<div id='pdv_15857' class='pdv_class' title=''
-				style='width: 340px; height: 29px; top: 41px; left: 630px; z-index: 11'>
-				<div id='spdv_15857' class='pdv_top'
-					style='overflow: hidden; width: 100%; height: 100%'>
-					<div class="pdv_border"
-						style="margin: 0; padding: 0; height: 100%; border: 0px solid; background:;">
-						<div
-							style="height: 25px; margin: 1px; display: none; background:;">
-							<div
-								style="float: left; margin-left: 12px; line-height: 25px; font-weight: bold; color:">
-
-							</div>
-							<div style="float: right; margin-right: 10px; display: none">
-								<a href="-1" style="line-height: 25px; color:">更多</a>
-							</div>
-						</div>
-						<div style="padding: 0px">
-							<link href="search/templates/css/searchform_simple.css"
-								rel="stylesheet" type="text/css" />
-
-							<div class="globalsearchformzone">
-								<form id="globalsearchform" method="get"
-									action="search/index.php">
-									<div class="globalsearchform">
-										<input name="key" type="text" id="globalsearchform_key"
-											value="" class="input" />
-									</div>
-									<div class="globalsearchform1">
-										<input name="imageField" id="button" type="image"
-											src="/img/searchr.png" class="imgbutton" />
-									</div>
-								</form>
-							</div>
-
-						</div>
-					</div>
-
-				</div>
-			</div>
-
-			<!-- 页内图片广告 -->
-
-			<div id='pdv_17798' class='pdv_class' title=''
-				style='width: 980px; height: 300px; top: 160px; left: 11px; z-index: 15'>
-				<div id='spdv_17798' class='pdv_top'
-					style='overflow: hidden; width: 100%; height: 100%'>
-					<div class="pdv_border"
-						style="margin: 0; padding: 0; height: 100%; border: 0px solid; background:;">
-						<div
-							style="height: 25px; margin: 1px; display: none; background:;">
-							<div
-								style="float: left; margin-left: 12px; line-height: 25px; font-weight: bold; color:">
-
-							</div>
-							<div style="float: right; margin-right: 10px; display: none">
-								<a href="-1" style="line-height: 25px; color:">更多</a>
-							</div>
-						</div>
-						<div style="padding: 0px">
-
-
-
-
-							<a href="http://www.try.com"><img
-								src="advs/pics/20130402/1364884850.jpg" border="0" width="100%" /></a>
-
-						</div>
-					</div>
-
-				</div>
-			</div>
-
-			<!-- 自定义透明FLASH -->
-
-			<div id='pdv_17800' class='pdv_class' title=''
-				style='width: 980px; height: 300px; top: 162px; left: 11px; z-index: 16'>
-				<div id='spdv_17800' class='pdv_top'
-					style='overflow: hidden; width: 100%; height: 100%'>
-					<div class="pdv_border"
-						style="margin: 0; padding: 0; height: 100%; border: 0px solid; background:;">
-						<div
-							style="height: 25px; margin: 1px; display: none; background:;">
-							<div
-								style="float: left; margin-left: 12px; line-height: 25px; font-weight: bold; color:">
-
-							</div>
-							<div style="float: right; margin-right: 10px; display: none">
-								<a href="-1" style="line-height: 25px; color:">更多</a>
-							</div>
-						</div>
-						<div style="padding: 0px">
-
-
-							<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-								codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0"
-								width="980" height="300">
-								<param name="movie" value="diy/pics/20130402/1364885777.swf" />
-								<param name="quality" value="high" />
-								<param name="wmode" value="transparent" />
-								<embed src="diy/pics/20130402/1364885777.swf"
-									wmode="transparent" quality="high"
-									pluginspage="http://www.macromedia.com/go/getflashplayer"
-									type="application/x-shockwave-flash" width="980" height="300"></embed>
-							</object>
-
-						</div>
-					</div>
-
-				</div>
-			</div>
+	<div id='contain'>
+		<!-- LOGO -->
+		<div id='e_logo'>
+			<a href="#"><?php echo $this->Html->image('logo.png');	?></a>
 		</div>
-		<div id='content'
-			style='width: 1002px; height: 617px; background: url(effect/source/bg/cbg.png); margin: 0px auto'>
+		<!-- //LOGO -->
+
+		<!-- 下拉菜单 -->
+		<div id="e_navi">
+			<ul id="dropmenu">
+				<li><a href="index.php">网站首页</a></li>
+				<li><a href="page/html/company.php">公司概况</a></li>
+				<li><a href="product/class/">产品中心</a></li>
+				<li><a href="news/class/">新闻动态</a></li>
+				<li><a href="page/quality/goal.php">质量体系</a></li>
+				<li><a href="job/index.php">人才招聘</a></li>
+				<li><a href="page/html/display.php">企业风采</a></li>
+				<li><a href="page/contact/contact.php">联系我们</a></li>
+				<li class="menuright"></li>
+			</ul>
+			<!-- slide -->
+			<a href="#"><?php echo $this->Html->image('slide.jpg', array('class'=>'slide'))?></a>
+		</div>
+		<!-- Content -->
+		<div id='content'>
 
 
 			<!-- 空白边框 -->
@@ -751,24 +548,7 @@ echo $this->Html->css('bottommenu');
 			</div>
 		</div>
 	</div>
-	<div id='bodyex'></div>
-	<div id='topex'
-		style='display: none; width: 100%; height: 483px; background: url(effect/source/bg/1262918621.gif)'>
-	</div>
-	<div id='contentex'
-		style='display: none; width: 100%; height: 617px; background: url(effect/source/bg/cbg.png)'>
-	</div>
-	<div id='bottomex'
-		style='display: none; width: 100%; height: 210px; background: url(effect/source/bg/cbg.png)'>
-	</div>
 
-
-
-	<script>
-$(function() {
-$().picFit("auto");
-});
-</script>
 
 </body>
 </html>
