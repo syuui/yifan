@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+
+/*=========脚注菜单===========*/
+div#bottommenu {
+	height: 28px;
+	color: #fff;
+	text-align: center;
+}
+
+div#bottommenu a:link, div#bottommenu a:visited, div#bottommenu a:active
+	{
+	margin: 0 8px;
+	color: #fff;
+	font: 12px/28px 'SimSun', Arial, Sans-Serif;
+	text-decoration: none;
+}
+
+div#bottommenu a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
