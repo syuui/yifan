@@ -56,9 +56,10 @@ body {
 	background: url(../img/bottom.png);
 }
 
-#bottom p{
+#bottom p {
 	text-align: center;
 }
+
 div#bottommenu {
 	line-height: 48px;
 	height: 48px;
@@ -149,4 +150,250 @@ form {
 select {
 	font: 12px Verdana, Arial, Helvetica, sans-serif;
 	color: #505050;
+}
+
+@CHARSET "UTF-8";
+
+.pdv_class {
+	position: absolute;
+	overflow: hidden;
+}
+
+.pdv_class_01 {
+	top: 0px;
+	left: 11px;
+	width: 224px;
+	height: 300px;
+}
+
+.pdv_class_02 {
+	top: 0px;
+	left: 259px;
+	width: 480px;
+	height: 242px;
+}
+
+.pdv_class_03 {
+	top: 0px;
+	left: 767px;
+	width: 224px;
+	height: 241px;
+	float: left;
+}
+
+.pdv_class_04 {
+	width: 224px;
+	height: 204px;
+	top: 317px;
+	left: 11px;
+}
+
+.pdv_class_05 {
+	width: 210px;
+	height: 84px;
+	top: 531px;
+	left: 18px;
+}
+
+.pdv_class_06 {
+	width: 480px;
+	height: 345px;
+	top: 266px;
+	left: 259px;
+}
+
+.pdv_class_07 {
+	width: 224px;
+	height: 345px;
+	top: 266px;
+	left: 767px;
+}
+
+.pdv_class_10 {
+	width: 1002px;
+	height: 178px;
+}
+
+.pdv_class_11 {
+	width: 1002px;
+	height: 34px;
+}
+
+.pdv_class_12 {
+	width: 1002px;
+	height: 83px;
+}
+
+.pdv_border {
+	border: 0px;
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+	background: url(../img/lbg.png) 0px 0px repeat-y;
+}
+
+.pdv_rbg {
+	height: 100%;
+	background: url(../img/rbg.png) right repeat-y;
+}
+
+.pdv_ttl_l {
+	height: 38px;
+	border: 0px;
+	padding: 0;
+	margin: 0;
+	background: url(../img/title.png) 0 0 no-repeat;
+}
+
+.pdv_ttl_m {
+	float: left;
+	font: 12px/31px Simsun;
+	color: #fff;
+	padding-left: 40px;
+}
+
+.pdv_ttl_r {
+	float: right;
+	width: 12px;
+	height: 38px;
+	background: url(../img/title.png) -988px 0 no-repeat;
+}
+
+.pdv_cnt {
+	margin: 0px;
+	padding: 0px;
+}
+
+.pdv_cnt_m {
+	padding: 12px 30px 5px 30px;
+	line-height: 22px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #303030;
+	font-size: 12px
+}
+
+.pdv_addr {
+	padding: 18px 20px 25px 26px;;
+	font: 12px/18px simsun;
+	color: #464646;
+}
+
+.pdv_ftr_l {
+	margin-top: -16px;
+	height: 16px;
+	line-height: 16px;
+	background: url(../img/title.png) 0px -366px no-repeat
+}
+
+.pdv_ftr_r {
+	float: right;
+	margin-top: -16px;
+	line-height: 16px;
+	width: 12px;
+	height: 16px;
+	background: url(../img/title.png) -988px -366px no-repeat;
+}
+
+div.productclass_dolphin {
+	margin: 0px 12px;
+	padding: 9px 33px 20px;
+	background: #fefefe;
+}
+
+a.productclass_dolphin:link, a.productclass_dolphin:visited, a.productclass_dolphin:active
+	{
+	display: block;
+	text-decoration: none;
+	font: 12px/31px Verdana, Arial, Helvetica, sans-serif;
+	height: 36px;
+	text-align: left;
+	background: url(../img/dot2.png) 0px 0px no-repeat;
+	padding-left: 35px;
+	margin: 0px;
+	color: #2e2e2e;
+}
+
+a.productclass_dolphin:hover {
+	display: block;
+	color: #ff0000;
+	text-decoration: none;
+}
+
+ul.newslist {
+	margin: 0px;
+	padding: 14px 27px 4px 27px;
+}
+
+li.newslist {
+	margin: 0;
+	padding-left: 13px;
+	list-style-type: none;
+	height: 23px;
+	color: #fff;
+	background: transparent url(../img/list.png) 0px center no-repeat;
+}
+
+a.newslist:link, a.newslist:visited, a.newslist:active {
+	text-decoration: none;
+	font: 12px/23px simsun;
+	color: #2e2e2e;
+}
+
+a.newslist:hover {
+	color: #ff0000;
+	text-decoration: underline;
+	font: 12px/23px simsun;
+}
+
+div.productlist_index {
+	margin: 5px 0px 3px 15px;
+	text-align: center;
+	float: left;
+	background: url(../img/pbg.jpg) 0 0 no-repeat;
+	padding: 2px 6px 0px 4px;
+}
+
+div.productlist_index div.fang {
+	background: #fff;
+	padding: 0px;
+	text-align: center;
+	width: 127px;
+	height: 94px;
+}
+
+div.productlist_index div.picFit {
+	overflow: hidden;
+	width: 127px;
+	height: 94px;
+}
+
+div.productlist_index div.picFit img {
+	width: 127px;
+	border: none;
+}
+
+div.productlist_index div.title {
+	text-align: center;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+div.productlist_index a:link, div.productlist_index a:visited, div.productlist_index a:active
+	{
+	color: #2e2e2e;
+	font: 12px/38px arial, simsun;
+	text-decoration: none;
+}
+
+div.productlist_index a:hover {
+	color: #ff0000;
+	text-decoration: underline;
+	font: 12px/38px arial, simsun;
+}
+
+.psn_hint {
+	width: 700px;
+	height: 30px;
+	top: 0px;
+	left: 260px;
 }

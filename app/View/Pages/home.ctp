@@ -1,230 +1,237 @@
-<?php
-/**
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.View.Pages
- * @since         CakePHP(tm) v 0.10.0.1076
- */
 
-if (!Configure::read('debug')):
-	throw new NotFoundException();
-endif;
 
-App::uses('Debugger', 'Utility');
-?>
-<h2><?php echo __d('cake_dev', 'Release Notes for CakePHP %s.', Configure::version()); ?></h2>
-<p>
-	<?php echo $this->Html->link(__d('cake_dev', 'Read the changelog'), 'http://cakephp.org/changelogs/' . Configure::version()); ?>
-</p>
-<?php
-if (Configure::read('debug') > 0):
-	Debugger::checkSecurityKeys();
-endif;
-?>
-<?php if (file_exists(WWW_ROOT . 'css' . DS . 'cake.generic.css')): ?>
-	<p id="url-rewriting-warning" style="background-color:#e32; color:#fff;">
-		<?php echo __d('cake_dev', 'URL rewriting is not properly configured on your server.'); ?>
-		1) <a target="_blank" href="http://book.cakephp.org/2.0/en/installation/url-rewriting.html" style="color:#fff;">Help me configure it</a>
-		2) <a target="_blank" href="http://book.cakephp.org/2.0/en/development/configuration.html#cakephp-core-configuration" style="color:#fff;">I don't / can't use URL rewriting</a>
-	</p>
-<?php endif; ?>
-<p>
-<?php
-if (version_compare(PHP_VERSION, '5.2.8', '>=')):
-	echo '<span class="notice success">';
-		echo __d('cake_dev', 'Your version of PHP is 5.2.8 or higher.');
-	echo '</span>';
-else:
-	echo '<span class="notice">';
-		echo __d('cake_dev', 'Your version of PHP is too low. You need PHP 5.2.8 or higher to use CakePHP.');
-	echo '</span>';
-endif;
-?>
-</p>
-<p>
-	<?php
-	if (is_writable(TMP)):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'Your tmp directory is writable.');
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'Your tmp directory is NOT writable.');
-		echo '</span>';
-	endif;
-	?>
-</p>
-<p>
-	<?php
-	$settings = Cache::settings();
-	if (!empty($settings)):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'The %s is being used for core caching. To change the config edit %s', '<em>' . $settings['engine'] . 'Engine</em>', 'APP/Config/core.php');
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'Your cache is NOT working. Please check the settings in %s', 'APP/Config/core.php');
-		echo '</span>';
-	endif;
-	?>
-</p>
-<p>
-	<?php
-	$filePresent = null;
-	if (file_exists(APP . 'Config' . DS . 'database.php')):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'Your database configuration file is present.');
-			$filePresent = true;
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'Your database configuration file is NOT present.');
-			echo '<br/>';
-			echo __d('cake_dev', 'Rename %s to %s', 'APP/Config/database.php.default', 'APP/Config/database.php');
-		echo '</span>';
-	endif;
-	?>
-</p>
-<?php
-if (isset($filePresent)):
-	App::uses('ConnectionManager', 'Model');
-	try {
-		$connected = ConnectionManager::getDataSource('default');
-	} catch (Exception $connectionError) {
-		$connected = false;
-		$errorMsg = $connectionError->getMessage();
-		if (method_exists($connectionError, 'getAttributes')):
-			$attributes = $connectionError->getAttributes();
-			if (isset($attributes['message'])):
-				$errorMsg .= '<br />' . $attributes['message'];
-			endif;
-		endif;
-	}
-	?>
-	<p>
-		<?php
-			if ($connected && $connected->isConnected()):
-				echo '<span class="notice success">';
-					echo __d('cake_dev', 'CakePHP is able to connect to the database.');
-				echo '</span>';
-			else:
-				echo '<span class="notice">';
-					echo __d('cake_dev', 'CakePHP is NOT able to connect to the database.');
-					echo '<br /><br />';
-					echo $errorMsg;
-				echo '</span>';
-			endif;
-		?>
-	</p>
-<?php
-endif;
+<!-- 产品系列 -->
+<div class="pdv_class pdv_class_01">
+	<div class="pdv_border">
+		<div class="pdv_rbg">
+			<div class="pdv_ttl_l">
+				<div class="pdv_ttl_m">产品系列</div>
+				<div class="pdv_ttl_r"></div>
+			</div>
+			<div class="pdv_cnt">
+				<div class="productclass_dolphin">
+					<a href="#" target="_self" class="productclass_dolphin">常规玻璃瓶输液</a>
+					<a href="#" target="_self" class="productclass_dolphin">常规塑瓶输液</a>
+					<a href="#" target="_self" class="productclass_dolphin">固体制剂</a> <a
+						href="#" target="_self" class="productclass_dolphin">滴剂</a> <a
+						href="#" target="_self" class="productclass_dolphin">口服溶液剂</a> <a
+						href="#" target="_self" class="productclass_dolphin">治疗性输液</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="pdv_ftr_l"></div>
+	<div class="pdv_ftr_r"></div>
+</div>
 
-App::uses('Validation', 'Utility');
-if (!Validation::alphaNumeric('cakephp')):
-	echo '<p><span class="notice">';
-		echo __d('cake_dev', 'PCRE has not been compiled with Unicode support.');
-		echo '<br/>';
-		echo __d('cake_dev', 'Recompile PCRE with Unicode support by adding <code>--enable-unicode-properties</code> when configuring');
-	echo '</span></p>';
-endif;
-?>
+<!-- 公司简介 -->
+<div class="pdv_class pdv_class_02">
+	<div class="pdv_border">
+		<div class="pdv_rbg">
+			<div class="pdv_ttl_l">
+				<div class="pdv_ttl_m">公司简介</div>
+				<div class="pdv_ttl_r"></div>
+			</div>
+			<div class="pdv_cnt">
+				<div class="pdv_cnt_m">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;杭州某某医药有限公司拥有齐全的经营门类和品种，具备优质完善的经营网络、专业特色的服务内涵、广泛认同的企业商誉，经营业绩一直位居全国同行业前列。处于繁华的国道之畔，占地面积三千六百平方米，建筑面积五千五百平方米。公司不断探索商业模式转型，加速创新突破发展，销售规模得以较快扩大。采用国内先进设备，最新引进的现代化的生产流水线，一直本着质量第一，信誉至上的经营理念，使得我们的产品得到了广大顾客的一致好评，产品销往全国各地，企业也得到迅速的发展。
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="pdv_ftr_l"></div>
+	<div class="pdv_ftr_r"></div>
+</div>
 
-<p>
-	<?php
-	if (CakePlugin::loaded('DebugKit')):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'DebugKit plugin is present');
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'DebugKit is not installed. It will help you inspect and debug different aspects of your application.');
-			echo '<br/>';
-			echo __d('cake_dev', 'You can install it from %s', $this->Html->link('GitHub', 'https://github.com/cakephp/debug_kit/tree/2.2'));
-		echo '</span>';
-	endif;
-	?>
-</p>
+<!-- 最新动态 -->
+<div class="pdv_class pdv_class_03">
+	<div class="pdv_border">
+		<div class="pdv_rbg">
+			<div class="pdv_ttl_l">
+				<div class="pdv_ttl_m">最新动态</div>
+				<div class="pdv_ttl_r"></div>
+			</div>
+			<div class="pdv_cnt">
+				<ul class="newslist">
+					<li class="newslist"><a href="news/html/?390.html" target="_self"
+						class="newslist">公司顺利通过食品最高质量认</a></li>
 
-<h3><?php echo __d('cake_dev', 'Editing this Page'); ?></h3>
-<p>
-<?php
-echo __d('cake_dev', 'To change the content of this page, edit: %s.<br />
-To change its layout, edit: %s.<br />
-You can also add some CSS styles for your pages at: %s.',
-	'APP/View/Pages/home.ctp', 'APP/View/Layouts/default.ctp', 'APP/webroot/css');
-?>
-</p>
+					<li class="newslist"><a href="news/html/?346.html" target="_self"
+						class="newslist">全面实施ISO9000国际质量管</a></li>
 
-<h3><?php echo __d('cake_dev', 'Getting Started'); ?></h3>
-<p>
-	<?php
-	echo $this->Html->link(
-		sprintf('<strong>%s</strong> %s', __d('cake_dev', 'New'), __d('cake_dev', 'CakePHP 2.0 Docs')),
-		'http://book.cakephp.org/2.0/en/',
-		array('target' => '_blank', 'escape' => false)
-	);
-	?>
-</p>
-<p>
-	<?php
-	echo $this->Html->link(
-		__d('cake_dev', 'The 15 min Blog Tutorial'),
-		'http://book.cakephp.org/2.0/en/tutorials-and-examples/blog/blog.html',
-		array('target' => '_blank', 'escape' => false)
-	);
-	?>
-</p>
+					<li class="newslist"><a href="news/html/?339.html" target="_self"
+						class="newslist">全面国际质量管理和质量保证</a></li>
 
-<h3><?php echo __d('cake_dev', 'Official Plugins'); ?></h3>
-<p>
-<ul>
-	<li>
-		<?php echo $this->Html->link('DebugKit', 'https://github.com/cakephp/debug_kit/tree/2.2') ?>:
-		<?php echo __d('cake_dev', 'provides a debugging toolbar and enhanced debugging tools for CakePHP applications.'); ?>
-	</li>
-	<li>
-		<?php echo $this->Html->link('Localized', 'https://github.com/cakephp/localized') ?>:
-		<?php echo __d('cake_dev', 'contains various localized validation classes and translations for specific countries'); ?>
-	</li>
-</ul>
-</p>
+					<li class="newslist"><a href="news/html/?338.html" target="_self"
+						class="newslist">十佳员工无锡两日游</a></li>
 
-<h3><?php echo __d('cake_dev', 'More about CakePHP'); ?></h3>
-<p>
-<?php echo __d('cake_dev', 'CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC.'); ?>
-</p>
-<p>
-<?php echo __d('cake_dev', 'Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility.'); ?>
-</p>
+					<li class="newslist"><a href="news/html/?336.html" target="_self"
+						class="newslist">董事长致新员工的一封信</a></li>
 
-<ul>
-	<li><a href="http://cakephp.org">CakePHP</a>
-	<ul><li><?php echo __d('cake_dev', 'The Rapid Development Framework'); ?></li></ul></li>
-	<li><a href="http://book.cakephp.org"><?php echo __d('cake_dev', 'CakePHP Documentation'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Your Rapid Development Cookbook'); ?></li></ul></li>
-	<li><a href="http://api.cakephp.org"><?php echo __d('cake_dev', 'CakePHP API'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Quick API Reference'); ?></li></ul></li>
-	<li><a href="http://bakery.cakephp.org"><?php echo __d('cake_dev', 'The Bakery'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Everything CakePHP'); ?></li></ul></li>
-	<li><a href="http://plugins.cakephp.org"><?php echo __d('cake_dev', 'CakePHP Plugins'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'A comprehensive list of all CakePHP plugins created by the community'); ?></li></ul></li>
-	<li><a href="http://community.cakephp.org"><?php echo __d('cake_dev', 'CakePHP Community Center'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Everything related to the CakePHP community in one place'); ?></li></ul></li>
-	<li><a href="http://discourse.cakephp.org/">CakePHP Official Forum </a>
-	<ul><li>CakePHP discussion forum</li></ul></li>
-	<li><a href="http://discourse.cakephp.org/"><?php echo __d('cake_dev', 'CakePHP Official Forum'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'CakePHP discussion forum'); ?></li></ul></li>
-	<li><a href="irc://irc.freenode.net/cakephp">irc.freenode.net #cakephp</a>
-	<ul><li><?php echo __d('cake_dev', 'Live chat about CakePHP'); ?></li></ul></li>
-	<li><a href="https://github.com/cakephp/"><?php echo __d('cake_dev', 'CakePHP Code'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Find the CakePHP code on GitHub and contribute to the framework'); ?></li></ul></li>
-	<li><a href="https://github.com/cakephp/cakephp/issues"><?php echo __d('cake_dev', 'CakePHP Issues'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'CakePHP Issues'); ?></li></ul></li>
-	<li><a href="https://github.com/cakephp/cakephp/wiki#roadmaps"><?php echo __d('cake_dev', 'CakePHP Roadmaps'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'CakePHP Roadmaps'); ?></li></ul></li>
-	<li><a href="http://training.cakephp.org"><?php echo __d('cake_dev', 'Training'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Join a live session and get skilled with the framework'); ?></li></ul></li>
-	<li><a href="http://cakefest.org"><?php echo __d('cake_dev', 'CakeFest'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Don\'t miss our annual CakePHP conference'); ?></li></ul></li>
-	<li><a href="http://cakefoundation.org"><?php echo __d('cake_dev', 'Cake Software Foundation'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Promoting development related to CakePHP'); ?></li></ul></li>
-</ul>
+					<li class="newslist"><a href="news/html/?335.html" target="_self"
+						class="newslist">公司开展操技能大赛</a></li>
+
+					<li class="newslist"><a href="news/html/?320.html" target="_self"
+						class="newslist">全面实施ISO9000国际质量管</a></li>
+
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="pdv_ftr_l"></div>
+	<div class="pdv_ftr_r"></div>
+</div>
+
+<!-- 联系我们 -->
+<div class="pdv_class pdv_class_04">
+	<div class="pdv_border">
+		<div class="pdv_rbg">
+			<div class="pdv_ttl_l">
+				<div class="pdv_ttl_m">联系我们</div>
+				<div class="pdv_ttl_r"></div>
+			</div>
+			<div class="pdv_cnt">
+				<div class="pdv_addr">
+					地址：杭州市莫山桥南路868号<br>电话：0571-98765432<br>传真：0571-98765432<br>传真：0571-98765430<br>邮箱：boss@mail.com<br>邮编：312345
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="pdv_ftr_l"></div>
+	<div class="pdv_ftr_r"></div>
+</div>
+
+<!-- 电话号码 -->
+<div class="pdv_class pdv_class_05">
+	<div class="pdv_border">
+		<img src="../img/hotline.png">
+	</div>
+</div>
+
+<!-- 产品推荐 -->
+<div class="pdv_class pdv_class_06">
+	<div class="pdv_border">
+		<div class="pdv_rbg">
+			<div class="pdv_ttl_l">
+				<div class="pdv_ttl_m">产品推荐</div>
+				<div class="pdv_ttl_r"></div>
+			</div>
+			<div class="pdv_cnt">
+				<div class="productlist_index">
+					<div class="fang">
+						<div class="picFit">
+							<a href="#" target="_blank"><img src="../img/1263441957.jpg"></a>
+						</div>
+					</div>
+					<div class="title">
+						<a href="#" target="_blank" class="title">药品系列</a>
+					</div>
+				</div>
+				<div class="productlist_index">
+					<div class="fang">
+						<div class="picFit">
+							<a href="#" target="_blank"><img src="../img/1263441957.jpg"></a>
+						</div>
+					</div>
+					<div class="title">
+						<a href="#" target="_blank" class="title">药品系列</a>
+					</div>
+				</div>
+				<div class="productlist_index">
+					<div class="fang">
+						<div class="picFit">
+							<a href="#" target="_blank"><img src="../img/1263441957.jpg"></a>
+						</div>
+					</div>
+					<div class="title">
+						<a href="#" target="_blank" class="title">药品系列</a>
+					</div>
+				</div>
+				<div class="productlist_index">
+					<div class="fang">
+						<div class="picFit">
+							<a href="#" target="_blank"><img src="../img/1263441957.jpg"></a>
+						</div>
+					</div>
+					<div class="title">
+						<a href="#" target="_blank" class="title">药品系列</a>
+					</div>
+				</div>
+				<div class="productlist_index">
+					<div class="fang">
+						<div class="picFit">
+							<a href="#" target="_blank"><img src="../img/1263441957.jpg"></a>
+						</div>
+					</div>
+					<div class="title">
+						<a href="#" target="_blank" class="title">药品系列</a>
+					</div>
+				</div>
+				<div class="productlist_index">
+					<div class="fang">
+						<div class="picFit">
+							<a href="#" target="_blank"><img src="../img/1263441957.jpg"></a>
+						</div>
+					</div>
+					<div class="title">
+						<a href="#" target="_blank" class="title">药品系列</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="pdv_ftr_l"></div>
+	<div class="pdv_ftr_r"></div>
+</div>
+
+<!-- 文章列表 -->
+<div class="pdv_class pdv_class_07">
+	<div class="pdv_border">
+		<div class="pdv_rbg">
+			<div class="pdv_ttl_l">
+				<div class="pdv_ttl_m">医药常识</div>
+				<div class="pdv_ttl_r"></div>
+			</div>
+			<div class="pdv_cnt">
+				<ul class="newslist">
+
+					<li class="newslist"><a href="news/html/?389.html" target="_self"
+						class="newslist">容易成瘾药品要注意安全使用</a></li>
+
+					<li class="newslist"><a href="news/html/?388.html" target="_self"
+						class="newslist">喝豆浆对药物影响</a></li>
+
+					<li class="newslist"><a href="news/html/?387.html" target="_self"
+						class="newslist">牛奶与补药不可同服</a></li>
+
+					<li class="newslist"><a href="news/html/?386.html" target="_self"
+						class="newslist">可口可乐和咖啡对药物影响</a></li>
+
+					<li class="newslist"><a href="news/html/?385.html" target="_self"
+						class="newslist">消除农药残余六法</a></li>
+
+					<li class="newslist"><a href="news/html/?377.html" target="_self"
+						class="newslist">感冒的分类及中成药选用</a></li>
+
+					<li class="newslist"><a href="news/html/?376.html" target="_self"
+						class="newslist">运动营养食品行业进入快速发</a></li>
+
+					<li class="newslist"><a href="news/html/?366.html" target="_self"
+						class="newslist">抗菌药不要自行购买使用</a></li>
+
+					<li class="newslist"><a href="news/html/?358.html" target="_self"
+						class="newslist">学生健康成长怎么补钙是关键</a></li>
+
+					<li class="newslist"><a href="news/html/?337.html" target="_self"
+						class="newslist">服药后 半小时内不要抽烟</a></li>
+
+					<li class="newslist"><a href="news/html/?321.html" target="_self"
+						class="newslist">5类药品不宜长时间保存</a></li>
+
+				</ul>
+			</div>
+		</div>
+		<div class="pdv_ftr_l"></div>
+		<div class="pdv_ftr_r"></div>
+	</div>
+</div>
