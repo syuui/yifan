@@ -9,14 +9,14 @@ body {
 
 #contain {
 	position: relative;
-	height: 100%;
 	border: 0;
 	width: 1002px;
 	margin: 0px auto;
-	padding: 0px
+	padding: 0px;
 }
 
 #e_logo {
+	position: relative;
 	border: 0px;
 	width: 100%;
 	height: 59px;
@@ -24,70 +24,61 @@ body {
 }
 
 #e_navi {
+	position: relative;
 	border: 1px;
 	width: 1002px;
 	height: 379px;
+	line-height: 46px;
 	background: url(../img/navi-top.png) no-repeat;
 	text-align: center;
 }
+
 .slide {
 	width: 980px;
 	height: 300px;
-	margin-top: 0px;
+	margin-top: 14px;
 }
+
 #content {
 	position: relative;
 	width: 1002px;
-	height: 617px;
-	background: url(effect/source/bg/cbg.png);
-	margin: 0px auto
+	height: 636px;
+	margin: 0 auto;
+	display: block;
 }
 
 #bottom {
 	position: relative;
-	margin: 0px auto
-}
-
-#top {
-	position: relative;
-	margin: 0px auto;
 	width: 1002px;
-	height: 483px;
-	width: 1002px;
-	height: 483px;
+	height: 80px;
+	display: block;
+	margin: 0 auto;
+	background: url(../img/bottom.png);
 }
 
-/*===��������===*/
-.pdv_class {
-	position: absolute;
-	border: 0px;
-	width: 1002px;
-	height: 379px;
+#bottom p{
+	text-align: center;
+}
+div#bottommenu {
+	line-height: 48px;
+	height: 48px;
+	color: #fff;
+	text-align: center;
 }
 
-.pdv_border {
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	border: 0px solid;
+div#bottommenu a:link, div#bottommenu a:visited, div#bottommenu a:active
+	{
+	margin: 0 8px;
+	color: #fff;
+	font: 12px/28px 'SimSun', Arial, Sans-Serif;
+	text-decoration: none;
 }
 
-.pdv_block_border {
-	border: 0px;
-	height: 100%;
-	padding: 0;
-	margin: 0;
-	background: url(../img/lbg.png) 0 0 repeat-y
+div#bottommenu a:hover {
+	color: #fff;
+	text-decoration: underline;
 }
 
-}
-
-
-.pdv_product_1 {
-	width: 480px;
-	height: 345px;
-}
-/* ==����== */
 div, li, td, p, select, input, textarea, a, button, input {
 	font: 12px Verdana, Arial, Helvetica, sans-serif;
 	color: #505050;
@@ -114,7 +105,6 @@ a:hover {
 	text-decoration: underline;
 }
 
-/* ============��============== */
 form {
 	margin: 0;
 	padding: 0
