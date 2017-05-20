@@ -1,5 +1,10 @@
-<div id="g_footer">
-	<hr>
-	<p>Copyright (C) 2017 XXXX公司.</p>
-	<p>京ICP许可证 XXXXXX 号</p>
+<div id="bottom">
+	<div class="pdv_cnt">
+		<div id="bottommenu">
+			| <a href="#" target="_self">关于我们</a>| <a href="#" target="_self">联系方式</a>|
+			<a href="#" target="_self">信息反馈</a>| <a href="#" target="_self">人才招聘</a>|
+			<a href="#" target="_self">友情链接</a>|
+		</div>
+		<p>Copyright (C) 2017 XXX公司</p>
+	</div>
 </div>

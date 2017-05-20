@@ -1,1 +1,0 @@
-<div id="g_slide">Slide here</div>

@@ -28,7 +28,7 @@ App::uses('AppController', 'Controller');
  * @package app.Controller
  * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
-class CompanyController extends AppController
+class ProductController extends AppController
 {
 
     /**
@@ -45,18 +45,6 @@ class CompanyController extends AppController
      * @throws NotFoundException When the view file could not be found
      *         or MissingViewException in debug mode.
      */
-    public function profile ()
-    {}
-
-    public function culture ()
-    {}
-
-    public function style ()
-    {}
-
-    public function honor ()
-    {}
-
-    public function speech ()
+    public function index ()
     {}
 }
