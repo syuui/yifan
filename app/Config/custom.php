@@ -1,2 +1,2 @@
 <?php
-Configure::write('c_site_title', '一凡的公司');
+Configure::write('c_site_title', '朗豪拓达（北京）科技发展有限公司');
