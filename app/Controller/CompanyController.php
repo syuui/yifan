@@ -45,7 +45,7 @@ class CompanyController extends AppController
      * @throws NotFoundException When the view file could not be found
      *         or MissingViewException in debug mode.
      */
-    public function profile ()
+    public function index ()
     {}
 
     public function culture ()
@@ -58,5 +58,8 @@ class CompanyController extends AppController
     {}
 
     public function speech ()
+    {}
+
+    public function sidebar ()
     {}
 }
