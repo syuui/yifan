@@ -28,7 +28,7 @@ App::uses('AppController', 'Controller');
  * @package app.Controller
  * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
-class CompanyController extends AppController
+class NewsController extends AppController
 {
 
     /**
@@ -41,7 +41,7 @@ class CompanyController extends AppController
     /**
      * Specify layout used in this page.
      */
-    public $layout = 'default_l';
+    public $layout = 'default_r';
 
     /**
      * Displays a view

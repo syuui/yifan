@@ -1,17 +1,17 @@
 <?php
 $this->start('sidebar');
-echo $this->Element('sidebar/company');
+echo $this->Element('sidebar/news');
 $this->end();
 ?>
 <!-- 当前位置提示条 -->
 <div class="page_navi">
-	您现在的位置：<a href="/">生物制药公司</a> &gt; 走进朗豪
+	您现在的位置：<a href="/">生物制药公司</a> &gt; 新闻资讯
 </div>
 <div class="ele_block">
 	<div class="ele_bdr_l">
 		<div class="ele_bdr_r">
 			<div class="ele_ttl_l">
-				<div class="ele_ttl_m">走进朗豪</div>
+				<div class="ele_ttl_m">新闻资讯</div>
 				<div class="ele_ttl_r"></div>
 			</div>
 			<div class="ele_cnt">

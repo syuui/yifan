@@ -1,4 +1,5 @@
 
+<!-- 网站脚 -->
 <div id="footer">
 	<div class="ele_block">
 		<div id="footermenu">
@@ -9,3 +10,4 @@
 		<p>Copyright (C) 2017 XXX公司</p>
 	</div>
 </div>
+<!-- /网站脚 -->
