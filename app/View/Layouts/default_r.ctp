@@ -1,7 +1,7 @@
 <?php
 $title = Configure::read('c_site_title');
 ?>
-<!DOCTYPE html>
+<?php echo $this->Html->docType();	?>
 <html>
 <head>
 	<?php	echo $this->Html->charset();	?>

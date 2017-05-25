@@ -53,18 +53,6 @@ class NewsController extends AppController
     public function index ()
     {}
 
-    public function culture ()
-    {}
-
-    public function development ()
-    {}
-
-    public function lanham ()
-    {}
-
-    public function sidebar ()
-    {}
-
     public function adm_index ()
     {
         ;
