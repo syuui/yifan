@@ -115,6 +115,43 @@ div.spliter {
 	text-decoration: line-through;
 }
 
+.submit, .reset {
+	float: left;
+	position: relative;
+	height: 25px;
+	width: 80px;
+	margin: 0 10px 18px 0;
+	text-decoration: none;
+	font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	line-height: 25px;
+	text-align: center;
+}
+
+.txa_message {
+	width: 700px;
+	height: 300px;
+}
+
+.submit, .reset {
+	width: 70px;
+	line-height: 30px;
+	height: 30px;
+	text-align: center;
+	font-weight: bold;
+	color: #fff;
+	text-shadow: 1px 1px 1px #000;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.submit {
+	background: #649F40;
+}
+
+.reset {
+	background: #d53939;
+}
 /*--------------------------------------------------------------------------------
  * Element block
  *--------------------------------------------------------------------------------*/

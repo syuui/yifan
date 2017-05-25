@@ -19,5 +19,10 @@ echo $this->Html->css('general');
 
 		<?php echo $this->Element('footer');	?>
 	</div>
+<?php
+if (Configure::read('debug') > 0) {
+    echo $this->Element('sql_dump');
+}
+?>
 </body>
 </html>

@@ -9,7 +9,7 @@
 			</div>
 			<div class="ele_cnt">
 				<ul class="list_style_2">
-					<li><?php echo $this->Html->link('人才招聘', array('controller'=>'recruit', 'action'=>'employ'));	?></li>
+					<li><?php echo $this->Html->link('人才招聘', array('controller'=>'recruit', 'action'=>'index'));	?></li>
 					<li><?php echo $this->Html->link('人才战略', array('controller'=>'recruit', 'action'=>'strategy'));	?></li>
 					<li><?php echo $this->Html->link('在线提交', array('controller'=>'recruit', 'action'=>'entry'));	?></li>
 				</ul>
