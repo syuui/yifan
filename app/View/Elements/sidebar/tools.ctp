@@ -13,8 +13,8 @@
 				<fieldset>
 					<legend>上传工具</legend>
 					<ul class="list_style_2">
-						<li><a href="/admin/uploadPic">上传图片</a></li>
-						<li><a href="/admin/uploadFile">上传文件</a></li>
+						<li><?php echo $this->Html->link('管理图片',array('controller'=>'tools','action'=>'uploadpic'));	?></li>
+						<li><?php echo $this->Html->link('管理文件',array('controller'=>'tools','action'=>'uploadfile'));	?></li>
 					</ul>
 				</fieldset>
 

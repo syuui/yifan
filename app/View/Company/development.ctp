@@ -5,7 +5,7 @@ $this->end();
 ?>
 <!-- 当前位置提示条 -->
 <div class="page_navi">
-	您现在的位置：<?php echo $this->Html->link( Configure::read('c_site_title'), array('controller'=>'pages', 'action'=>'display')); ?>
+	您现在的位置：<?php echo $this->Html->link( Configure::read('c_site_title'), array('controller'=>'pages', 'action'=>'display')); ?> &gt; 走进朗豪
 	&gt; 发展战略
 </div>
 <div class="ele_block">

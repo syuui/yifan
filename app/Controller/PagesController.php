@@ -52,7 +52,6 @@ class PagesController extends AppController
      */
     public function display ()
     {
-        $isAdmin = false;
         $path = func_get_args();
         
         $count = count($path);
@@ -70,7 +69,7 @@ class PagesController extends AppController
         if (! empty($path[$count - 1])) {
             $title_for_layout = Inflector::humanize($path[$count - 1]);
         }
-        $this->set(compact('page', 'subpage', 'title_for_layout', 'isAdmin'));
+        $this->set(compact('page', 'subpage', 'title_for_layout'));
         
         try {
             $this->render(implode('/', $path));
@@ -85,7 +84,7 @@ class PagesController extends AppController
     public function admin_display ()
     {
         $this->set('isAdmin', true);
-        $this->render('home');
+        $this->render('home', 'toppage');
     }
 
     public function admin_tools ()

@@ -2,28 +2,92 @@
 $this->start('sidebar');
 echo $this->Element('sidebar/news');
 $this->end();
+
+$url = $this->Html->url(
+        [
+                'controller' => 'news',
+                'action' => 'admin_savenews'
+        ]);
+$addLink = $this->Html->link('增加新闻', '#', 
+        [
+                'onclick' => "mLayerAction('$url');",
+                'class' => 'addButton'
+        ]);
+
+$inews = isset($inews) ? $inews : 'E';
+switch ($inews) {
+    case 'I':
+        $title = '行业动态';
+        break;
+    case 'E':
+        $title = '公司动态';
+        break;
+    case 'S':
+        $title = '搜索结果';
+        break;
+    default:
+        $title = '公司动态';
+        break;
+}
 ?>
 <!-- 当前位置提示条 -->
 <div class="page_navi">
-	您现在的位置：<a href="/">生物制药公司</a> &gt; 新闻资讯
+    您现在的位置：<?php echo $this->Html->link( Configure::read('c_site_title'), array('controller'=>'pages', 'action'=>'display')); ?>
+    &gt; 新闻资讯 &gt; <?php
+    
+    echo $title;
+    ?>
 </div>
 <div class="ele_block">
 	<div class="ele_bdr_l">
 		<div class="ele_bdr_r">
 			<div class="ele_ttl_l">
-				<div class="ele_ttl_m">新闻资讯</div>
+				<div class="ele_ttl_m"><?php echo $title; ?></div>
 				<div class="ele_ttl_r"></div>
 			</div>
 			<div class="ele_cnt">
 				<div class="ele_cnt_txt">
-					杭州某某医药有限公司医药流通企业，拥有齐全的经营门类和品种，具备优质完善的经营网络、专业特色的服务内涵、广泛认同的企业商誉，经营业绩一直位居全国同行业前列。<br />
-					采用国内先进的设备，最新引进的现代化的生产流水线，一直本着质量第一，信誉至上的经营理念，使得我们的产品得到了广大顾客的一致好评，产品销往全国各地，企业也得到迅速的发展。<br />
-					本公司将继续坚持以质量求生存，靠科技促发展的方针，以顾客为关注焦点，不断研发新产品，提高产量和质量，以满足广大顾客的要求。<br />
-					采用国内先进的设备，最新引进的现代化的生产流水线，一直本着质量第一，信誉至上的经营理念，使得我们的产品得到了广大顾客的一致好评，产品销往全国各地，企业也得到迅速的发展。<br />
-					本公司将继续坚持以质量求生存，靠科技促发展的方针，以顾客为关注焦点，不断研发新产品，提高产量和质量，以满足广大顾客的要求。<br />
-					您的需求是我们努力的方向！欢迎各界人士来电来厂咨询洽谈。<br />
-					本公司将继续坚持以质量求生存，靠科技促发展的方针，以顾客为关注焦点，不断研发新产品，提高产量和质量，以满足广大顾客的要求。<br />
-					您的需求是我们努力的方向！欢迎各界人士来电来厂咨询洽谈。<br />
+<?php
+if (isset($isAdmin)) {
+    echo $addLink;
+}
+
+if (count($data) == 0) {
+    echo Configure::read('MSG00010001');
+} else {
+    ?>
+                <ul class="list_style_2">
+<?php foreach ($data as $d) {        ?>
+    <li><?php
+        if (isset($isAdmin) && $isAdmin === true) {
+            $url = $this->Html->url(
+                    [
+                            'controller' => 'news',
+                            'action' => 'admin_savenews',
+                            $d['News']['id']
+                    ]);
+            echo $this->Html->link($d['News']['title'], '#', 
+                    [
+                            'onclick' => "mLayerAction('$url');"
+                    ]);
+        } else {
+            echo $this->Html->link($d['News']['title'], 
+                    [
+                            'controller' => 'News',
+                            'action' => 'newsdetail',
+                            $d['News']['id']
+                    ]);
+        }
+        ?></li>
+					
+<?php
+    }
+    ?>
+    </ul>
+<?php
+}
+?>
+                
 				</div>
 			</div>
 		</div>

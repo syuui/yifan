@@ -4,7 +4,7 @@ $title = Configure::read('c_site_title');
 <?php echo $this->Html->docType();?>
 <html>
 <head>
-	<?php echo $this->Html->charset();	?>
+	<?php	echo $this->Element('include');	?>
 	<title><?php echo $title;	?></title>
 <?php
 echo $this->Html->css('general');

@@ -104,29 +104,7 @@
 <!-- right -->
 <div id="right">
 	<!-- 新闻资讯 -->
-	<div class="ele_block">
-		<div class="ele_bdr_l">
-			<div class="ele_bdr_r">
-				<div class="ele_ttl_l">
-					<div class="ele_ttl_m">新闻资讯</div>
-					<div class="ele_ttl_r"></div>
-				</div>
-				<div class="ele_cnt">
-					<ul class="list_style_2">
-						<li><a href="news/html/?390.html">公司顺利通过XXXX国际认证</a></li>
-						<li><a href="news/html/?346.html">朗豪召开ABCD研讨交流会</a></li>
-						<li><a href="news/html/?339.html">朗豪科技荣获SDFGHJ国际金奖</a></li>
-						<li><a href="news/html/?338.html">泌尿学科全国某某某某研讨会在京</a></li>
-						<li><a href="news/html/?336.html">董事长致新员工的一封信</a></li>
-						<li><a href="news/html/?335.html">公司开展操技能大赛</a></li>
-						<li><a href="news/html/?320.html">泌尿学科全国某某某某研讨会在京</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="ele_ftr_l"></div>
-		<div class="ele_ftr_r"></div>
-	</div>
+<?php echo $this->element('newslist');  ?>
 	<!-- 新闻资讯 -->
 
 	<!-- 招贤纳士 -->

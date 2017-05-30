@@ -2,7 +2,7 @@
 /**
  * Static content controller.
  *
- * This file will render views from views/pages/
+ * This file will render views from views/Company/
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -18,7 +18,8 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 App::uses('AppController', 'Controller');
-App::uses('VariableModel', 'Model');
+App::uses('Variable', 'Model');
+App::uses('Uploaditem', 'Model');
 
 /**
  * Static content controller
@@ -33,155 +34,152 @@ class CompanyController extends AppController
 {
 
     /**
-     * This controller does not use a model
+     * 在variables表中保存的 【朗豪风采】 页面所使用的照片的 name 字段值
+     *
+     * @var string
+     */
+    const LANHAM_PICTURE = 'lanham_pics';
+
+    /**
+     * 在variables表中保存的 【朗豪风采】 页面所使用的文字描述的 name 字段值
+     *
+     * @var string
+     */
+    const LANHAM_DESCRIPTION = 'lanham_dscr';
+
+    /**
+     * 此控制器中使用以下模型
      *
      * @var array
      */
-    public $uses = array(
+    public $uses = [
             'Variable'
-    );
+    ];
 
     /**
-     * Specify layout used in this page.
+     * 此控制器使用的布局
+     *
+     * @var string
      */
     public $layout = 'default_l';
 
     /**
-     * Displays a view
+     * [走进朗豪]-[企业简介]的控制器
      *
      * @return void
-     * @throws NotFoundException When the view file could not be found
-     *         or MissingViewException in debug mode.
      */
     public function index ()
     {
         $this->set('data', 
                 $this->Variable->find('first', 
-                        array(
-                                'conditions' => array(
-                                        'Variable.name' => VariableModel::ENTERPRISE_DESCRIPTION
-                                ), // 查询条件数组
-                                'recursive' => 1, // 整型
-                                                  // 字段名数组
-                                'fields' => array(
-                                        'Variable.id',
-                                        'Variable.name',
-                                        'Variable.value',
-                                        'Variable.created',
-                                        'Variable.modified'
-                                ),
-                                // 定义排序的字符串或者数组
-                                'order' => array(
-                                        'Variable.modified DESC'
-                                ),
+                        [
+                                'conditions' => [
+                                        'Variable.name' => Variable::ENTERPRISE_DESCRIPTION
+                                ],
                                 'limit' => 1
-                        )));
+                        ]));
     }
 
+    /**
+     * [走进朗豪]-[企业文化]的控制器
+     *
+     * @return void
+     */
     public function culture ()
     {
         $this->set('data', 
                 $this->Variable->find('first', 
-                        array(
-                                'conditions' => array(
-                                        'Variable.name' => VariableModel::ENTERPRISE_CULTURE
-                                ), // 查询条件数组
-                                'recursive' => 1, // 整型
-                                                  // 字段名数组
-                                'fields' => array(
-                                        'Variable.id',
-                                        'Variable.name',
-                                        'Variable.value',
-                                        'Variable.created',
-                                        'Variable.modified'
-                                ),
-                                // 定义排序的字符串或者数组
-                                'order' => array(
-                                        'Variable.modified DESC'
-                                ),
+                        [
+                                'conditions' => [
+                                        'Variable.name' => Variable::ENTERPRISE_CULTURE
+                                ],
                                 'limit' => 1
-                        )));
+                        ]));
     }
 
+    /**
+     * [走进朗豪]-[发展战略]的控制器
+     *
+     * @return void
+     */
     public function development ()
     {
         $this->set('data', 
                 $this->Variable->find('first', 
-                        array(
-                                'conditions' => array(
-                                        'Variable.name' => VariableModel::ENTERPRISE_DEVELOPMENT
-                                ), // 查询条件数组
-                                'recursive' => 1, // 整型
-                                                  // 字段名数组
-                                'fields' => array(
-                                        'Variable.id',
-                                        'Variable.name',
-                                        'Variable.value',
-                                        'Variable.created',
-                                        'Variable.modified'
-                                ),
-                                // 定义排序的字符串或者数组
-                                'order' => array(
-                                        'Variable.modified DESC'
-                                ),
+                        [
+                                'conditions' => [
+                                        'Variable.name' => Variable::ENTERPRISE_DEVELOPMENT
+                                ],
                                 'limit' => 1
-                        )));
+                        ]));
     }
 
+    /**
+     * [走进朗豪]-[朗豪风采]的控制器
+     *
+     * @return void
+     */
     public function lanham ()
-    {}
+    {
+        $this->set('pics', 
+                $this->Variable->find('all', 
+                        [
+                                'conditions' => [
+                                        'Variable.name' => CompanyController::LANHAM_PICTURE
+                                ]
+                        ]));
+        $this->set('dscr', 
+                $this->Variable->find('first', 
+                        [
+                                'conditions' => [
+                                        'Variable.name' => CompanyController::LANHAM_DESCRIPTION
+                                ]
+                        ]));
+    }
 
-    public function sidebar ()
-    {}
-
+    /**
+     * 管理工具 [走进朗豪]-[企业简介]的控制器
+     *
+     * @return void
+     */
     public function admin_index ()
     {
-        $this->Helper = array(
+        $this->Helper = [
                 'form'
-        );
+        ];
         $this->set('isAdmin', true);
         
         if (! empty($this->data)) {
             $this->Variable->save($this->data);
         }
-        
         $this->data = $this->Variable->find('first', 
-                array(
-                        'conditions' => array(
-                                'Variable.name' => VariableModel::ENTERPRISE_DESCRIPTION
-                        ), // 查询条件数组
-                        'recursive' => 1, // 整型
-                                          // 字段名数组
-                        'fields' => array(
-                                'Variable.id',
-                                'Variable.name',
-                                'Variable.value',
-                                'Variable.created',
-                                'Variable.modified'
-                        ),
-                        // 定义排序的字符串或者数组
-                        'order' => array(
-                                'Variable.modified DESC'
-                        ),
-                        'limit' => 1
-                ));
+                [
+                        'conditions' => [
+                                'Variable.name' => Variable::ENTERPRISE_DESCRIPTION
+                        ]
+                ]);
         if (empty($this->data)) {
-            $this->data = array(
-                    'Variable' => array(
+            $this->data = [
+                    'Variable' => [
                             'id' => 0,
-                            'name' => VariableModel::ENTERPRISE_DESCRIPTION,
+                            'name' => Variable::ENTERPRISE_DESCRIPTION,
                             'value' => ''
-                    )
-            );
+                    ]
+            ];
         }
         $this->set('data', $this->data);
     }
 
+    /**
+     * 管理工具 [走进朗豪]-[企业文化]的控制器
+     *
+     * @return void
+     */
     public function admin_culture ()
     {
-        $this->Helper = array(
+        $this->Helper = [
                 'form'
-        );
+        ];
         $this->set('isAdmin', true);
         
         if (! empty($this->data)) {
@@ -189,77 +187,121 @@ class CompanyController extends AppController
         }
         
         $this->data = $this->Variable->find('first', 
-                array(
-                        'conditions' => array(
-                                'Variable.name' => VariableModel::ENTERPRISE_CULTURE
-                        ), // 查询条件数组
-                        'recursive' => 1, // 整型
-                                          // 字段名数组
-                        'fields' => array(
-                                'Variable.id',
-                                'Variable.name',
-                                'Variable.value',
-                                'Variable.created',
-                                'Variable.modified'
-                        ),
-                        // 定义排序的字符串或者数组
-                        'order' => array(
-                                'Variable.modified DESC'
-                        ),
+                [
+                        'conditions' => [
+                                'Variable.name' => Variable::ENTERPRISE_CULTURE
+                        ],
                         'limit' => 1
-                ));
+                ]);
         if (empty($this->data)) {
-            $this->data = array(
-                    'Variable' => array(
+            $this->data = [
+                    'Variable' => [
                             'id' => 0,
-                            'name' => VariableModel::ENTERPRISE_CULTURE,
+                            'name' => Variable::ENTERPRISE_CULTURE,
                             'value' => ''
-                    )
-            );
+                    ]
+            ];
         }
         $this->set('data', $this->data);
     }
 
+    /**
+     * 管理工具 [走进朗豪]-[发展战略]的控制器
+     *
+     * @return void
+     */
     public function admin_development ()
     {
-        $this->Helper = array(
+        $this->Helper = [
                 'form'
-        );
+        ];
         $this->set('isAdmin', true);
         
         if (! empty($this->data)) {
             $this->Variable->save($this->data);
         }
-        
         $this->data = $this->Variable->find('first', 
-                array(
-                        'conditions' => array(
-                                'Variable.name' => VariableModel::ENTERPRISE_DEVELOPMENT
-                        ), // 查询条件数组
-                        'recursive' => 1, // 整型
-                                          // 字段名数组
-                        'fields' => array(
-                                'Variable.id',
-                                'Variable.name',
-                                'Variable.value',
-                                'Variable.created',
-                                'Variable.modified'
-                        ),
-                        // 定义排序的字符串或者数组
-                        'order' => array(
-                                'Variable.modified DESC'
-                        ),
+                [
+                        'conditions' => [
+                                'Variable.name' => Variable::ENTERPRISE_DEVELOPMENT
+                        ],
                         'limit' => 1
-                ));
+                ]);
         if (empty($this->data)) {
-            $this->data = array(
-                    'Variable' => array(
+            $this->data = [
+                    'Variable' => [
                             'id' => 0,
-                            'name' => VariableModel::ENTERPRISE_DEVELOPMENT,
+                            'name' => Variable::ENTERPRISE_DEVELOPMENT,
                             'value' => ''
-                    )
-            );
+                    ]
+            ];
         }
         $this->set('data', $this->data);
+    }
+
+    /**
+     * 管理工具 [走进朗豪]-[朗豪风采]的控制器
+     *
+     * @return void
+     */
+    public function admin_lanham ()
+    {
+        $this->Helper = [
+                'form'
+        ];
+        $this->set('isAdmin', true);
+        
+        if (isset($this->data) && ! empty($this->data['Variable']['value'])) {
+            $this->Variable->save($this->data);
+        }
+        $this->set('pics', 
+                $this->Variable->find('all', 
+                        [
+                                'conditions' => [
+                                        'Variable.name' => CompanyController::LANHAM_PICTURE
+                                ]
+                        ]));
+        $this->set('dscr', 
+                $this->Variable->find('first', 
+                        [
+                                'conditions' => [
+                                        'Variable.name' => CompanyController::LANHAM_DESCRIPTION
+                                ]
+                        ]));
+    }
+
+    /**
+     * 管理工具 [走进朗豪]-[朗豪风采] 管理照片时的弹出层的控制器。
+     * AJAX服务器端
+     *
+     * @return void
+     */
+    public function admin_lanham_editpic ($id = null)
+    {
+        $this->layout = false;
+        if (isset($this->data) && ! empty($this->data['Variable']['value'])) {
+            if ($this->data['Variable']['action'] === 'E') {
+                $this->Variable->save($this->data);
+            } elseif ($this->data['Variable']['action'] === 'D') {
+                $this->Variable->delete($this->data['Variable']['id']);
+            } else {
+                $this->log('admin_lanham_editpic: 非法的action');
+            }
+            
+            $dbo = $this->Variable->getDatasource();
+            $logData = $dbo->getLog();
+            
+            ob_start();
+            var_dump($logData);
+            $result = ob_get_clean();
+            $this->log($result);
+        }
+        if (! empty($id)) {
+            $this->set('data', 
+                    $this->Variable->find('first', 
+                            [
+                                    'conditions' => 'id=' . $id
+                            ]));
+        }
     }
 }
