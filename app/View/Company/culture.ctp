@@ -19,8 +19,7 @@ $msg = empty($data['Variable']['value']) ? Configure::read('MSG00010001') : $thi
 			</div>
 			<div class="ele_cnt">
 				<div class="ele_cnt_txt">
-<?php
-echo $msg?>
+<?php   echo $msg;  ?>
 				</div>
 			</div>
 		</div>

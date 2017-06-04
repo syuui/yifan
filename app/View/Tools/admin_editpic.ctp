@@ -20,6 +20,7 @@ $this->end();
 			<div class="ele_cnt">
 <?php
 if (isset($data) && ! empty($data)) {
+    // 编辑现有图片
     echo $this->Form->create('Uploaditem', 
             array(
                     'inputDefaults' => array(
@@ -29,7 +30,7 @@ if (isset($data) && ! empty($data)) {
                     "onsubmit" => "",
                     'url' => array(
                             'controller' => 'tools',
-                            'action' => 'uploadpic'
+                            'action' => 'editpic'
                     )
             ));
     echo $this->Form->inputs(
@@ -55,6 +56,7 @@ if (isset($data) && ! empty($data)) {
                     'fieldset' => false
             ));
 } else {
+    // 追加新图片
     echo $this->Form->create('Uploaditem', 
             array(
                     'type' => 'file',
@@ -64,7 +66,7 @@ if (isset($data) && ! empty($data)) {
                     "onsubmit" => "",
                     'url' => array(
                             'controller' => 'tools',
-                            'action' => 'uploadpic'
+                            'action' => 'editpic'
                     )
             ));
     echo $this->Form->inputs(
@@ -96,15 +98,13 @@ echo $this->Form->submit('保存',
                 'class' => 'submit',
                 'div' => false
         ));
-if (isset($saveFailed) && $saveFailed) {
-    //$popTtl = Configure::read('MSG00010002');
-    
-    $popTtl = 'aaaaaaaaaaa';
-    $popMsg = Configure::read('MSG00010002');
-    
+if (isset($saved) && ! $saved) {
+    $popTtl = Configure::read('MSG00010002');
+    $popMsg = '';
     if ($this->Form->isFieldError('Uploaditem.filename')) {
         $popMsg .= $this->Form->error('Uploaditem.filename') . $this->Tag->br();
     }
+    
     echo $this->Tag->popup($popTtl, $popMsg, "", '#');
 }
 

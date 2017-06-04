@@ -2,6 +2,7 @@
 <!-- left -->
 <div id="left">
 <?php echo $this->Element('aboutus');	?>
+<?php echo $this->Element('contactus'); ?>
 </div>
 <!-- /left -->
 
@@ -108,31 +109,9 @@
 	<!-- 新闻资讯 -->
 
 	<!-- 招贤纳士 -->
-	<div class="ele_block">
-		<div class="ele_bdr_l">
-			<div class="ele_bdr_r">
-				<div class="ele_ttl_l">
-					<div class="ele_ttl_m">招贤纳士</div>
-					<div class="ele_ttl_r"></div>
-				</div>
-				<div class="ele_cnt">
-					<ul class="list_style_2">
-						<li><a href="news/html/?389.html">西南地区总代表一名</a></li>
-						<li><a href="news/html/?388.html">江苏省总代表一名</a></li>
-						<li><a href="news/html/?387.html">西北地区经销商五名</a></li>
-						<li><a href="news/html/?386.html">人事职员一名</a></li>
-						<li><a href="news/html/?385.html">销售经理四名</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="ele_ftr_l"></div>
-		<div class="ele_ftr_r"></div>
-	</div>
+<?php echo $this->element('recruitlist');   ?>
 	<!-- /招贤纳士 -->
-				
-				<?php echo $this->Element('contactus');	?>
-			</div>
+</div>
 <!-- /right -->
 
 <div class="clearfloat"></div>

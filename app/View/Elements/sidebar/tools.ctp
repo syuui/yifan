@@ -13,83 +13,18 @@
 				<fieldset>
 					<legend>上传工具</legend>
 					<ul class="list_style_2">
-						<li><?php echo $this->Html->link('管理图片',array('controller'=>'tools','action'=>'uploadpic'));	?></li>
-						<li><?php echo $this->Html->link('管理文件',array('controller'=>'tools','action'=>'uploadfile'));	?></li>
+						<li><?php echo $this->Html->link('管理图片',['controller'=>'tools','action'=>'uploadpic']);	?></li>
 					</ul>
 				</fieldset>
 
 				<fieldset>
 					<legend>共通设置</legend>
 					<ul class="list_style_2">
-						<li><a href="/admin/banner">网页横幅</a></li>
-						<li><a href="/admin/LOGO">站名LOGO</a></li>
+						<li><?php echo $this->Html->link('网页横幅', ['controller'=>'tools','action'=>'banner']);?></li>
+						<li><?php echo $this->Html->link('站名LOGO', ['controller'=>'tools','action'=>'banner','L']);?></li>
 					</ul>
 
 				</fieldset>
-
-
-				<fieldset>
-					<legend>走进朗豪</legend>
-					<ul class="list_style_2">
-						<li><a href="/admin/index">企业简介</a></li>
-						<li><a href="/admin/culture">企业文化</a></li>
-						<li><a href="/admin/development">发展战略</a></li>
-						<li><a href="/admin/lanham">朗豪风采</a></li>
-					</ul>
-
-				</fieldset>
-
-
-				<fieldset>
-					<legend>新闻资讯</legend>
-					<ul class="list_style_2">
-						<li><a href="/admin/uploadPic">上传图片</a></li>
-						<li><a href="/admin/uploadFile">上传文件</a></li>
-					</ul>
-
-				</fieldset>
-
-
-				<fieldset>
-					<legend>帮扶项目</legend>
-					<ul class="list_style_2">
-						<li><a href="/admin/uploadPic">上传图片</a></li>
-						<li><a href="/admin/uploadFile">上传文件</a></li>
-					</ul>
-
-				</fieldset>
-
-
-				<fieldset>
-					<legend>专家风采</legend>
-					<ul class="list_style_2">
-						<li><a href="/admin/uploadPic">上传图片</a></li>
-						<li><a href="/admin/uploadFile">上传文件</a></li>
-					</ul>
-
-				</fieldset>
-
-
-				<fieldset>
-					<legend>招贤纳士</legend>
-					<ul class="list_style_2">
-						<li><a href="/admin/uploadPic">上传图片</a></li>
-						<li><a href="/admin/uploadFile">上传文件</a></li>
-					</ul>
-
-				</fieldset>
-
-
-				<fieldset>
-					<legend>联系我们</legend>
-					<ul class="list_style_2">
-						<li><a href="/admin/uploadPic">上传图片</a></li>
-						<li><a href="/admin/uploadFile">上传文件</a></li>
-					</ul>
-
-				</fieldset>
-
-
 			</div>
 		</div>
 	</div>

@@ -1,6 +1,6 @@
 <!-- 网站头 -->
 <div id="header">
-	<div id="sitename"><?php echo $this->Html->image('logo.png');	?></div>
+	<div id="sitename"><?php echo $this->Html->image(Configure::read('logo_filename'));	?></div>
 	<div id="navi">
 		<ul id="dropmenu">
 			<?php
@@ -32,6 +32,6 @@ if (isset($isAdmin) && $isAdmin) {
 			<li class="menuright"></li>
 		</ul>
 	</div>
-	<div id="banner"><?php echo $this->Html->image('slide.jpg');?></div>
+	<div id="banner"><?php echo $this->Html->image(Configure::read('banner_filename'));?></div>
 </div>
 <!-- /网站头 -->

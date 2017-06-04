@@ -2,11 +2,15 @@
 $this->start('sidebar');
 echo $this->Element('sidebar/recruit');
 $this->end();
+
+$msg = empty($data['Variable']['value']) ? Configure::read('MSG00010001') : $this->Tag->nl2p(
+        trim($data['Variable']['value']));
 ?>
 <!-- 当前位置提示条 -->
 <div class="page_navi">
-	您现在的位置：<?php echo $this->Html->link( Configure::read('c_site_title'), array('controller'=>'pages', 'action'=>'display')); ?>
-	&gt; 人才战略
+    您现在的位置：<?php echo $this->Html->link( Configure::read('c_site_title'), array('controller'=>'pages', 'action'=>'display')); ?>
+    &gt; <?php echo $this->Html->link( '招贤纳士', ['controller'=>'recruit','action'=>'index']);?>
+    &gt; 人才战略
 </div>
 <div class="ele_block">
 	<div class="ele_bdr_l">
@@ -17,14 +21,8 @@ $this->end();
 			</div>
 			<div class="ele_cnt">
 				<div class="ele_cnt_txt">
-<?php
-if (empty($data['Variable']['value'])) {
-    echo Configure::read('MSG00010001');
-} else {
-    echo nl2br($data['Variable']['value']);
-}
-?>
-				</div>
+<?php   echo $msg;  ?>
+                </div>
 			</div>
 		</div>
 	</div>

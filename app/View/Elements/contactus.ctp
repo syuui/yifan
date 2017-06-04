@@ -8,9 +8,25 @@
 				<div class="ele_ttl_r"></div>
 			</div>
 			<div class="ele_cnt">
-				<div class="ele_cnt_txt">
-					地址：杭州市莫山桥南路868号<br> 电话：0571-98765432<br> 传真：0571-98765432<br>
-					传真：0571-98765430<br> 邮箱：boss@mail.com<br>邮编：312345
+				<div class="culine">
+					<div class="culabel"><?php echo $this->Html->image('address.png',['class'=>'adr_icon'])?></div>
+					<div class="cudetail"><?php echo Configure::read('contact_address');  ?></div>
+				</div>
+				<div class="culine">
+					<div class="culabel"><?php echo $this->Html->image('tel.png',['class'=>'adr_icon'])?></div>
+					<div class="cudetail"><?php echo Configure::read('contact_tel');  ?></div>
+				</div>
+				<div class="culine">
+					<div class="culabel"><?php echo $this->Html->image('mobile.png',['class'=>'adr_icon'])?></div>
+					<div class="cudetail"><?php echo Configure::read('contact_mobile');  ?></div>
+				</div>
+				<div class="culine">
+					<div class="culabel"><?php echo $this->Html->image('fax.png',['class'=>'adr_icon'])?></div>
+					<div class="cudetail"><?php echo Configure::read('contact_fax');   ?></div>
+				</div>
+				<div class="culine">
+					<div class="culabel"><?php echo $this->Html->image('mail.png',['class'=>'adr_icon'])?></div>
+					<div class="cudetail"><?php echo Configure::read('contact_mail');  ?></div>
 				</div>
 			</div>
 		</div>
@@ -18,5 +34,5 @@
 	<div class="ele_ftr_l"></div>
 	<div class="ele_ftr_r"></div>
 </div>
-<div class="hotline"><?php echo $this->Html->image('hotline.png')?></div>
+<div class="hotline"><?php echo $this->Html->image(Configure::read('hotline_filename'));    ?></div>
 <!-- /联系我们 -->

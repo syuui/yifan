@@ -28,22 +28,10 @@ App::uses('AppModel', 'Model');
  *
  * @package app.Model
  */
-class Uploaditem extends AppModel
+class Recruit extends AppModel
 {
 
-    const UPLOAD_IMAGE = 'posts';
-
-    const UPLOAD_FILE = 'files';
-
-    /**
-     * 数据库表的名称
-     *
-     * useTable 属性指定数据库表的名称。默认情况下，模型会使用模型类名的小写复数形
-     * 式。可以设定为其他表，如果希望模型不使用数据库表，也可以设置为``false``。
-     *
-     * @var string
-     */
-    public $useTable = 'uploaditems';
+    public $useTable = 'recruits';
 
     /**
      * 验证规则
@@ -53,12 +41,15 @@ class Uploaditem extends AppModel
      * @var array
      */
     public $validate = [
-            'filename' => [
-                    'unique' => [
-                            'rule' => 'isUnique',
+            'title' => [
+                    'length' => [
+                            'rule' => [
+                                    'between',
+                                    0,
+                                    32
+                            ],
                             'required' => true,
-                            'allowEmpty' => false,
-                            'message' => '已经存在一个同名的文件'
+                            'message' => '职位名称必须填写,长度小于16字。'
                     ]
             ]
     ];
@@ -70,7 +61,7 @@ class Uploaditem extends AppModel
      *
      * @var string
      */
-    public $order = [];
+    public $order = "updated DESC";
 
     /**
      * 模型名称
@@ -79,7 +70,7 @@ class Uploaditem extends AppModel
      *
      * @var string
      */
-    public $name = 'Variable';
+    public $name = 'Recruit';
 
     /**
      * 虚字段
@@ -100,10 +91,4 @@ class Uploaditem extends AppModel
      * @var string
      */
     public $cacheQueries = true;
-
-    public function onlyone ($check)
-    {
-        $this->log('Validate will return false.');
-        return false;
-    }
 }

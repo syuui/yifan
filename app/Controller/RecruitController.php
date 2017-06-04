@@ -33,18 +33,46 @@ class RecruitController extends AppController
 {
 
     /**
-     * This controller does not use a model
+     * This controller uses following compnonets
      *
      * @var array
      */
-    public $uses = array(
-            'Variable'
-    );
+    public $components = [
+            'Paginator'
+    ];
 
     /**
-     * Specify layout used in this page.
+     * This controller uses following models
+     *
+     * @var array
      */
-    public $layout = 'default_r';
+    public $uses = [
+            'Recruit',
+            'Variable'
+    ];
+
+    /**
+     * 分页设置
+     *
+     * $paginate在控制器中控制分布功能。
+     *
+     * @var array
+     */
+    var $paginate = [
+            'Recruit' => [
+                    'conditions' => '',
+                    'fields' => '',
+                    'limit' => 10,
+                    'page' => 1,
+                    'recursive' => 0
+            ]
+    ];
+
+    var $helpers = [
+            'Paginator'
+    ];
+
+    var $layout = 'default_r';
 
     /**
      * Displays a view
@@ -54,81 +82,62 @@ class RecruitController extends AppController
      *         or MissingViewException in debug mode.
      */
     public function index ()
-    {}
+    {
+        $this->paginate['Recruit']['limit'] = Configure::read('page_length');
+        $this->Paginator->settings = $this->paginate;
+        $this->set('data', $this->Paginator->paginate('Recruit'));
+    }
+
+    public function jobdetail ($id = null)
+    {
+        if (! empty($id)) {
+            $this->set('data', 
+                    $this->Recruit->find('first', 
+                            [
+                                    'conditions' => [
+                                            'id' => $id
+                                    ]
+                            ]));
+        }
+    }
 
     public function strategy ()
     {
         $this->set('data', 
                 $this->Variable->find('first', 
-                        array(
-                                'conditions' => array(
-                                        'Variable.name' => VariableModel::RECRUIT_STRATEGY
-                                ), // 查询条件数组
-                                'recursive' => 1, // 整型
-                                                  // 字段名数组
-                                'fields' => array(
-                                        'Variable.id',
-                                        'Variable.name',
-                                        'Variable.value',
-                                        'Variable.created',
-                                        'Variable.modified'
-                                ),
-                                // 定义排序的字符串或者数组
-                                'order' => array(
-                                        'Variable.modified DESC'
-                                ),
+                        [
+                                'conditions' => [
+                                        'Variable.name' => Variable::RECRUIT_STRATEGY
+                                ],
                                 'limit' => 1
-                        )));
+                        ]));
+    }
+
+    public function entry ()
+    {
+        ;
+    }
+
+    public function admin_entry ()
+    {
+        $this->set('isAdmin', true);
+        $this->entry();
+        $this->render('entry');
     }
 
     public function admin_index ()
     {
-        $this->Helper = array(
-                'form'
-        );
         $this->set('isAdmin', true);
         
-        if (! empty($this->data)) {
-            $this->Variable->save($this->data);
-        }
-        
-        $this->data = $this->Variable->find('first', 
-                array(
-                        'conditions' => array(
-                                'Variable.name' => VariableModel::ENTERPRISE_DESCRIPTION
-                        ), // 查询条件数组
-                        'recursive' => 1, // 整型
-                                          // 字段名数组
-                        'fields' => array(
-                                'Variable.id',
-                                'Variable.name',
-                                'Variable.value',
-                                'Variable.created',
-                                'Variable.modified'
-                        ),
-                        // 定义排序的字符串或者数组
-                        'order' => array(
-                                'Variable.modified DESC'
-                        ),
-                        'limit' => 1
-                ));
-        if (empty($this->data)) {
-            $this->data = array(
-                    'Variable' => array(
-                            'id' => 0,
-                            'name' => VariableModel::ENTERPRISE_DESCRIPTION,
-                            'value' => ''
-                    )
-            );
-        }
-        $this->set('data', $this->data);
+        $this->index();
+        $this->render('index');
     }
 
     public function admin_strategy ()
     {
-        $this->Helper = array(
+        $this->Helper = [
                 'form'
-        );
+        ];
         $this->set('isAdmin', true);
         
         if (! empty($this->data)) {
@@ -136,34 +145,123 @@ class RecruitController extends AppController
         }
         
         $this->data = $this->Variable->find('first', 
-                array(
-                        'conditions' => array(
-                                'Variable.name' => VariableModel::RECRUIT_STRATEGY
-                        ), // 查询条件数组
-                        'recursive' => 1, // 整型
-                                          // 字段名数组
-                        'fields' => array(
-                                'Variable.id',
-                                'Variable.name',
-                                'Variable.value',
-                                'Variable.created',
-                                'Variable.modified'
-                        ),
-                        // 定义排序的字符串或者数组
-                        'order' => array(
-                                'Variable.modified DESC'
-                        ),
+                [
+                        'conditions' => [
+                                'Variable.name' => Variable::RECRUIT_STRATEGY
+                        ],
                         'limit' => 1
-                ));
+                ]);
         if (empty($this->data)) {
-            $this->data = array(
-                    'Variable' => array(
+            $this->data = [
+                    'Variable' => [
                             'id' => 0,
-                            'name' => VariableModel::RECRUIT_STRATEGY,
+                            'name' => Variable::RECRUIT_STRATEGY,
                             'value' => ''
-                    )
-            );
+                    ]
+            ];
         }
         $this->set('data', $this->data);
+    }
+
+    public function admin_savejob ($id = null)
+    {
+        $this->set('isAdmin', true);
+        
+        $this->layout = false;
+        $this->autoRender = false;
+        
+        // Add/Modify/Delete a job
+        if (isset($this->data) && ! empty($this->data)) {
+            if (isset($this->data['Recruit']['id']) &
+                     ! empty($this->data['Recruit']['id'])) {
+                if ($this->data['Recruit']['action'] == 'E') {
+                    $this->Recruit->save($this->data);
+                    
+                    $this->log('Save Recruit: ' . $this->data['Recruit']['id']);
+                } elseif ($this->data['Recruit']['action'] == 'D') {
+                    $this->Recruit->delete($this->data['Recruit']['id']);
+                    
+                    $this->log(
+                            'Delete Recruit: ' . $this->data['Recruit']['id']);
+                } else {
+                    
+                    $this->log(
+                            'admin_savenews: 非法的action (' .
+                                     $this->data['Recruit']['action'] . ')');
+                }
+            } else {
+                $this->Recruit->save($this->data);
+                
+                $this->log('Add Recruit :' . $this->Recruit->getInsertID());
+            }
+            return;
+        }
+        
+        // Get news for Edit/Delete Page
+        if (! empty($id)) {
+            $this->set('data', 
+                    $this->Recruit->find('first', 
+                            [
+                                    'conditions' => 'id=' . $id
+                            ]));
+            $this->log('Edit Recruit');
+        } else {
+            // Prepare blank record for Add Page
+            $this->set('data', 
+                    [
+                            'Recruit' => [
+                                    'id' => '',
+                                    'title' => '',
+                                    'salary' => '',
+                                    'location' => '',
+                                    'description' => '',
+                                    'public' => true
+                            ]
+                    ]);
+            
+            $this->log('Add Recruit');
+        }
+        $this->render();
+    }
+
+    /**
+     * Controller for Element newslist.ctp
+     *
+     * @return unknown
+     */
+    public function getAllRecruitList ($limit = 0)
+    {
+        return $this->getRecruitList($limit);
+    }
+
+    public function admin_getAllRecruitList ($limit = 0)
+    {
+        return $this->getRecruitList($limit);
+    }
+
+    /**
+     * 取得职位信息列表
+     *
+     *
+     * @param unknown $type
+     *            新闻类型（企业新闻、行业新闻、所有）。
+     *            $type为null时返回所有新闻列表。
+     * @param number $limit
+     *            取得件数上限
+     * @return unknown
+     */
+    private function getRecruitList ($limit = 0)
+    {
+        $options = [
+                'fields' => [
+                        'Recruit.id',
+                        'Recruit.title',
+                        'Recruit.number'
+                ]
+        ];
+        if ($limit != 0) {
+            $options['limit'] = $limit;
+        }
+        return $this->Recruit->find('all', $options);
     }
 }
