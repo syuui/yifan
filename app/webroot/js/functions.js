@@ -61,3 +61,17 @@ function mLayerAction(url) {
 		}
 	}
 }
+
+function switchOnOff(ndiv) {
+	var ele = $(event.target);
+	var val = ele.html();
+
+	if (val == '+') {
+		$("#" + ndiv).css('display','block'); 
+		ele.html("-");
+	} else {
+		$("#" + ndiv).css('display','none'); 
+		ele.html("+");
+	}
+
+}

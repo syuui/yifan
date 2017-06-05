@@ -379,6 +379,10 @@ th {
 	font-weight: bold;
 	color: red;
 }
+
+.hidden{
+	display: none;
+}
 /*--------------------------------------------------------------------------------
  * Element block
  *--------------------------------------------------------------------------------*/
@@ -760,12 +764,29 @@ span.news_content, span.news_content P {
 /*--------------------------------------------------------------------------------
  * Recruit
  *--------------------------------------------------------------------------------*/
+.jobtable {
+	font-size: 12px;
+}
 .jobtitle {
 	color: #315aaa;
 	font-size: 14px;
 	font-weight: bold;
 	text-indent: 0px;
 	overflow: hidden;
+	width: 230px;
+}
+
+.salary {
+	width: 130px;
+}
+
+.location{ 
+	width: 250px;
+}
+.updated{
+	width: 100px;
+	opacity: 0.7;
+	text-align: right;
 }
 
 .jdtitle {

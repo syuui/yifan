@@ -73,7 +73,9 @@ class Post extends AppModel
     public $hasMany = [
             'Sector' => [
                     'className' => 'Sector',
-                    'order' => 'Sector.seq ASC'
+                    'foreignKey' => 'post_id',
+                    'order' => 'Sector.seq ASC',
+                    'dependent' => true
             ]
     ];
 
@@ -86,4 +88,19 @@ class Post extends AppModel
      * @var string
      */
     public $cacheQueries = true;
+
+    public $findMethods = [
+            'max' => true
+    ];
+
+    protected function _findMax ($state, $query, $results = array())
+    {
+        if ($state === 'before') {
+            $sql = "SELECT MAX(`Post`.`seq`) AS maxseq FROM `posts` AS `POST` WHERE `Post`.`post_id` = " .
+                     $query['post_id'];
+            $this->log("Custom SQL: $sql" );
+            return $this->query($sql);
+        }
+        return $results;
+    }
 }

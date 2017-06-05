@@ -8,7 +8,7 @@ $url = $this->Html->url(
                 'controller' => 'project',
                 'action' => 'admin_savepost'
         ]);
-$addLink = $this->Html->link('增加文章', '#',
+$addLink = $this->Html->link('增加文章', '#', 
         [
                 'onclick' => "mLayerAction('$url');",
                 'class' => 'addButton'
@@ -29,7 +29,7 @@ $addLink = $this->Html->link('增加文章', '#',
 			<div class="ele_cnt">
 <?php
 
-echo $addLink;  
+echo $addLink;
 
 if (isset($data) && ! empty($data)) {
     
@@ -40,28 +40,16 @@ if (isset($data) && ! empty($data)) {
         ?>
     <tr>
 						<td class="jobtitle"><?php
-        if (isset($isAdmin) && $isAdmin) {
-            echo $this->Html->link($d['Post']['title'], "#", 
-                    [
-                            'onclick' => "mLayerAction('" . $this->Html->url(
-                                    [
-                                            'controller' => 'project',
-                                            'action' => 'savepost',
-                                            $d['Post']['id']
-                                    ]) . "');",
-                            'class' => 'jobtitle'
-                    ]);
-        } else {
-            echo $this->Html->link($d['Post']['title'], 
-                    [
-                            'controller' => 'project',
-                            'action' => 'postdetail',
-                            $d['Post']['id']
-                    ], 
-                    [
-                            'class' => 'jobtitle'
-                    ]);
-        }
+        echo $this->Html->link($d['Post']['title'], 
+                [
+                        'controller' => 'project',
+                        'action' => 'postdetail',
+                        $d['Post']['id']
+                ]
+                , 
+                [
+                        'class' => 'jobtitle'
+                ]);
         ?></td>
 						<td><?php
         echo date('Y-m-d', strtotime($d['Post']['created']));

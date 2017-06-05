@@ -89,6 +89,33 @@ class ProjectController extends AppController
         $this->set('data', $this->Paginator->paginate('Post'));
     }
 
+    public function postdetail ($id = null)
+    {
+        if (! empty($id)) {
+            $this->set('data', 
+                    $this->Post->find('first', 
+                            [
+                                    'conditions' => [
+                                            'id' => $id
+                                    ]
+                            ]));
+            $this->set('sectors', 
+                    $this->Sector->find('all', 
+                            [
+                                    'conditions' => [
+                                            'post_id' => $id
+                                    ]
+                            ]));
+        }
+    }
+
+    public function admin_postdetail ($id = null)
+    {
+        $this->set('isAdmin', true);
+        $this->postdetail($id);
+        $this->render('postdetail');
+    }
+
     public function admin_index ()
     {
         $this->set('isAdmin', true);
@@ -124,17 +151,26 @@ class ProjectController extends AppController
             } else {
                 $this->Post->save($this->data);
                 
-                $this->log('Add Recruit :' . $this->Post->getInsertID());
+                $this->log('Add Post :' . $this->Post->getInsertID());
             }
             return;
         }
         
-        // Get news for Edit/Delete Page
+        // Get records for Edit/Delete Page
         if (! empty($id)) {
             $this->set('data', 
                     $this->Post->find('first', 
                             [
-                                    'conditions' => 'id=' . $id
+                                    'conditions' => [
+                                            'id' => $id
+                                    ]
+                            ]));
+            $this->set('sectors', 
+                    $this->Sector->find('all', 
+                            [
+                                    'conditions' => [
+                                            'post_id' => $id
+                                    ]
                             ]));
             $this->log('Edit Post');
         } else {
@@ -153,6 +189,29 @@ class ProjectController extends AppController
             
             $this->log('Add Post');
         }
-        $this->render();
     }
+
+    public function admin_savesector ()
+    {
+        $this->set('isAdmin', true);
+        if (isset($this->data['Sector']['post_id']) &&
+                 ! empty($this->data['Sector']['post_id'])) {
+            $sql = "SELECT MAX(`Sector`.`seq`) AS `maxseq` " .
+             "FROM `sectors` as `Sector` WHERE `Sector`.`post_id` = " .
+             $this->data['Sector']['post_id'] . " Limit 1";
+    $r = $this->Sector->query($sql);
+    
+    $d = [
+            'Sector' => [
+                    'post_id' => $this->data['Sector']['post_id'],
+                    'seq' => $r[0][0]['maxseq'] + 10
+            ]
+    ];
+    $this->Sector->save($d);
+}
+$id = $this->data['Sector']['post_id'];
+$this->data = null;
+$this->postdetail($id);
+$this->render('postdetail');
+}
 }

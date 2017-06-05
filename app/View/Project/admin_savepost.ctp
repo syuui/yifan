@@ -29,6 +29,22 @@ $inputs = $this->Form->Inputs(
                 'fieldset' => false,
                 'legend' => false
         ]);
+
+$url = $this->Html->url(
+        [
+                'controller' => 'project',
+                'action' => 'savesector'
+        ]);
+$addSector = $this->Form->button('增加节', 
+        [
+                'label' => false,
+                'div' => false,
+                'class' => 'submit',
+                'type' => 'button',
+                'id' => 'addSector',
+                'onclick' => "mLayerActionRefresh('" . $url . "', " .
+                         $data['Post']['id'] . ");"
+        ]);
 $buttons = $this->Form->button('确定', 
         [
                 'label' => false,
@@ -57,8 +73,7 @@ echo $form_s;
 							<span class="lyclose" onclick="removeLayer();">×</span>
 						</header>
 						<section class="lyct">
-							<p><?php   echo $inputs;   ?>
-							</p>
+							<p><?php   echo $inputs;   ?></p>
 						</section>
 						<footer class="lybt">
 							<div class="lyother">

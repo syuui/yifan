@@ -69,9 +69,9 @@ if (! isset($data) || empty($data)) {
                     ]);
         }
         ?></td>
-						<td><?php echo $d['Recruit']['salary'];    ?></td>
-						<td><?php echo $d['Recruit']['location'];  ?></td>
-						<td><?php
+						<td class="salary"><?php echo $d['Recruit']['salary'];    ?></td>
+						<td class="location"><?php echo $d['Recruit']['location'];  ?></td>
+						<td class="updated"><?php
         
         echo date('Y-m-d', strtotime($d['Recruit']['created']));
         // echo $d['Recruit']['created'];
