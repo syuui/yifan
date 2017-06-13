@@ -44,51 +44,51 @@
 					<div class="ele_ttl_r"></div>
 				</div>
 				<div class="ele_cnt">
-					<div class="productlist_index">
-						<div class="productlist_index_pic">
+					<div class="expertlist_index">
+						<div class="expertlist_index_pic">
 							<a href="#" target="_blank"><?php echo $this->Html->image('product_001.jpg');	?></a>
 						</div>
-						<div class="productlist_index_title">
+						<div class="expertlist_index_title">
 							<a href="#" target="_blank" class="title">张三</a>
 						</div>
 					</div>
-					<div class="productlist_index">
-						<div class="productlist_index_pic">
+					<div class="expertlist_index">
+						<div class="expertlist_index_pic">
 							<a href="#" target="_blank"><?php echo $this->Html->image('product_001.jpg');	?></a>
 						</div>
-						<div class="productlist_index_title">
+						<div class="expertlist_index_title">
 							<a href="#" target="_blank" class="title">李四</a>
 						</div>
 					</div>
-					<div class="productlist_index">
-						<div class="productlist_index_pic">
+					<div class="expertlist_index">
+						<div class="expertlist_index_pic">
 							<a href="#" target="_blank"><?php echo $this->Html->image('product_001.jpg');	?></a>
 						</div>
-						<div class="productlist_index_title">
+						<div class="expertlist_index_title">
 							<a href="#" target="_blank" class="title">王五</a>
 						</div>
 					</div>
-					<div class="productlist_index">
-						<div class="productlist_index_pic">
+					<div class="expertlist_index">
+						<div class="expertlist_index_pic">
 							<a href="#" target="_blank"><?php echo $this->Html->image('product_001.jpg');	?></a>
 						</div>
-						<div class="productlist_index_title">
+						<div class="expertlist_index_title">
 							<a href="#" target="_blank" class="title">赵六</a>
 						</div>
 					</div>
-					<div class="productlist_index">
-						<div class="productlist_index_pic">
+					<div class="expertlist_index">
+						<div class="expertlist_index_pic">
 							<a href="#" target="_blank"><?php echo $this->Html->image('product_001.jpg');	?></a>
 						</div>
-						<div class="productlist_index_title">
+						<div class="expertlist_index_title">
 							<a href="#" target="_blank" class="title">尼莫</a>
 						</div>
 					</div>
-					<div class="productlist_index">
-						<div class="productlist_index_pic">
+					<div class="expertlist_index">
+						<div class="expertlist_index_pic">
 							<a href="#" target="_blank"><?php echo $this->Html->image('product_001.jpg');	?></a>
 						</div>
-						<div class="productlist_index_title">
+						<div class="expertlist_index_title">
 							<a href="#" target="_blank" class="title">源静香</a>
 						</div>
 					</div>

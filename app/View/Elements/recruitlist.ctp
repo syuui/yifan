@@ -2,7 +2,7 @@
 	<div class="ele_bdr_l">
 		<div class="ele_bdr_r">
 			<div class="ele_ttl_l">
-				<div class="ele_ttl_m">新闻资讯</div>
+				<div class="ele_ttl_m">招贤纳士</div>
 				<div class="ele_ttl_r"></div>
 			</div>
 			<div class="ele_cnt">

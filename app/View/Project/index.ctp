@@ -3,15 +3,12 @@ $this->start('sidebar');
 echo $this->Element('sidebar/project');
 $this->end();
 
-$url = $this->Html->url(
+$addLink = $this->Html->link('增加文章', 
         [
                 'controller' => 'project',
                 'action' => 'admin_savepost'
-        ]);
-$addLink = $this->Html->link('增加文章', '#', 
-        [
-                'onclick' => "mLayerAction('$url');",
-                'class' => 'addButton'
+        ], [
+                'class' => 'submit'
         ]);
 ?>
 <!-- 当前位置提示条 -->
@@ -28,35 +25,28 @@ $addLink = $this->Html->link('增加文章', '#',
 			</div>
 			<div class="ele_cnt">
 <?php
-
 echo $addLink;
 
-if (isset($data) && ! empty($data)) {
-    
+if (! empty($data)) {
     ?>
 <table>
 <?php
     foreach ($data as $d) {
-        ?>
-    <tr>
-						<td class="jobtitle"><?php
-        echo $this->Html->link($d['Post']['title'], 
-                [
-                        'controller' => 'project',
-                        'action' => 'postdetail',
-                        $d['Post']['id']
-                ]
-                , 
-                [
-                        'class' => 'jobtitle'
-                ]);
-        ?></td>
-						<td><?php
-        echo date('Y-m-d', strtotime($d['Post']['created']));
-        ?></td>
-					</tr>
-<?php
+        $table_cells[] = [
+                $this->Html->link($d['Post']['title'], 
+                        [
+                                'controller' => 'project',
+                                'action' => 'postdetail',
+                                $d['Post']['id']
+                        ], 
+                        [
+                                'class' => 'projecttitle'
+                        ]),
+                date('Y-m-d', strtotime($d['Post']['created']))
+        ];
     }
+    
+    echo $this->Html->tableCells($table_cells);
     ?>
 </table>
 

@@ -24,58 +24,179 @@ $url = $this->Html->url(
 			</div>
 			<div class="ele_cnt">
 <?php
-if (isset($data) && ! empty($data)) {
-    ?>
-<div class="jdtitle"><?php echo $data['Post']['title']; ?></div>
-
-<?php
+if (! empty($data)) {
+    echo $this->Html->div('jdtitle', $data['Post']['title']);
     
-    echo $this->Form->create('Sector', 
-            [
-                    'url' => [
-                            'controller' => 'project',
-                            'action' => 'savesector'
-                    ]
-            ]);
-    echo $this->Form->input('Sector.post_id', 
-            [
-                    'value' => $data['Post']['id'],
-                    'type' => 'hidden'
-            ]);
-    echo $this->Form->submit('增加节', [
-            'class' => 'submit'
-    ]);
-    echo $this->Form->end();
+    if (isset($isAdmin) && $isAdmin) {
+        /* 保存文章用表单 */
+        echo $this->Form->create('Post', 
+                [
+                        'url' => [
+                                'controller' => 'project',
+                                'action' => 'savepost'
+                        ],
+                        'inputDefaults' => [
+                                'div' => false,
+                                'label' => false
+                        ]
+                ]);
+        echo $this->Form->input('Post.id', 
+                [
+                        'type' => 'hidden',
+                        'value' => $data['Post']['id']
+                ]);
+        echo $this->Form->input('Post.title', 
+                [
+                        'label' => '文章标题',
+                        'value' => $data['Post']['title']
+                ]);
+        echo $this->Form->submit('保存', 
+                [
+                        'class' => 'submit',
+                        'div' => false,
+                        'name' => 'Post.action'
+                ]);
+        echo $this->Form->end();
+        /* 保存文章用表单结束 */
+        
+        /* 增加节用表单 */
+        echo $this->Form->create('Sector', 
+                [
+                        'url' => [
+                                'controller' => 'project',
+                                'action' => 'savesector'
+                        ],
+                        'inputDefaults' => [
+                                'div' => false,
+                                'label' => false
+                        ]
+                ]);
+        echo $this->Form->input('Sector.post_id', 
+                [
+                        'value' => $data['Post']['id'],
+                        'type' => 'hidden'
+                ]);
+        echo $this->Form->submit('增加节', 
+                [
+                        'class' => 'submit',
+                        'name' => 'Sector.action'
+                ]);
+        echo $this->Form->end();
+        /* 增加节用表单结束 */
+        
+        /* 删除文章用表单 */
+        echo $this->Form->create('Post', 
+                [
+                        'url' => [
+                                'controller' => 'project',
+                                'action' => 'savepost'
+                        ],
+                        'inputDefaults' => [
+                                'div' => false,
+                                'label' => false
+                        ]
+                ]);
+        echo $this->Form->input('Post.id', 
+                [
+                        'type' => 'hidden',
+                        'value' => $data['Post']['id']
+                ]);
+        echo $this->Form->submit('删除文章', 
+                [
+                        'class' => 'reset',
+                        'name' => 'Post.action'
+                ]);
+        echo $this->Form->end();
+        /* 删除文章用表单结束 */
+    }
     
     foreach ($data['Sector'] as $s) {
         if (isset($isAdmin) && $isAdmin) {
-            echo $this->Form->create('Sector');
             ?>
 <div class="jdline">
 <?php
-            
+            echo $this->Form->create('Sector', 
+                    [
+                            'url' => [
+                                    'controller' => 'project',
+                                    'action' => 'savesector'
+                            ],
+                            'inputDefaults' => [
+                                    'label' => false,
+                                    'div' => false
+                            ]
+                    ]);
+            echo $this->Form->input('Sector.id', 
+                    [
+                            'type' => 'hidden',
+                            'value' => $s['id']
+                    ]);
             echo $this->Form->input('Sector.seq', 
                     [
                             'div' => false,
                             'value' => $s['seq']
                     ]);
+            echo $this->Html->link('+', '#', 
+                    [
+                            'onclick' => 'switchOnOff("sector_' . $s['id'] .
+                                     '");',
+                                    'style' => 'float: right; font-size: 16px; font-weight: bold; margin-right: 10px; border: 1px solid; width: 30px; text-align: center;'
+                    ]);
+            
             ?>
-                    <a href="#"
-						onclick='switchOnOff("sector_<?php echo $s['id'];?>")'
-						style="float: right; font-size: 16px; font-weight: bold; margin-right: 10px; border: 1px solid; width: 30px; text-align: center;">+</a>
+<div id="sector_<?php echo $s['id'];?>" style="display: none;">
 <?php
             echo $this->Form->input('Sector.message', 
                     [
-                            'div' => [
-                                    'id' => "sector_" . $s['id'],
-                                    'style' => 'display:none;'
-                            ],
                             'label' => false,
-                            'class' => 'txa_message'
+                            'class' => 'txa_message',
+                            'value' => $s['message']
+                    ]);
+            echo $this->Form->input('Sector.post_id', 
+                    [
+                            'value' => $data['Post']['id'],
+                            'type' => 'hidden'
+                    ]);
+            echo $this->Form->submit('保存', 
+                    [
+                            'div' => false,
+                            'class' => 'submit',
+                            'name' => 'Sector.action'
                     ]);
             echo $this->Form->end();
+            
+            echo $this->Form->create('Sector', 
+                    [
+                            'url' => [
+                                    'controller' => 'project',
+                                    'action' => 'savesector'
+                            ],
+                            'inputDefaults' => [
+                                    'label' => false,
+                                    'div' => false
+                            ]
+                    ]);
+            echo $this->Form->input('Sector.id', 
+                    [
+                            'type' => 'hidden',
+                            'value' => $s['id']
+                    ]);
+            echo $this->Form->input('Sector.post_id', 
+                    [
+                            'value' => $data['Post']['id'],
+                            'type' => 'hidden'
+                    ]);
+            echo $this->Form->submit('删除', 
+                    [
+                            'div' => false,
+                            'class' => 'reset',
+                            'name' => 'Sector.action'
+                    ]);
+            echo $this->Form->end();
+        } else {
+            echo $s['message'];
         }
-        ?>
+        ?></div>
 				</div>
 <?php
     }

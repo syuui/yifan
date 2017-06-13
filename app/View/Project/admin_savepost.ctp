@@ -1,5 +1,9 @@
 <?php
-$form_s = $this->Form->create('Recruit', 
+$this->start('sidebar');
+echo $this->Element('sidebar/project');
+$this->end();
+
+$form_s = $this->Form->create('Post', 
         [
                 'inputDefaults' => [
                         'label' => false,
@@ -14,12 +18,7 @@ $inputs = $this->Form->Inputs(
                         'type' => 'hidden',
                         'value' => $data['Post']['id']
                 ],
-                'Post.action' => [
-                        'type' => 'hidden',
-                        'value' => 'E',
-                        'id' => 'currentAction'
-                ],
-                'Recruit.title' => [
+                'Post.title' => [
                         'value' => $data['Post']['title'],
                         'label' => '文章名称',
                         'div' => true
@@ -35,55 +34,37 @@ $url = $this->Html->url(
                 'controller' => 'project',
                 'action' => 'savesector'
         ]);
-$addSector = $this->Form->button('增加节', 
+$buttons = $this->Form->submit('保存', 
         [
                 'label' => false,
                 'div' => false,
                 'class' => 'submit',
-                'type' => 'button',
-                'id' => 'addSector',
-                'onclick' => "mLayerActionRefresh('" . $url . "', " .
-                         $data['Post']['id'] . ");"
+                'name' => 'Post.action'
         ]);
-$buttons = $this->Form->button('确定', 
-        [
-                'label' => false,
-                'div' => false,
-                'class' => 'submit',
-                'type' => 'button',
-                'id' => 'saveItem'
-        ]) . $this->Form->button('删除', 
-        [
-                'label' => false,
-                'div' => false,
-                'class' => 'reset',
-                'type' => 'button',
-                'id' => 'deleteItem'
-        ]);
-
-echo $form_s;
 ?>
-<div class="m-layer z-show" id="popup_win">
-	<table>
-		<tbody>
-			<tr>
-				<td><article class="lywrap">
-						<header class="lytt">
-							<h2 class="u-tt"><?php echo isset($data)?'编辑文章' :'增加文章';?></h2>
-							<span class="lyclose" onclick="removeLayer();">×</span>
-						</header>
-						<section class="lyct">
-							<p><?php   echo $inputs;   ?></p>
-						</section>
-						<footer class="lybt">
-							<div class="lyother">
-								<p></p>
-							</div>
-							<div class="lybtns"><?php   echo $buttons;  ?></div>
-						</footer>
-					</article></td>
-			</tr>
-		</tbody>
-	</table>
+<!-- 当前位置提示条 -->
+<div class="page_navi">
+    您现在的位置：<?php echo $this->Html->link( Configure::read('c_site_title'),['controller'=>'pages', 'action'=>'display']); ?>
+    &gt; <?php echo $this->Html->link('帮扶项目', ['controller'=>'project', 'action'=>'index']);    ?>
+    &gt; <?php echo isset($data['Post']['title']) ? $data['Post']['title'] : Configure::read('MSG00010001'); ?>
 </div>
-<?php echo $form_e; ?>
+<div class="ele_block">
+	<div class="ele_bdr_l">
+		<div class="ele_bdr_r">
+			<div class="ele_ttl_l">
+				<div class="ele_ttl_m"><?php echo isset($data['Post']['title']) ? $data['Post']['title'] : Configure::read('MSG00010001'); ?></div>
+				<div class="ele_ttl_r"></div>
+			</div>
+			<div class="ele_cnt">
+<?php
+echo $form_s;
+echo $inputs;
+echo $buttons;
+echo $form_e;
+?>
+            </div>
+		</div>
+	</div>
+	<div class="ele_ftr_l"></div>
+	<div class="ele_ftr_r"></div>
+</div>

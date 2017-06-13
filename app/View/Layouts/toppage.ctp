@@ -6,9 +6,6 @@ $title = Configure::read('c_site_title');
 <head>
 	<?php	echo $this->Element('include');	?>
 	<title><?php echo $title;	?></title>
-<?php
-echo $this->Html->css('general');
-?>
 </head>
 <body>
 	<div id="contain">

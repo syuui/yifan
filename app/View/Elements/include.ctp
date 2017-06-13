@@ -1,7 +1,7 @@
 <?php
 echo $this->Html->charset();
 echo $this->Html->css(array(
-        'general'
+        'main'
 ));
 echo $this->Html->script(
         array(

@@ -1,33 +1,30 @@
 <?php
+$page_title = '企业简介';
+
 $this->start('sidebar');
 echo $this->Element('sidebar/company');
 $this->end();
+
+$this->start('page_title');
+echo $page_title;
+$this->end();
+
+$this->start('breadcrumb');
+$this->Html->addCrumb('走进朗豪', 
+        [
+                'controller' => 'company',
+                'action' => 'index'
+        ]);
+$this->Html->addCrumb($page_title);
+echo $this->Html->getCrumbs(' &gt; ', null);
+$this->end();
 ?>
-<!-- 当前位置提示条 -->
-<div class="page_navi">
-	您现在的位置：<?php echo $this->Html->link( Configure::read('c_site_title'), array('controller'=>'pages', 'action'=>'display')); ?> &gt; 走进朗豪
-	&gt; 企业简介
-</div>
-<div class="ele_block">
-	<div class="ele_bdr_l">
-		<div class="ele_bdr_r">
-			<div class="ele_ttl_l">
-				<div class="ele_ttl_m">企业简介</div>
-				<div class="ele_ttl_r"></div>
-			</div>
-			<div class="ele_cnt">
-				<div class="ele_cnt_txt">
+<div class="ele_cnt_txt">
 <?php
 if (empty($data['Variable']['value'])) {
     echo Configure::read('MSG00010001');
 } else {
-    echo nl2br($data['Variable']['value']);
+    echo $this->Tag->nl2p($data['Variable']['value']);
 }
 ?>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="ele_ftr_l"></div>
-	<div class="ele_ftr_r"></div>
 </div>

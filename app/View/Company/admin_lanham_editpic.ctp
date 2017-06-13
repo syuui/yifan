@@ -32,27 +32,28 @@ if (! isset($data)) {
 }
 
 echo $this->Form->Inputs(
-        array(
-                'Variable.id' => array(
+        [
+                'Variable.id' => [
                         'type' => 'hidden',
                         'value' => $data['Variable']['id']
-                ),
-                'Variable.name' => array(
+                ],
+                'Variable.name' => [
                         'type' => 'hidden',
                         'value' => $data['Variable']['name']
-                ),
-                'Variable.value' => array(
-                        'type' => 'input',
-                        'value' => $data['Variable']['value']
-                ),
-                'action' => array(
+                ],
+                'Variable.value' => [
+                        'type' => 'text',
+                        'value' => $data['Variable']['value'],
+                        'label' => '图片文件名'
+                ],
+                'action' => [
                         'type' => 'hidden',
                         'value' => 'E',
                         'id' => 'currentAction'
-                )
-        ), null, array(
+                ]
+        ], null, [
                 'fieldset' => false
-        ));
+        ]);
 ?>							
 							</p>
 						</section>
@@ -63,26 +64,28 @@ echo $this->Form->Inputs(
 							<div class="lybtns">
 <?php
 $url = $this->Html->url(
-        array(
+        [
                 'controller' => 'company',
                 'action' => 'admin_lanham_editpic'
-        ));
+        ]);
 echo $this->Form->button('确定', 
-        array(
+        [
                 'label' => false,
                 'div' => false,
                 'class' => 'submit',
                 'type' => 'button',
                 'id' => 'saveItem'
-        ));
-echo $this->Form->button('删除', 
-        array(
-                'label' => false,
-                'div' => false,
-                'class' => 'reset',
-                'type' => 'button',
-                'id' => 'deleteItem'
-        ));
+        ]);
+if (! empty($data['Variable']['id'])) {
+    echo $this->Form->button('删除', 
+            [
+                    'label' => false,
+                    'div' => false,
+                    'class' => 'reset',
+                    'type' => 'button',
+                    'id' => 'deleteItem'
+            ]);
+}
 ?>
 							</div>
 						</footer>

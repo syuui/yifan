@@ -33,7 +33,7 @@ class NewsController extends AppController
 {
 
     /**
-     * This controller uese following models
+     * 此控制器中使用以下模型
      *
      * @var array
      */
@@ -42,12 +42,14 @@ class NewsController extends AppController
     ];
 
     /**
-     * Specify layout used in this page.
+     * 此控制器使用的布局
+     *
+     * @var string
      */
     public $layout = 'default_r';
 
     /**
-     * This controller uses following helpers
+     * 此控制器中使用以下助件
      *
      * @var array
      */
@@ -56,11 +58,9 @@ class NewsController extends AppController
     ];
 
     /**
-     * Displays a view
+     * [新闻资讯]-[公司动态]的控制器
      *
      * @return void
-     * @throws NotFoundException When the view file could not be found
-     *         or MissingViewException in debug mode.
      */
     public function index ()
     {
@@ -68,6 +68,13 @@ class NewsController extends AppController
         $this->set('inews', 'E');
     }
 
+    /**
+     * [新闻资讯]-[行业动态]的控制器
+     *
+     * 这个控制器与 index 控制器共用一个视图
+     *
+     * @return void
+     */
     public function inews ()
     {
         $this->set('data', $this->getNewsList(News::NEWSTYPE_INDUSTRY));
@@ -75,6 +82,13 @@ class NewsController extends AppController
         $this->render('index');
     }
 
+    /**
+     * [新闻资讯]-[搜索]
+     *
+     * 这个控制器与 index 控制器共用一个视图
+     *
+     * @return void
+     */
     public function search ()
     {
         if (empty($this->data['News']['keyword'])) {
@@ -90,9 +104,14 @@ class NewsController extends AppController
         $this->render('index');
     }
 
+    /**
+     * [新闻资讯]-[新闻内容]的控制器
+     *
+     * @param unknown $id            
+     */
     public function newsdetail ($id = null)
     {
-        if (empty($id) || ! is_numeric($id) || $id < 0) {
+        if (empty($id) || ! is_numeric($id)) {
             $this->set('data', []);
         } else {
             $this->set('data', 
@@ -105,12 +124,26 @@ class NewsController extends AppController
         }
     }
 
+    /**
+     * 管理工具 [新闻资讯]-[搜索]
+     *
+     * 这个控制器与 index 控制器共用一个视图
+     *
+     * @return void
+     */
     public function admin_search ()
     {
         $this->set('isAdmin', true);
         $this->search();
     }
 
+    /**
+     * 管理工具 [新闻资讯]-[新闻内容]
+     *
+     * 这个控制器与 newsdetail 控制器共用一个视图
+     *
+     * @return void
+     */
     public function admin_newsdetail ($id = null)
     {
         $this->set('isAdmin', true);
@@ -118,6 +151,13 @@ class NewsController extends AppController
         $this->render('newsdetail');
     }
 
+    /**
+     * 管理工具 [新闻资讯]-[公司动态]的控制器
+     *
+     * 这个控制器与 index 控制器共用一个视图
+     *
+     * @return void
+     */
     public function admin_index ()
     {
         $this->set('isAdmin', true);
@@ -125,6 +165,13 @@ class NewsController extends AppController
         $this->render('index');
     }
 
+    /**
+     * 管理工具 [新闻资讯]-[行业动态]的控制器
+     *
+     * 这个控制器与 index 控制器共用一个视图
+     *
+     * @return void
+     */
     public function admin_inews ()
     {
         $this->set('isAdmin', true);
@@ -133,6 +180,13 @@ class NewsController extends AppController
         $this->render('index');
     }
 
+    /**
+     * 管理工具 [新闻资讯]-[公司动态]的控制器
+     *
+     * 新闻数据的增、删、改的逻辑。
+     *
+     * @return void
+     */
     public function admin_savenews ($id = null)
     {
         $this->set('isAdmin', true);
@@ -140,42 +194,36 @@ class NewsController extends AppController
         $this->layout = false;
         $this->autoRender = false;
         
-        // Add/Modify/Delete a news
-        if (isset($this->data) && ! empty($this->data)) {
-            if (isset($this->data['News']['id']) &
-                     ! empty($this->data['News']['id'])) {
+        // 增删改的逻辑
+        if (! empty($this->data)) {
+            if (empty($this->data['News']['id'])) {
                 if ($this->data['News']['action'] == 'E') {
+                    // 改
                     $this->News->save($this->data);
-                    
-                    $this->log('Save News: ' . $this->data['News']['id']);
                 } elseif ($this->data['News']['action'] == 'D') {
+                    // 删
                     $this->News->delete($this->data['News']['id']);
-                    
-                    $this->log('Delete News: ' . $this->data['News']['id']);
                 } else {
-                    
                     $this->log(
                             'admin_savenews: 非法的action (' .
                                      $this->data['News']['action'] . ')');
                 }
             } else {
+                // 增
                 $this->News->save($this->data);
-                
-                $this->log('Add News :' . $this->News->getInsertID());
             }
             return;
         }
         
-        // Get news for Edit/Delete Page
+        // 为页面准备既有数据
         if (! empty($id)) {
             $this->set('data', 
                     $this->News->find('first', 
                             [
                                     'conditions' => 'id=' . $id
                             ]));
-            $this->log('Edit News');
         } else {
-            // Prepare blank record for Add Page
+            // 为页面准备空数据
             $this->set('data', 
                     [
                             'News' => [
@@ -185,14 +233,12 @@ class NewsController extends AppController
                                     'content' => ''
                             ]
                     ]);
-            
-            $this->log('Add News');
         }
         $this->render();
     }
 
     /**
-     * Controller for Element newslist.ctp
+     * [元素块]-[新闻一览]的控制器
      *
      * @return unknown
      */
@@ -201,6 +247,11 @@ class NewsController extends AppController
         return $this->getNewsList(null, $limit);
     }
 
+    /**
+     * 管理工具 [元素块]-[新闻一览]的控制器
+     *
+     * @return unknown
+     */
     public function admin_getAllNewsList ($limit = 0)
     {
         return $this->getAllNewsList($limit);
@@ -209,6 +260,7 @@ class NewsController extends AppController
     /**
      * 取得新闻列表
      *
+     * 这个方法为各控制器中所用的新闻信息列表取得数据
      *
      * @param unknown $type
      *            新闻类型（企业新闻、行业新闻、所有）。

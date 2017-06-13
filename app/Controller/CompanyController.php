@@ -57,6 +57,15 @@ class CompanyController extends AppController
     ];
 
     /**
+     * 此控制器中使用以下助件
+     *
+     * @var array
+     */
+    public $helpers = [
+            'Tag'
+    ];
+
+    /**
      * 此控制器使用的布局
      *
      * @var string
@@ -144,9 +153,6 @@ class CompanyController extends AppController
      */
     public function admin_index ()
     {
-        $this->Helper = [
-                'form'
-        ];
         $this->set('isAdmin', true);
         
         if (! empty($this->data)) {
@@ -177,9 +183,6 @@ class CompanyController extends AppController
      */
     public function admin_culture ()
     {
-        $this->Helper = [
-                'form'
-        ];
         $this->set('isAdmin', true);
         
         if (! empty($this->data)) {
@@ -212,9 +215,6 @@ class CompanyController extends AppController
      */
     public function admin_development ()
     {
-        $this->Helper = [
-                'form'
-        ];
         $this->set('isAdmin', true);
         
         if (! empty($this->data)) {
@@ -246,9 +246,6 @@ class CompanyController extends AppController
      */
     public function admin_lanham ()
     {
-        $this->Helper = [
-                'form'
-        ];
         $this->set('isAdmin', true);
         
         if (isset($this->data) && ! empty($this->data['Variable']['value'])) {
@@ -278,8 +275,10 @@ class CompanyController extends AppController
      */
     public function admin_lanham_editpic ($id = null)
     {
+        $this->set('isAdmin', true);
+        
         $this->layout = false;
-        if (isset($this->data) && ! empty($this->data['Variable']['value'])) {
+        if (! empty($this->data['Variable']['value'])) {
             if ($this->data['Variable']['action'] === 'E') {
                 $this->Variable->save($this->data);
             } elseif ($this->data['Variable']['action'] === 'D') {
@@ -287,14 +286,6 @@ class CompanyController extends AppController
             } else {
                 $this->log('admin_lanham_editpic: 非法的action');
             }
-            
-            $dbo = $this->Variable->getDatasource();
-            $logData = $dbo->getLog();
-            
-            ob_start();
-            var_dump($logData);
-            $result = ob_get_clean();
-            $this->log($result);
         }
         if (! empty($id)) {
             $this->set('data', 
