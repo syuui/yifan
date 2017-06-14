@@ -1,6 +1,16 @@
 <?php
 $this->start('sidebar');
-echo $this->Element('sidebar/project');
+echo $this->Element('sidebar/company');
+$this->end();
+$page_title = '帮扶项目';
+
+$this->start('page_title');
+echo $page_title;
+$this->end();
+
+$this->start('breadcrumb');
+$this->Html->addCrumb($page_title);
+echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
 $addLink = $this->Html->link('增加文章', 
@@ -10,66 +20,48 @@ $addLink = $this->Html->link('增加文章',
         ], [
                 'class' => 'submit'
         ]);
-?>
-<!-- 当前位置提示条 -->
-<div class="page_navi">
-    您现在的位置：<?php echo $this->Html->link( Configure::read('c_site_title'),['controller'=>'pages', 'action'=>'display']); ?>
-    &gt; 帮扶项目
-</div>
-<div class="ele_block">
-	<div class="ele_bdr_l">
-		<div class="ele_bdr_r">
-			<div class="ele_ttl_l">
-				<div class="ele_ttl_m">帮扶项目</div>
-				<div class="ele_ttl_r"></div>
-			</div>
-			<div class="ele_cnt">
-<?php
-echo $addLink;
+
+if (isset($isAdmin) && $isAdmin) {
+    echo $addLink;
+}
 
 if (! empty($data)) {
-    ?>
-<table>
-<?php
+    
+    echo '<table>';
+    
     foreach ($data as $d) {
+        
         $table_cells[] = [
-                $this->Html->link($d['Post']['title'], 
+                [
+                        $this->Html->link($d['Post']['title'], 
+                                [
+                                        'controller' => 'project',
+                                        'action' => 'postdetail',
+                                        $d['Post']['id']
+                                ]),
                         [
-                                'controller' => 'project',
-                                'action' => 'postdetail',
-                                $d['Post']['id']
-                        ], 
+                                'class' => 'projectlist_index'
+                        ]
+                ],
+                [
+                        date('Y-m-d', strtotime($d['Post']['created'])),
                         [
-                                'class' => 'projecttitle'
-                        ]),
-                date('Y-m-d', strtotime($d['Post']['created']))
+                                'class' => 'project_date'
+                        ]
+                ]
         ];
     }
-    
     echo $this->Html->tableCells($table_cells);
-    ?>
-</table>
-
-<?php
+    
+    echo '</table>';
 } else {
     echo Configure::read('MSG00010001');
 }
 
-?>
+echo $this->Html->div('pagination', 
+        $this->Paginator->prev(' < ') . $this->Paginator->numbers(
+                [
+                        'separator' => ' | '
+                ]) . $this->Paginator->next(' > '));
 
-
-                <div class="pagination">
-<?php
-echo $this->Paginator->prev('<');
-echo $this->Paginator->numbers([
-        'separator' => ''
-]);
-echo $this->Paginator->next('>');
 ?>
-</div>
-			</div>
-		</div>
-	</div>
-	<div class="ele_ftr_l"></div>
-	<div class="ele_ftr_r"></div>
-</div>

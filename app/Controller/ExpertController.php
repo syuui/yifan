@@ -53,7 +53,10 @@ class ExpertController extends AppController
     public function index ()
     {}
 
-    public function adm_index ()
+    public function lession ()
+    {}
+
+    public function admin_index ()
     {
         ;
     }

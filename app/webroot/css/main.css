@@ -20,10 +20,16 @@ body {
 	text-align: left;
 	font: 12px Verdana, Arial, Helvetica, sans-serif;
 	text-decoration: none;
+	text-align: left;
 }
 
 div, li, td, p, select, input, textarea, a, button {
 	color: #505050;
+}
+
+p {
+	margin: 3px;
+	line-height: 28px;
 }
 
 a:link, a:visited, a:active {
@@ -156,6 +162,22 @@ li {
 	height: 300px;
 }
 
+.txt_nobutton {
+	width: 700px;
+}
+
+.txt_button_title {
+	width: 500px;
+}
+
+.txt_button2_title {
+	width: 450px;
+}
+
+.txt_title {
+	width: 600px;
+}
+
 /* 共通 */
 div.page_navi {
 	width: 730px;
@@ -168,6 +190,28 @@ div.spliter {
 	width: 80%;
 	text-decoration: line-through;
 }
+
+/* 分页 */
+.pagination {
+	width: 100%;
+	text-align: center;
+	font: 12px/18px SimSun, 'microsoft yahei', Verdana, Arial;
+}
+
+.pagination span {
+	margin: 10px;
+}
+
+.pagination span a {
+	font: 14pt SimSun, 'microsoft yahei', Verdana, Arial;
+}
+
+.pagination span.current {
+	font: 14pt SimSun, 'microsoft yahei', Verdana, Arial;
+	font-weight: bold;
+	color: red;
+}
+
 /* 操作型弹出浮层-默认居中 */
 .m-layer {
 	display: none;
@@ -570,6 +614,15 @@ div.piclist_index .piclist_index_pic img {
 	border: 0px;
 }
 
+div.piclist_pic {
+	display: inline-block;
+}
+
+div.piclist_pic img {
+	width: 300px;
+	height: 200px;
+}
+
 div.piclist_index .piclist_index_title {
 	margin-top: 5px;
 	overflow: hidden;
@@ -639,4 +692,45 @@ span.news_content, span.news_content P {
 	font: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	text-indent: 20px;
 	text-decoration: none;
+}
+/*--------------------------------------------------------------------------------
+ * 帮扶项目
+ *--------------------------------------------------------------------------------*/
+td.projectlist_index {
+	color: #315aaa;
+	font-size: 12px;
+	width: 600px;
+	text-align: left;
+	overflow: hidden;
+}
+
+span.project_date {
+	display: block;
+	width: 100%;
+	margin: 0px 0px 20px 0px;
+	font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-align: right;
+	text-decoration: none;
+	opacity: 0.7;
+}
+
+td.project_date {
+	width: 100px;
+	margin: 0px 0px 20px 0px;
+	font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-align: right;
+	text-decoration: none;
+	opacity: 0.7;
+}
+
+span.project_title {
+	display: block;
+	width: 100%;
+	margin: 0px 0px 30px 0px;
+	font: 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-align: center;
+	font-weight: bold;
+	text-decoration: none;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+	width: 100%;
 }

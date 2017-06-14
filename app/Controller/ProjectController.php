@@ -113,7 +113,6 @@ class ProjectController extends AppController
     {
         $this->set('isAdmin', true);
         $this->postdetail($id);
-        $this->render('postdetail');
     }
 
     public function admin_index ()
@@ -133,10 +132,11 @@ class ProjectController extends AppController
             } elseif ($this->data['Post_action'] === "删除文章") {
                 $this->Post->delete($this->data['Post']['id']);
             }
-            $this->redirect([
-                    'controller' => 'project',
-                    'action' => 'index'
-            ]);
+            $this->redirect(
+                    [
+                            'controller' => 'project',
+                            'action' => 'index'
+                    ]);
         }
         
         // Get records for Edit/Delete Page
@@ -229,5 +229,24 @@ class ProjectController extends AppController
         $this->data = null;
         $this->postdetail($id);
         $this->render('postdetail');
+    }
+
+    public function getProjectList ($limit = 0)
+    {
+        $options = [
+                'fields' => [
+                        'Post.id',
+                        'Post.title'
+                ]
+        ];
+        if ($limit != 0) {
+            $options['limit'] = $limit;
+        }
+        return $this->Post->find('all', $options);
+    }
+
+    public function admin_getProjectList ($limit = 0)
+    {
+        return $this->getProjectList($limit);
     }
 }

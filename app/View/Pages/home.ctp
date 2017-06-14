@@ -9,30 +9,7 @@
 <!-- middle -->
 <div id="middle">
 	<!-- 帮扶项目 -->
-	<div class="ele_block">
-		<div class="ele_bdr_l">
-			<div class="ele_bdr_r">
-				<div class="ele_ttl_l">
-					<div class="ele_ttl_m">帮扶项目</div>
-					<div class="ele_ttl_r"></div>
-				</div>
-				<div class="ele_cnt">
-					<ul class="list_style_2">
-						<li><?php echo $this->Html->link('XXXX医院YYYY项目顺利实施', array('controller'=>'news', 'action'=>'displaynews', 5))?></li>
-						<li><?php echo $this->Html->link('XXXX医院YYYY项目顺利实施', array('controller'=>'news', 'action'=>'displaynews', 5))?></li>
-						<li><?php echo $this->Html->link('XXXX医院YYYY项目顺利实施', array('controller'=>'news', 'action'=>'displaynews', 5))?></li>
-						<li><?php echo $this->Html->link('XXXX医院YYYY项目顺利实施', array('controller'=>'news', 'action'=>'displaynews', 5))?></li>
-						<li><?php echo $this->Html->link('XXXX医院YYYY项目顺利实施', array('controller'=>'news', 'action'=>'displaynews', 5))?></li>
-						<li><?php echo $this->Html->link('XXXX医院YYYY项目顺利实施', array('controller'=>'news', 'action'=>'displaynews', 5))?></li>
-						<li><?php echo $this->Html->link('XXXX医院YYYY项目顺利实施', array('controller'=>'news', 'action'=>'displaynews', 5))?></li>
-						<li><?php echo $this->Html->link('XXXX医院YYYY项目顺利实施', array('controller'=>'news', 'action'=>'displaynews', 5))?></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="ele_ftr_l"></div>
-		<div class="ele_ftr_r"></div>
-	</div>
+    <?php  echo $this->Element('projectlist');  ?>
 	<!-- 帮扶项目 -->
 
 	<!-- 专家风采 -->

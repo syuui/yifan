@@ -19,14 +19,15 @@ echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
 foreach ($pics as $p) {
-    echo $this->Html->div('piclist_index', 
-            $this->Html->div('piclist_index_pic', 
-                    $this->Html->image(
-                            Uploaditem::UPLOAD_IMAGE . '/' .
-                                     $p['Variable']['value'], 
-                                    [
-                                            'alt' => $p['Variable']['value']
-                                    ])));
+    $url = Uploaditem::UPLOAD_IMAGE . '/' . $p['Variable']['value'];
+    echo $this->Html->div('piclist_pic', 
+            $this->Html->image($url, 
+                    [
+                            'alt' => $p['Variable']['value'],
+                            'onclick' => "window.open('" . '/img/' .
+                                     Uploaditem::UPLOAD_IMAGE . '/' .
+                                     $p['Variable']['value'] . "');"
+                    ]));
 }
 ?>
 <div class="ele_cnt_txt">
