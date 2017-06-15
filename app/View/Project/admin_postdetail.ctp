@@ -1,6 +1,6 @@
 <?php
 $this->start('sidebar');
-echo $this->Element('sidebar/company');
+echo $this->Element('sidebar/project');
 $this->end();
 $page_title = $data['Post']['title'];
 
@@ -61,21 +61,6 @@ if (! empty($data)) {
                     'div' => false,
                     'name' => 'Post.action'
             ]);
-    echo $this->Form->end();
-    /* 保存文章用表单结束 */
-    
-    /* 删除文章用表单 */
-    echo $this->Form->create('Post', 
-            [
-                    'url' => [
-                            'controller' => 'project',
-                            'action' => 'savepost'
-                    ],
-                    'inputDefaults' => [
-                            'div' => false,
-                            'label' => false
-                    ]
-            ]);
     echo $this->Form->input('Post.id', 
             [
                     'type' => 'hidden',
@@ -116,7 +101,23 @@ if (! empty($data)) {
     /* 增加节用表单结束 */
     
     foreach ($data['Sector'] as $s) {
-        $form_s = $this->Form->create('Sector', 
+        ?>
+<div class="jd-block">
+	<div class="jd-title">
+<?php
+        echo $s['seq'];
+        echo $this->Html->link('+', '#', 
+                [
+                        'onclick' => 'switchOnOff("sector_' . $s['id'] . '");',
+                        'class' => 'switch-link'
+                ]);
+        
+        ?></div>
+	<div class="jdline">
+		<div id="sector_<?php echo $s['id'];?>" style="display: none;">
+        <?php
+        
+        echo $this->Form->create('Sector', 
                 [
                         'url' => [
                                 'controller' => 'project',
@@ -127,80 +128,62 @@ if (! empty($data)) {
                                 'div' => false
                         ]
                 ]);
-        $inputs = $this->Form->input('Sector.id', 
+        echo $this->Form->input('Sector.id', 
                 [
                         'type' => 'hidden',
                         'value' => $s['id']
                 ]);
-        $inputs .= $this->Form->input('Sector.seq', 
+        echo $this->Form->input('Sector.seq', 
                 [
                         'div' => false,
-                        'value' => $s['seq']
+                        'value' => $s['seq'],
+                        'label' => '表示顺序'
                 ]);
-        $inputs .= $this->Html->link('+', '#', 
-                [
-                        'onclick' => 'switchOnOff("sector_' . $s['id'] . '");',
-                        'style' => 'float: right; font-size: 16px; font-weight: bold; margin-right: 10px; border: 1px solid; width: 30px; text-align: center;'
-                ]);
-        $jdline_div = $form_s . $inputs;
-        ?>
-<div class="jdline">
-	<div id="sector_<?php echo $s['id'];?>" style="display: none;">
-<?php
-        $sinputs = $this->Form->input('Sector.message', 
+        
+        echo $this->Form->input('Sector.message', 
                 [
                         'label' => false,
-                        'class' => 'txa_message',
+                        'class' => 'txa_button',
                         'value' => $s['message']
                 ]);
-        $sinputs .= $this->Form->input('Sector.post_id', 
+        echo $this->Form->input('Sector.id', 
+                [
+                        'value' => $s['id'],
+                        'type' => 'hidden'
+                ]);
+        echo $this->Form->input('Sector.post_id', 
                 [
                         'value' => $data['Post']['id'],
                         'type' => 'hidden'
                 ]);
-        $submit = $this->Form->submit('保存', 
+        echo $this->Form->submit('保存', 
                 [
                         'div' => false,
                         'class' => 'submit',
                         'name' => 'Sector.action'
                 ]);
-        $form_e = $this->Form->end();
-        
-        $form2_s = $this->Form->create('Sector', 
-                [
-                        'url' => [
-                                'controller' => 'project',
-                                'action' => 'savesector'
-                        ],
-                        'inputDefaults' => [
-                                'label' => false,
-                                'div' => false
-                        ]
-                ]);
-        $inputs2 = $this->Form->input('Sector.id', 
+        echo $this->Form->input('Sector.id', 
                 [
                         'type' => 'hidden',
                         'value' => $s['id']
                 ]);
-        $inputs2 .= $this->Form->input('Sector.post_id', 
+        echo $this->Form->input('Sector.post_id', 
                 [
                         'value' => $data['Post']['id'],
                         'type' => 'hidden'
                 ]);
-        $submit2 = $this->Form->submit('删除', 
+        echo $this->Form->submit('删除', 
                 [
                         'div' => false,
                         'class' => 'reset',
                         'name' => 'Sector.action'
                 ]);
-        $form2_e = $this->Form->end();
-        $sector_div = $this->Html->div('sector_' . $s['id'], 
-                $sinputs . $submit . $form_e . $form2_s . $inputs2 . $submit2 .
-                         $form2_e, 
-                        [
-                                'style' => 'display: none;'
-                        ]);
-        echo $this->Html->div('jdline', $jdline_div . $sector_div);
+        echo $this->Form->end();
+        ?>
+</div>
+	</div>
+</div>
+<?php
     }
 } else {
     echo Configure::read('MSG00010001');

@@ -27,7 +27,8 @@ if (count($data) == 0) {
 <?php
 }
 ?>
-</div>
+<div class="see-more"><?php echo $this->Html->link('更多',['controller'=>'recruit', 'action'=>'index']);?></div>
+			</div>
 		</div>
 	</div>
 	<div class="ele_ftr_l"></div>

@@ -67,11 +67,11 @@ function switchOnOff(ndiv) {
 	var val = ele.html();
 
 	if (val == '+') {
-		$("#" + ndiv).css('display','block'); 
+		$("#" + ndiv).css('display', 'block');
 		ele.html("-");
 	} else {
-		$("#" + ndiv).css('display','none'); 
+		$("#" + ndiv).css('display', 'none');
 		ele.html("+");
 	}
-
+	location.href = "#" + ndiv;
 }

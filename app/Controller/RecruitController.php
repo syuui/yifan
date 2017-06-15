@@ -83,7 +83,8 @@ class RecruitController extends AppController
      */
     public function index ()
     {
-        $this->paginate['Recruit']['limit'] = Configure::read('page_length');
+        $this->paginate['Recruit']['limit'] = Configure::read(
+                'recruit_page_length');
         $this->Paginator->settings = $this->paginate;
         $this->set('data', $this->Paginator->paginate('Recruit'));
     }

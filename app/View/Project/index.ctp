@@ -1,6 +1,6 @@
 <?php
 $this->start('sidebar');
-echo $this->Element('sidebar/company');
+echo $this->Element('sidebar/project');
 $this->end();
 $page_title = '帮扶项目';
 
@@ -26,42 +26,22 @@ if (isset($isAdmin) && $isAdmin) {
 }
 
 if (! empty($data)) {
-    
-    echo '<table>';
-    
     foreach ($data as $d) {
-        
-        $table_cells[] = [
+        $div_title = $this->Html->link($d['Post']['title'], 
                 [
-                        $this->Html->link($d['Post']['title'], 
-                                [
-                                        'controller' => 'project',
-                                        'action' => 'postdetail',
-                                        $d['Post']['id']
-                                ]),
-                        [
-                                'class' => 'projectlist_index'
-                        ]
-                ],
-                [
-                        date('Y-m-d', strtotime($d['Post']['created'])),
-                        [
-                                'class' => 'project_date'
-                        ]
-                ]
-        ];
+                        'controller' => 'project',
+                        'action' => 'postdetail',
+                        $d['Post']['id']
+                ]);
+        $div_date = date('Y-m-d', strtotime($d['Post']['created']));
+        echo $this->Html->div('projectlist', 
+                $this->Html->div('projectlist_index', $div_title) .
+                         $this->Html->div('projectlist_date', $div_date));
     }
-    echo $this->Html->tableCells($table_cells);
-    
-    echo '</table>';
 } else {
     echo Configure::read('MSG00010001');
 }
 
-echo $this->Html->div('pagination', 
-        $this->Paginator->prev(' < ') . $this->Paginator->numbers(
-                [
-                        'separator' => ' | '
-                ]) . $this->Paginator->next(' > '));
+echo $this->Element('pagination');
 
 ?>

@@ -4,6 +4,8 @@ Configure::write('newslist_max_length', 8);
 Configure::write('projectlist_max_length', 8);
 Configure::write('recruit_max_length', 8);
 Configure::write('page_length', 10);
+Configure::write('project_page_length', 10);
+Configure::write('recruit_page_length', 10);
 Configure::write('banner_filename', 'banner.jpg');
 Configure::write('logo_filename', 'logo.png');
 Configure::write('hotline_filename', 'hotline.png');

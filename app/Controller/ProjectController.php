@@ -84,8 +84,10 @@ class ProjectController extends AppController
      */
     public function index ()
     {
-        $this->paginate['Posts']['limit'] = Configure::read('page_length');
+        $this->paginate['Post']['limit'] = Configure::read(
+                'project_page_length');
         $this->Paginator->settings = $this->paginate;
+        
         $this->set('data', $this->Paginator->paginate('Post'));
     }
 
@@ -228,7 +230,7 @@ class ProjectController extends AppController
         $id = $this->data['Sector']['post_id'];
         $this->data = null;
         $this->postdetail($id);
-        $this->render('postdetail');
+        $this->render('admin_postdetail');
     }
 
     public function getProjectList ($limit = 0)

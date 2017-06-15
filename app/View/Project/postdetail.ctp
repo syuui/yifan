@@ -1,6 +1,6 @@
 <?php
 $this->start('sidebar');
-echo $this->Element('sidebar/company');
+echo $this->Element('sidebar/project');
 $this->end();
 $page_title = $data['Post']['title'];
 
@@ -23,7 +23,7 @@ if (! empty($data)) {
             [
                     'class' => 'project_title'
             ]);
-    echo $this->Html->tag('span', $data['Post']['updated'], 
+    echo $this->Html->tag('span', date('Y-m-d', strtotime($data['Post']['updated'])), 
             [
                     'class' => 'project_date'
             ]);
