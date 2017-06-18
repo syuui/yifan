@@ -194,26 +194,9 @@ class CompanyController extends AppController
         $this->layout = 'mLayer';
         if (! empty($this->data)) {
             if ($this->data['Post_action'] === '删除') {
-                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
-                         $this->data['Variable']['value'];
-                unlink($imgPath);
-                $this->Variable->delete($this->data['Variable']['id']);
+                $this->delPicture();
             } elseif ($this->data['Post_action'] === '增加图片') {
-                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
-                         $this->data['Variable']['file']['name'];
-                if (file_exists($imgPath)) {
-                    // TODO:
-                    ;
-                } else {
-                    copy($this->data['Variable']['file']['tmp_name'], $imgPath);
-                    $d = [
-                            'Variable' => [
-                                    'name' => Variable::ENTERPRISE_DESCRIPTION_PIC,
-                                    'value' => $this->data['Variable']['file']['name']
-                            ]
-                    ];
-                    $this->Variable->save($d);
-                }
+                $this->addPicture(Variable::ENTERPRISE_DESCRIPTION_PIC);
             } else {
                 $this->log('admin_index_editpic: 非法的action');
             }
@@ -281,26 +264,9 @@ class CompanyController extends AppController
         $this->layout = 'mLayer';
         if (! empty($this->data)) {
             if ($this->data['Post_action'] === '删除') {
-                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
-                         $this->data['Variable']['value'];
-                unlink($imgPath);
-                $this->Variable->delete($this->data['Variable']['id']);
+                $this->delPicture();
             } elseif ($this->data['Post_action'] === '增加图片') {
-                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
-                         $this->data['Variable']['file']['name'];
-                if (file_exists($imgPath)) {
-                    // TODO:
-                    ;
-                } else {
-                    copy($this->data['Variable']['file']['tmp_name'], $imgPath);
-                    $d = [
-                            'Variable' => [
-                                    'name' => Variable::ENTERPRISE_CULTURE_PIC,
-                                    'value' => $this->data['Variable']['file']['name']
-                            ]
-                    ];
-                    $this->Variable->save($d);
-                }
+                $this->addPicture(Variable::ENTERPRISE_CULTURE_PIC);
             } else {
                 $this->log('admin_index_editpic: 非法的action');
             }
@@ -368,26 +334,9 @@ class CompanyController extends AppController
         $this->layout = 'mLayer';
         if (! empty($this->data)) {
             if ($this->data['Post_action'] === '删除') {
-                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
-                         $this->data['Variable']['value'];
-                unlink($imgPath);
-                $this->Variable->delete($this->data['Variable']['id']);
+                $this->delPicture();
             } elseif ($this->data['Post_action'] === '增加图片') {
-                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
-                         $this->data['Variable']['file']['name'];
-                if (file_exists($imgPath)) {
-                    // TODO:
-                    ;
-                } else {
-                    copy($this->data['Variable']['file']['tmp_name'], $imgPath);
-                    $d = [
-                            'Variable' => [
-                                    'name' => Variable::ENTERPRISE_DEVELOPMENT_PIC,
-                                    'value' => $this->data['Variable']['file']['name']
-                            ]
-                    ];
-                    $this->Variable->save($d);
-                }
+                $this->addPicture(Variable::ENTERPRISE_DEVELOPMENT_PIC);
             } else {
                 $this->log('admin_index_editpic: 非法的action');
             }
@@ -451,26 +400,9 @@ class CompanyController extends AppController
         $this->layout = 'mLayer';
         if (! empty($this->data)) {
             if ($this->data['Post_action'] === '删除') {
-                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
-                         $this->data['Variable']['value'];
-                unlink($imgPath);
-                $this->Variable->delete($this->data['Variable']['id']);
+                $this->delPicture();
             } elseif ($this->data['Post_action'] === '增加图片') {
-                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
-                         $this->data['Variable']['file']['name'];
-                if (file_exists($imgPath)) {
-                    // TODO:
-                    ;
-                } else {
-                    copy($this->data['Variable']['file']['tmp_name'], $imgPath);
-                    $d = [
-                            'Variable' => [
-                                    'name' => Variable::ENTERPRISE_LANHAM_PIC,
-                                    'value' => $this->data['Variable']['file']['name']
-                            ]
-                    ];
-                    $this->Variable->save($d);
-                }
+                $this->addPicture(Variable::ENTERPRISE_LANHAM_PIC);
             } else {
                 $this->log('admin_lanham_editpic: 非法的action');
             }
@@ -481,6 +413,7 @@ class CompanyController extends AppController
                     ]);
         }
         $this->set('pics', $this->Variable->find('companyPicList'));
+        $this->render('admin_editpic');
     }
 
     private function getPageData ($varName, $findMethod = 'first')
@@ -491,5 +424,42 @@ class CompanyController extends AppController
                                 'Variable.name' => $varName
                         ]
                 ]);
+    }
+
+    private function delPicture ()
+    {
+        empty($this->data) && exit();
+        
+        $this->Variable->delete($this->data['Variable']['id']);
+        $npic = $this->Variable->find('count', 
+                [
+                        'conditions' => [
+                                'Variable.value' => $this->data['Variable']['value']
+                        ]
+                ]);
+        if ($npic <= 0) {
+            $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+                     $this->data['Variable']['value'];
+            unlink($imgPath);
+        }
+    }
+
+    private function addPicture ($name)
+    {
+        empty($this->data) && exit();
+        
+        $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+                 $this->data['Variable']['file']['name'];
+        $d = [
+                'Variable' => [
+                        'name' => $name,
+                        'value' => $this->data['Variable']['file']['name']
+                ]
+        ];
+        $this->Variable->save($d);
+        
+        if (! file_exists($imgPath)) {
+            copy($this->data['Variable']['file']['tmp_name'], $imgPath);
+        }
     }
 }
