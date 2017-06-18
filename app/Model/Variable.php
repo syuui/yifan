@@ -33,9 +33,19 @@ class Variable extends AppModel
 
     const ENTERPRISE_DESCRIPTION = 'enterprise_description';
 
+    const ENTERPRISE_DESCRIPTION_PIC = 'enterprise_description_pics';
+
     const ENTERPRISE_CULTURE = 'enterprise_culture';
 
+    const ENTERPRISE_CULTURE_PIC = 'enterprise_culture_pics';
+
     const ENTERPRISE_DEVELOPMENT = 'enterprise_development';
+
+    const ENTERPRISE_DEVELOPMENT_PIC = 'enterprise_development_pics';
+
+    const ENTERPRISE_LANHAM = 'enterprise_lanham';
+
+    const ENTERPRISE_LANHAM_PIC = 'enterprise_lanham_pics';
 
     const RECRUIT_STRATEGY = 'recruit_strategy';
 
@@ -88,101 +98,16 @@ class Variable extends AppModel
      */
     public $cacheQueries = true;
 
-    /**
-     * 取得数据库变量
-     *
-     * 此方法返回一个CakePHP格式的数据库查询数组，其中包含取得的变量的数据库记录。
-     * 默认情况下只返回第一个值。
-     * 如果$options中包含 type=>first 的键值对，则返回第一个值（默认）。
-     * 如果$options中包含 type=>all 的键值对，则返回所有的值。
-     * 如果$options中包含 type=>count 的键值对，则返回符合条件的数据个数。
-     *
-     * @param unknown $name
-     *            变量名
-     * @param array $options
-     *            选项
-     *            
-     * @return NULL|unknown 包含变量值的数组，遵循Cake规范
-     */
-    public function getVariable ($name, $options = [])
-    {
-        $this->log("Param name: $name");
-        if (empty($name) || ! is_string($name)) {
-            return null;
-        }
-        
-        $con = [
-                'conditions' => [
-                        'Variable.name' => $name
-                ]
-        ];
-        $type = 'first';
-        
-        if (key_exists('type', $options)) {
-            if ($options['type'] === 'all') {
-                $type = 'all';
-            } elseif ($options['type'] === 'count') {
-                $type = 'count';
-            }
-        }
-        ob_start();
-        echo "name: $name";
-        var_dump($options);
-        $this->log(ob_end_clean());
-        
-        return $this->find($type, $con);
-    }
+    public $findMethods = array(
+            'companyPicList' => true
+    );
 
-    /**
-     * 设置数据库变量
-     *
-     * 此方法设置一个数据库变量。
-     * 如果$options中包含 'useNameAsId'=>true 的键值对，则$name的值将做为id
-     *
-     * @param unknown $name
-     *            变量名
-     *            
-     * @param unknown $value
-     *            变量值
-     *            
-     * @param array $options
-     *            选项
-     *            
-     * @return void
-     */
-    public function setVariable ($name, $value, $options = [])
+    protected function _findCompanyPicList ($state, $query, $results = array())
     {
-        if (empty($name) || ! is_string($name)) {
-            return;
+        if ($state === 'before') {
+            $query['conditions']['name'] = Variable::ENTERPRISE_LANHAM_PIC;
+            return $query;
         }
-        
-        if (! empty($options) && key_exists('useNameAsId', $options) &&
-                 $options['useNameAsId'] === true) {
-            $dat = $this->find('first', 
-                    [
-                            'conditions' => [
-                                    'id' => $name
-                            ]
-                    ]);
-            if (count($dat) == 1) {
-                $dat['Variable']['value'] = value;
-            }
-        } else {
-            $dat = $this->getVariable($name, 
-                    [
-                            'type' => 'all'
-                    ]);
-            if (count($dat) > 1) {
-                // 同一个name有多个值，为防止误覆盖，处理停止
-                return;
-            }
-            $dat[0]['Variable']['value'] = $value;
-            $this->Variable->save($dat[0]);
-        }
-    }
-
-    public function returnAAA ()
-    {
-        return 'AAA';
+        return $results;
     }
 }

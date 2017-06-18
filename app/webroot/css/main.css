@@ -321,7 +321,19 @@ div.spliter {
 
 .m-layer input, textarea, select {
 	display: inline-block;
+	/*width: 600px;*/
+}
+
+.m-layer input[type=text] {
 	width: 600px;
+}
+
+.m-layer select {
+	width: 300px;
+}
+
+.m-layer textarea {
+	width: 750px;
 }
 
 .m-layer label {
@@ -611,6 +623,11 @@ div#footermenu a:hover {
 	overflow: hidden;
 }
 
+.piclist-small {
+	width: 100px;
+	margin: 5px;
+}
+
 div.piclist_index {
 	margin: 5px 0px 3px 13px;
 	text-align: center;
@@ -636,6 +653,7 @@ div.piclist_index .piclist_index_pic img {
 
 div.piclist_pic {
 	display: inline-block;
+    margin: 20px;
 }
 
 div.piclist_pic img {

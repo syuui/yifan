@@ -34,20 +34,6 @@ class CompanyController extends AppController
 {
 
     /**
-     * 在variables表中保存的 【朗豪风采】 页面所使用的照片的 name 字段值
-     *
-     * @var string
-     */
-    const LANHAM_PICTURE = 'lanham_pics';
-
-    /**
-     * 在variables表中保存的 【朗豪风采】 页面所使用的文字描述的 name 字段值
-     *
-     * @var string
-     */
-    const LANHAM_DESCRIPTION = 'lanham_dscr';
-
-    /**
      * 此控制器中使用以下模型
      *
      * @var array
@@ -79,14 +65,16 @@ class CompanyController extends AppController
      */
     public function index ()
     {
-        $this->set('data', 
-                $this->Variable->find('first', 
+        $this->set('pics', 
+                $this->Variable->find('all', 
                         [
                                 'conditions' => [
-                                        'Variable.name' => Variable::ENTERPRISE_DESCRIPTION
-                                ],
-                                'limit' => 1
+                                        'name' => Variable::ENTERPRISE_DESCRIPTION_PIC
+                                ]
                         ]));
+        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_DESCRIPTION));
+        $this->set('page_title', '企业简介');
+        $this->render('display');
     }
 
     /**
@@ -96,14 +84,16 @@ class CompanyController extends AppController
      */
     public function culture ()
     {
-        $this->set('data', 
-                $this->Variable->find('first', 
+        $this->set('pics', 
+                $this->Variable->find('all', 
                         [
                                 'conditions' => [
-                                        'Variable.name' => Variable::ENTERPRISE_CULTURE
-                                ],
-                                'limit' => 1
+                                        'name' => Variable::ENTERPRISE_CULTURE_PIC
+                                ]
                         ]));
+        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_CULTURE));
+        $this->set('page_title', '企业文化');
+        $this->render('display');
     }
 
     /**
@@ -113,14 +103,16 @@ class CompanyController extends AppController
      */
     public function development ()
     {
-        $this->set('data', 
-                $this->Variable->find('first', 
+        $this->set('pics', 
+                $this->Variable->find('all', 
                         [
                                 'conditions' => [
-                                        'Variable.name' => Variable::ENTERPRISE_DEVELOPMENT
-                                ],
-                                'limit' => 1
+                                        'name' => Variable::ENTERPRISE_DEVELOPMENT_PIC
+                                ]
                         ]));
+        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_DEVELOPMENT));
+        $this->set('page_title', '发展战略');
+        $this->render('display');
     }
 
     /**
@@ -134,16 +126,12 @@ class CompanyController extends AppController
                 $this->Variable->find('all', 
                         [
                                 'conditions' => [
-                                        'Variable.name' => CompanyController::LANHAM_PICTURE
+                                        'name' => Variable::ENTERPRISE_LANHAM_PIC
                                 ]
                         ]));
-        $this->set('dscr', 
-                $this->Variable->find('first', 
-                        [
-                                'conditions' => [
-                                        'Variable.name' => CompanyController::LANHAM_DESCRIPTION
-                                ]
-                        ]));
+        $this->set('data', $this->getPageData(Variable::ENTERPRISE_LANHAM));
+        $this->set('page_title', '朗豪风采');
+        $this->render('display');
     }
 
     /**
@@ -158,14 +146,16 @@ class CompanyController extends AppController
         if (! empty($this->data)) {
             $this->Variable->save($this->data);
         }
-        $this->data = $this->Variable->find('first', 
-                [
-                        'conditions' => [
-                                'Variable.name' => Variable::ENTERPRISE_DESCRIPTION
-                        ]
-                ]);
-        if (empty($this->data)) {
-            $this->data = [
+        $this->set('pics', 
+                $this->Variable->find('all', 
+                        [
+                                'conditions' => [
+                                        'name' => Variable::ENTERPRISE_DESCRIPTION_PIC
+                                ]
+                        ]));
+        $data = $this->getPagedata(Variable::ENTERPRISE_DESCRIPTION);
+        if (empty($data)) {
+            $data = [
                     'Variable' => [
                             'id' => 0,
                             'name' => Variable::ENTERPRISE_DESCRIPTION,
@@ -173,7 +163,74 @@ class CompanyController extends AppController
                     ]
             ];
         }
-        $this->set('data', $this->data);
+        $this->set('params', $this->request->params);
+        $this->index();
+    }
+
+    public function admin_index_edit ()
+    {
+        $this->set('isAdmin', true);
+        $this->layout = 'mLayer';
+        $this->set('data', $this->getPageData(Variable::ENTERPRISE_DESCRIPTION));
+        $this->set('page_title', '企业简介');
+        $this->set('params', 
+                [
+                        'controller' => $this->request->params['controller'],
+                        'action' => 'index'
+                ]);
+        $this->render('admin_edit');
+    }
+
+    /**
+     * 管理工具 [走进朗豪]-[企业简介] 管理照片时的弹出层的控制器。
+     * AJAX服务器端
+     *
+     * @return void
+     */
+    public function admin_index_editpic ()
+    {
+        $this->set('isAdmin', true);
+        
+        $this->layout = 'mLayer';
+        if (! empty($this->data)) {
+            if ($this->data['Post_action'] === '删除') {
+                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+                         $this->data['Variable']['value'];
+                unlink($imgPath);
+                $this->Variable->delete($this->data['Variable']['id']);
+            } elseif ($this->data['Post_action'] === '增加图片') {
+                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+                         $this->data['Variable']['file']['name'];
+                if (file_exists($imgPath)) {
+                    // TODO:
+                    ;
+                } else {
+                    copy($this->data['Variable']['file']['tmp_name'], $imgPath);
+                    $d = [
+                            'Variable' => [
+                                    'name' => Variable::ENTERPRISE_DESCRIPTION_PIC,
+                                    'value' => $this->data['Variable']['file']['name']
+                            ]
+                    ];
+                    $this->Variable->save($d);
+                }
+            } else {
+                $this->log('admin_index_editpic: 非法的action');
+            }
+            $this->redirect(
+                    [
+                            'controller' => 'company',
+                            'action' => 'index'
+                    ]);
+        }
+        $this->set('pics', 
+                $this->Variable->find('all', 
+                        [
+                                'conditions' => [
+                                        'name' => Variable::ENTERPRISE_DESCRIPTION_PIC
+                                ]
+                        ]));
+        $this->render('admin_editpic');
     }
 
     /**
@@ -189,13 +246,7 @@ class CompanyController extends AppController
             $this->Variable->save($this->data);
         }
         
-        $this->data = $this->Variable->find('first', 
-                [
-                        'conditions' => [
-                                'Variable.name' => Variable::ENTERPRISE_CULTURE
-                        ],
-                        'limit' => 1
-                ]);
+        $this->data = $this->getPagedata(Variable::ENTERPRISE_CULTURE);
         if (empty($this->data)) {
             $this->data = [
                     'Variable' => [
@@ -205,7 +256,68 @@ class CompanyController extends AppController
                     ]
             ];
         }
-        $this->set('data', $this->data);
+        $this->set('params', $this->request->params);
+        $this->culture();
+    }
+
+    public function admin_culture_edit ()
+    {
+        $this->set('isAdmin', true);
+        $this->layout = 'mLayer';
+        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_CULTURE));
+        $this->set('page_title', '企业文化');
+        $this->set('params', 
+                [
+                        'controller' => $this->request->params['controller'],
+                        'action' => 'culture'
+                ]);
+        $this->render('admin_edit');
+    }
+
+    public function admin_culture_editpic ()
+    {
+        $this->set('isAdmin', true);
+        
+        $this->layout = 'mLayer';
+        if (! empty($this->data)) {
+            if ($this->data['Post_action'] === '删除') {
+                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+                         $this->data['Variable']['value'];
+                unlink($imgPath);
+                $this->Variable->delete($this->data['Variable']['id']);
+            } elseif ($this->data['Post_action'] === '增加图片') {
+                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+                         $this->data['Variable']['file']['name'];
+                if (file_exists($imgPath)) {
+                    // TODO:
+                    ;
+                } else {
+                    copy($this->data['Variable']['file']['tmp_name'], $imgPath);
+                    $d = [
+                            'Variable' => [
+                                    'name' => Variable::ENTERPRISE_CULTURE_PIC,
+                                    'value' => $this->data['Variable']['file']['name']
+                            ]
+                    ];
+                    $this->Variable->save($d);
+                }
+            } else {
+                $this->log('admin_index_editpic: 非法的action');
+            }
+            $this->redirect(
+                    [
+                            'controller' => 'company',
+                            'action' => 'culture'
+                    ]);
+        }
+        $this->set('pics', 
+                $this->Variable->find('all', 
+                        [
+                                'conditions' => [
+                                        'name' => Variable::ENTERPRISE_CULTURE_PIC
+                                ]
+                        ]));
+        $this->render('admin_editpic');
     }
 
     /**
@@ -220,13 +332,7 @@ class CompanyController extends AppController
         if (! empty($this->data)) {
             $this->Variable->save($this->data);
         }
-        $this->data = $this->Variable->find('first', 
-                [
-                        'conditions' => [
-                                'Variable.name' => Variable::ENTERPRISE_DEVELOPMENT
-                        ],
-                        'limit' => 1
-                ]);
+        $this->data = $this->getPagedata(Variable::ENTERPRISE_DEVELOPMENT);
         if (empty($this->data)) {
             $this->data = [
                     'Variable' => [
@@ -236,7 +342,69 @@ class CompanyController extends AppController
                     ]
             ];
         }
-        $this->set('data', $this->data);
+        $this->set('params', $this->request->params);
+        $this->set('page_title', '发展战略');
+        $this->development();
+    }
+
+    public function admin_development_edit ()
+    {
+        $this->set('isAdmin', true);
+        $this->layout = 'mLayer';
+        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_DEVELOPMENT));
+        $this->set('page_title', '发展战略');
+        $this->set('params', 
+                [
+                        'controller' => $this->request->params['controller'],
+                        'action' => 'development'
+                ]);
+        $this->render('admin_edit');
+    }
+
+    public function admin_development_editpic ()
+    {
+        $this->set('isAdmin', true);
+        
+        $this->layout = 'mLayer';
+        if (! empty($this->data)) {
+            if ($this->data['Post_action'] === '删除') {
+                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+                         $this->data['Variable']['value'];
+                unlink($imgPath);
+                $this->Variable->delete($this->data['Variable']['id']);
+            } elseif ($this->data['Post_action'] === '增加图片') {
+                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+                         $this->data['Variable']['file']['name'];
+                if (file_exists($imgPath)) {
+                    // TODO:
+                    ;
+                } else {
+                    copy($this->data['Variable']['file']['tmp_name'], $imgPath);
+                    $d = [
+                            'Variable' => [
+                                    'name' => Variable::ENTERPRISE_DEVELOPMENT_PIC,
+                                    'value' => $this->data['Variable']['file']['name']
+                            ]
+                    ];
+                    $this->Variable->save($d);
+                }
+            } else {
+                $this->log('admin_index_editpic: 非法的action');
+            }
+            $this->redirect(
+                    [
+                            'controller' => 'company',
+                            'action' => 'development'
+                    ]);
+        }
+        $this->set('pics', 
+                $this->Variable->find('all', 
+                        [
+                                'conditions' => [
+                                        'name' => Variable::ENTERPRISE_DEVELOPMENT_PIC
+                                ]
+                        ]));
+        $this->render('admin_editpic');
     }
 
     /**
@@ -251,20 +419,23 @@ class CompanyController extends AppController
         if (isset($this->data) && ! empty($this->data['Variable']['value'])) {
             $this->Variable->save($this->data);
         }
-        $this->set('pics', 
-                $this->Variable->find('all', 
-                        [
-                                'conditions' => [
-                                        'Variable.name' => CompanyController::LANHAM_PICTURE
-                                ]
-                        ]));
-        $this->set('dscr', 
-                $this->Variable->find('first', 
-                        [
-                                'conditions' => [
-                                        'Variable.name' => CompanyController::LANHAM_DESCRIPTION
-                                ]
-                        ]));
+        $this->set('params', $this->request->params);
+        $this->set('page_title', '朗豪风采');
+        $this->lanham();
+    }
+
+    public function admin_lanham_edit ()
+    {
+        $this->set('isAdmin', true);
+        $this->layout = 'mlayer';
+        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_LANHAM));
+        $this->set('page_title', '朗豪风采');
+        $this->set('params', 
+                [
+                        'controller' => $this->request->params['controller'],
+                        'action' => 'lanham'
+                ]);
+        $this->render('admin_edit');
     }
 
     /**
@@ -273,26 +444,52 @@ class CompanyController extends AppController
      *
      * @return void
      */
-    public function admin_lanham_editpic ($id = null)
+    public function admin_lanham_editpic ()
     {
         $this->set('isAdmin', true);
         
-        $this->layout = false;
-        if (! empty($this->data['Variable']['value'])) {
-            if ($this->data['Variable']['action'] === 'E') {
-                $this->Variable->save($this->data);
-            } elseif ($this->data['Variable']['action'] === 'D') {
+        $this->layout = 'mLayer';
+        if (! empty($this->data)) {
+            if ($this->data['Post_action'] === '删除') {
+                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+                         $this->data['Variable']['value'];
+                unlink($imgPath);
                 $this->Variable->delete($this->data['Variable']['id']);
+            } elseif ($this->data['Post_action'] === '增加图片') {
+                $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+                         $this->data['Variable']['file']['name'];
+                if (file_exists($imgPath)) {
+                    // TODO:
+                    ;
+                } else {
+                    copy($this->data['Variable']['file']['tmp_name'], $imgPath);
+                    $d = [
+                            'Variable' => [
+                                    'name' => Variable::ENTERPRISE_LANHAM_PIC,
+                                    'value' => $this->data['Variable']['file']['name']
+                            ]
+                    ];
+                    $this->Variable->save($d);
+                }
             } else {
                 $this->log('admin_lanham_editpic: 非法的action');
             }
+            $this->redirect(
+                    [
+                            'controller' => 'company',
+                            'action' => 'lanham'
+                    ]);
         }
-        if (! empty($id)) {
-            $this->set('data', 
-                    $this->Variable->find('first', 
-                            [
-                                    'conditions' => 'id=' . $id
-                            ]));
-        }
+        $this->set('pics', $this->Variable->find('companyPicList'));
+    }
+
+    private function getPageData ($varName, $findMethod = 'first')
+    {
+        return $this->Variable->find($findMethod, 
+                [
+                        'conditions' => [
+                                'Variable.name' => $varName
+                        ]
+                ]);
     }
 }

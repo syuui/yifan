@@ -1,32 +1,15 @@
 <?php
-$page_title = '企业简介';
-
-$this->start('sidebar');
-echo $this->Element('sidebar/company');
-$this->end();
-
-$this->start('page_title');
-echo $page_title;
-$this->end();
-
-$this->start('breadcrumb');
-$this->Html->addCrumb('走进朗豪', 
-        [
-                'controller' => 'company',
-                'action' => 'index'
-        ]);
-$this->Html->addCrumb($page_title);
-echo $this->Html->getCrumbs(' &gt; ', null);
-$this->end();
-
 $form_s = $this->Form->create('', 
         [
                 'inputDefaults' => [
                         'label' => false,
                         'div' => false
                 ],
-                "type" => "POST",
-                "onsubmit" => ""
+                'type' => 'POST',
+                'url' => [
+                        'controller' => 'company',
+                        'action' => 'development'
+                ]
         ]);
 
 $inputs = $this->Form->inputs(
@@ -66,7 +49,14 @@ $buttons .= $this->Form->submit('保存',
 
 $form_e = $this->Form->end();
 
+$this->start('page_title');
+echo '发展战略';
+$this->end();
+
+$this->start('page_footer');
+echo $buttons;
+$this->end();
+
 echo $form_s;
 echo $inputs;
-echo $buttons;
 echo $form_e;

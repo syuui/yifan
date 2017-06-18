@@ -1,34 +1,24 @@
 <?php
-$page_title = '企业文化';
-
-$this->start('sidebar');
-echo $this->Element('sidebar/company');
-$this->end();
-
 $this->start('page_title');
 echo $page_title;
 $this->end();
 
-$this->start('breadcrumb');
-$this->Html->addCrumb('走进朗豪', 
+$this->start('form_s');
+echo $this->Form->create('', 
         [
-                'controller' => 'company',
-                'action' => 'index'
-        ]);
-$this->Html->addCrumb($page_title);
-echo $this->Html->getCrumbs(' &gt; ', null);
-$this->end();
-
-$form_s = $this->Form->create('', 
-        [
-                "type" => "POST",
-                "onsubmit" => "",
                 'inputDefaults' => [
                         'label' => false,
                         'div' => false
+                ],
+                'type' => 'POST',
+                'url' => [
+                        'controller' => $params['controller'],
+                        'action' => $params['action']
                 ]
         ]);
-$inputs = $this->Form->inputs(
+$this->end('form_s');
+
+echo $this->Form->inputs(
         [
                 'Variable.id' => [
                         'type' => 'hidden',
@@ -50,19 +40,21 @@ $inputs = $this->Form->inputs(
                 'div' => false,
                 'fieldset' => false
         ]);
-$buttons = $this->Form->button('重置', 
+
+$this->start('buttons');
+echo $this->Form->button('重置', 
         [
                 'class' => 'reset',
                 'type' => 'reset',
                 'div' => false
-        ]) . $this->Form->submit('保存', 
+        ]);
+echo $this->Form->submit('保存', 
         [
                 'class' => 'submit',
                 'div' => false
         ]);
-$form_e = $this->Form->end();
+$this->end();
 
-echo $form_s;
-echo $inputs;
-echo $buttons;
-echo $form_e;
+$this->start('form_e');
+echo $this->Form->end();
+$this->end();
