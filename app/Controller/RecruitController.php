@@ -154,6 +154,12 @@ class RecruitController extends AppController
         $this->render('strategy');
     }
 
+    public function admin_jobdetail ($id = null)
+    {
+        $this->jobdetail($id);
+        $this->render('jobdetail');
+    }
+
     /**
      * 管理页面 招贤纳士 - 人才战略 的更新逻辑
      */
