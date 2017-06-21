@@ -49,6 +49,30 @@ class Variable extends AppModel
 
     const RECRUIT_STRATEGY = 'recruit_strategy';
 
+    const EXPERT_LESSION = 'expert_lession';
+
+    const EXPERT_LESSION_PIC = 'expert_lession_pic';
+
+    const EXPERT_CLINIC = 'expert_clinic';
+
+    const EXPERT_CLINIC_PIC = 'expert_clinic_pic';
+
+    const EXPERT_ROUND = 'expert_round';
+
+    const EXPERT_ROUND_PIC = 'expert_round_pic';
+
+    const EXPERT_OPERATION = 'expert_operation';
+
+    const EXPERT_OPERATION_PIC = 'expert_operation_pic';
+
+    const EXPERT_COMMUNICATION = 'expert_communication';
+
+    const EXPERT_COMMUNICATION_PIC = 'expert_communication_pic';
+
+    const EXPERT_OPENING = 'expert_opening';
+
+    const EXPERT_OPENING_PIC = 'expert_opening_pic';
+
     public $useTable = 'variables';
 
     /**

@@ -22,4 +22,17 @@ $this->end();
 $msg = empty($data['Variable']['value']) ? Configure::read('MSG00010001') : $this->Tag->nl2p(
         trim($data['Variable']['value']));
 
-echo $this->Html->div('ele_cnt_txt', $msg);
+if (isset($isAdmin) && $isAdmin) {
+    // 编辑文章
+    $url = $this->Html->url(
+            [
+                    'controller' => 'recruit',
+                    'action' => 'admin_strategy_edit'
+            ]);
+    $options = [
+            'onclick' => "mLayerShow('${url}');"
+    ];
+    echo $this->Html->div('ele_cnt_txt', $msg, $options);
+} else {
+    echo $this->Html->div('ele_cnt_txt', $msg);
+}

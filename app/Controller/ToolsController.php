@@ -61,113 +61,6 @@ class ToolsController extends AppController
         $this->set('isAdmin', true);
     }
 
-    public function admin_uploadpic ()
-    {
-        $this->set('data', 
-                $this->Uploaditem->find('all', 
-                        [
-                                'type' => Uploaditem::UPLOAD_IMAGE
-                        ]));
-    }
-
-    public function admin_deletepic ()
-    {
-        $tar_path = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\';
-        
-        if (! empty($this->data) && isset($this->data['Uploaditem']['id']) &&
-                 ! empty($this->data['Uploaditem']['id'])) {
-            
-            $d = $this->Uploaditem->find('first', 
-                    [
-                            'conditions' => [
-                                    'id' => $this->data['Uploaditem']['id']
-                            ]
-                    ]);
-            if (empty($d) || empty($d['Uploaditem'])) {
-                $this->log(
-                        'Uploaditem not exists. ID: ' .
-                                 $this->data['Uploaditem']['id']);
-            }
-            if (file_exists($tar_path . $d['Uploaditem']['filename']) &&
-                     unlink($tar_path . $d['Uploaditem']['filename'])) {
-                $this->Uploaditem->delete($this->data['Uploaditem']['id']);
-            } else {
-                $this->log(
-                        'Uploaditem file not exist: ' . $tar_path .
-                                 $d['Uploaditem']['filename']);
-            }
-        }
-        
-        $this->redirect(
-                [
-                        'controller' => 'tools',
-                        'action' => 'uploadpic'
-                ]);
-    }
-
-    public function admin_editpic ($id = null)
-    {
-        $tar_path = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\';
-        
-        if (! empty($this->data)) {
-            
-            $d = $this->data;
-            $saved = true;
-            
-            if (isset($d['Uploaditem']['file'])) {
-                // 新增图片
-                if (empty($d['Uploaditem']['file']['tmp_name'])) {
-                    // 没选择任何图片
-                    $saved = false;
-                    $this->log('没选择任何图片');
-                } else {
-                    $d['Uploaditem']['filename'] = $this->data['Uploaditem']['file']['name'];
-                    $d['Uploaditem']['folder'] = Uploaditem::UPLOAD_IMAGE;
-                    
-                    if ($this->Uploaditem->save($d)) {
-                        copy($d['Uploaditem']['file']['tmp_name'], 
-                                $tar_path . $d['Uploaditem']['file']['name']);
-                        $this->log(
-                                "Copy file " .
-                                         $d['Uploaditem']['file']['tmp_name'] .
-                                         " to " . $tar_path .
-                                         $d['Uploaditem']['file']['name']);
-                        $saved = true;
-                    } else {
-                        $saved = false;
-                        $this->log('Failed to save a new file');
-                    }
-                }
-            } else {
-                // 编辑现有图片
-                if ($this->Uploaditem->save($d)) {
-                    $this->log('Updated files.');
-                    $saved = true;
-                } else {
-                    $saved = false;
-                    $this->log('Failed to update files');
-                }
-            }
-            if ($saved) {
-                $this->redirect(
-                        [
-                                'controller' => 'tools',
-                                'action' => 'uploadpic'
-                        ]);
-            }
-        }
-        
-        if (! empty($id)) {
-            $this->data = $this->Uploaditem->find('first', 
-                    [
-                            'conditions' => [
-                                    'Uploaditem.id' => $id
-                            ]
-                    ]);
-            $this->set('data', $this->data);
-        }
-    }
-
     public function admin_banner ($type = 'B')
     {
         $this->set('type', $type);
@@ -192,6 +85,7 @@ class ToolsController extends AppController
                 $this->log("Copy file to $tar");
             }
         }
+        $this->set('page_title', $type === 'L' ? '网站LOGO' : '网站横幅');
     }
 }
 

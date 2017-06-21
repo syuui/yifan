@@ -9,10 +9,10 @@
 			</div>
 			<div class="ele_cnt">
 				<ul class="list_style_1">
-					<li><?php echo $this->Html->link('企业简介', array('controller'=>'company','action'=>'index'));	?></li>
-					<li><?php echo $this->Html->link('企业文化', array('controller'=>'company','action'=>'culture'));	?></li>
-					<li><?php echo $this->Html->link('发展战略', array('controller'=>'company','action'=>'development'));	?></li>
-					<li><?php echo $this->Html->link('朗豪风采', array('controller'=>'company','action'=>'lanham'));	?></li>
+					<li><?php echo $this->Html->link('企业简介', array('controller'=>'company','action'=>'index','D'));	?></li>
+					<li><?php echo $this->Html->link('企业文化', array('controller'=>'company','action'=>'index','C'));	?></li>
+					<li><?php echo $this->Html->link('发展战略', array('controller'=>'company','action'=>'index','V'));	?></li>
+					<li><?php echo $this->Html->link('朗豪风采', array('controller'=>'company','action'=>'index','L'));	?></li>
 				</ul>
 			</div>
 		</div>

@@ -1,17 +1,14 @@
 <?php
 $form_s = $this->Form->create('', 
         [
+                'type'=>'POST',
                 'inputDefaults' => [
                         'label' => false,
                         'div' => false
                 ],
-                'type' => 'POST',
-                'url' => [
-                        'controller' => 'company',
-                        'action' => 'development'
-                ]
+                'url'=>['controller'=>'recruit', 'action'=>'strategy']
+                
         ]);
-
 $inputs = $this->Form->inputs(
         [
                 'Variable.id' => [
@@ -34,29 +31,28 @@ $inputs = $this->Form->inputs(
                 'div' => false,
                 'fieldset' => false
         ]);
-
 $buttons = $this->Form->button('重置', 
         [
                 'class' => 'reset',
                 'type' => 'reset',
                 'div' => false
-        ]);
-$buttons .= $this->Form->submit('保存', 
+        ]) . $this->Form->submit('保存', 
         [
                 'class' => 'submit',
                 'div' => false
         ]);
-
 $form_e = $this->Form->end();
 
-$this->start('page_title');
-echo '发展战略';
+$this->start('form_s');
+echo $form_s;
 $this->end();
 
-$this->start('page_footer');
+echo $inputs;
+
+$this->start('buttons');
 echo $buttons;
 $this->end();
 
-echo $form_s;
-echo $inputs;
+$this->start('form_e');
 echo $form_e;
+$this->end();

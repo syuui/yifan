@@ -1,29 +1,39 @@
 <?php
-$form_s = $this->Form->create('', 
+App::uses('Variable', 'Model');
+
+$this->start('page_title');
+echo $page_title;
+$this->end();
+
+$this->start('form_s');
+echo $this->Form->create('', 
         [
-                'type' => 'POST',
                 'inputDefaults' => [
                         'label' => false,
                         'div' => false
                 ],
+                'type' => 'POST',
                 'url' => [
-                        'controller' => 'company',
-                        'action' => 'culture'
+                        'controller' => 'expert',
+                        'action' => 'index',
+                        $type
                 ]
         ]);
-$inputs = $this->Form->inputs(
+$this->end('form_s');
+
+echo $this->Form->inputs(
         [
                 'Variable.id' => [
                         'type' => 'hidden',
-                        'value' => $data['Variable']['id']
+                        'value' => empty($data['Variable']['id']) ? '' : $data['Variable']['id']
                 ],
                 'Variable.name' => [
                         'type' => 'hidden',
-                        'value' => $data['Variable']['name']
+                        'value' => empty($data['Variable']['name']) ? $name : $data['Variable']['name']
                 ],
                 'Variable.value' => [
                         'type' => 'textarea',
-                        'value' => $data['Variable']['value'],
+                        'value' => empty($data['Variable']['value']) ? '' : $data['Variable']['value'],
                         'label' => false,
                         'class' => 'txa_nobutton',
                         'div' => false
@@ -33,26 +43,21 @@ $inputs = $this->Form->inputs(
                 'div' => false,
                 'fieldset' => false
         ]);
-$buttons = $this->Form->button('重置', 
+
+$this->start('buttons');
+echo $this->Form->button('重置', 
         [
                 'class' => 'reset',
                 'type' => 'reset',
                 'div' => false
-        ]) . $this->Form->submit('保存', 
+        ]);
+echo $this->Form->submit('保存', 
         [
                 'class' => 'submit',
                 'div' => false
         ]);
-$form_e = $this->Form->end();
-
-$this->start('page_title');
-echo '企业文化';
 $this->end();
 
-$this->start('page_footer');
-echo $buttons;
+$this->start('form_e');
+echo $this->Form->end();
 $this->end();
-
-echo $form_s;
-echo $inputs;
-echo $form_e;

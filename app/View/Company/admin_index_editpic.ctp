@@ -1,6 +1,4 @@
 <?php
-App::uses('CompanyController', 'Controller');
-
 $this->start('page_title');
 echo isset($picId) ? '修改图片' : '增加图片';
 $this->end();

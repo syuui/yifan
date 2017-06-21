@@ -8,22 +8,12 @@
 				<div class="ele_ttl_r"></div>
 			</div>
 			<div class="ele_cnt">
-
-
-				<fieldset>
-					<legend>上传工具</legend>
-					<ul class="list_style_2">
-						<li><?php echo $this->Html->link('管理图片',['controller'=>'tools','action'=>'uploadpic']);	?></li>
-					</ul>
-				</fieldset>
-
 				<fieldset>
 					<legend>共通设置</legend>
 					<ul class="list_style_2">
 						<li><?php echo $this->Html->link('网页横幅', ['controller'=>'tools','action'=>'banner']);?></li>
 						<li><?php echo $this->Html->link('站名LOGO', ['controller'=>'tools','action'=>'banner','L']);?></li>
 					</ul>
-
 				</fieldset>
 			</div>
 		</div>

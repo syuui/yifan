@@ -33,6 +33,14 @@ App::uses('Uploaditem', 'Model');
 class CompanyController extends AppController
 {
 
+    const TYPE_DESCRIPTION = 'D';
+
+    const TYPE_CULTURE = 'C';
+
+    const TYPE_DEVELOPMENT = 'V';
+
+    const TYPE_LANHAM = 'L';
+
     /**
      * 此控制器中使用以下模型
      *
@@ -59,363 +67,162 @@ class CompanyController extends AppController
     public $layout = 'default_l';
 
     /**
-     * [走进朗豪]-[企业简介]的控制器
+     * 用户用页面的控制器
      *
-     * @return void
+     * @param string $type
+     *            CompanyController::TYPE_DESCRIPTION: 企业简介
+     *            CompanyController::TYPE_CULTURE: 企业文化
+     *            CompanyController::TYPE_DEVELOPMENT: 发展战略
+     *            CompanyController::TYPE_LANHAM: 朗豪风采
      */
-    public function index ()
+    public function index ($type = CompanyController::TYPE_DESCRIPTION)
     {
-        $this->set('pics', 
-                $this->Variable->find('all', 
-                        [
-                                'conditions' => [
-                                        'name' => Variable::ENTERPRISE_DESCRIPTION_PIC
-                                ]
-                        ]));
-        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_DESCRIPTION));
-        $this->set('page_title', '企业简介');
-        $this->render('display');
+        switch ($type) {
+            case CompanyController::TYPE_DESCRIPTION:
+                $name = Variable::ENTERPRISE_DESCRIPTION;
+                $pics = Variable::ENTERPRISE_DESCRIPTION_PIC;
+                $page_title = '企业简介';
+                break;
+            case CompanyController::TYPE_CULTURE:
+                $name = Variable::ENTERPRISE_CULTURE;
+                $pics = Variable::ENTERPRISE_CULTURE_PIC;
+                $page_title = '企业文化';
+                break;
+            case CompanyController::TYPE_DEVELOPMENT:
+                $name = Variable::ENTERPRISE_DEVELOPMENT;
+                $pics = Variable::ENTERPRISE_DEVELOPMENT_PIC;
+                $page_title = '发展战略';
+                break;
+            case CompanyController::TYPE_LANHAM:
+                $name = Variable::ENTERPRISE_LANHAM;
+                $pics = Variable::ENTERPRISE_LANHAM_PIC;
+                $page_title = '朗豪风采';
+                break;
+            default:
+                $name = Variable::ENTERPRISE_DESCRIPTION;
+                $pics = Variable::ENTERPRISE_DESCRIPTION_PIC;
+                $page_title = '企业简介';
+                break;
+        }
+        $this->set('pics', $this->getPageData($pics, 'all'));
+        $this->set('data', $this->getPagedata($name));
+        $this->set('type', $type);
+        $this->set('page_title', $page_title);
     }
 
     /**
-     * [走进朗豪]-[企业文化]的控制器
+     * 管理用页面的控制器
      *
      * @return void
      */
-    public function culture ()
-    {
-        $this->set('pics', 
-                $this->Variable->find('all', 
-                        [
-                                'conditions' => [
-                                        'name' => Variable::ENTERPRISE_CULTURE_PIC
-                                ]
-                        ]));
-        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_CULTURE));
-        $this->set('page_title', '企业文化');
-        $this->render('display');
-    }
-
-    /**
-     * [走进朗豪]-[发展战略]的控制器
-     *
-     * @return void
-     */
-    public function development ()
-    {
-        $this->set('pics', 
-                $this->Variable->find('all', 
-                        [
-                                'conditions' => [
-                                        'name' => Variable::ENTERPRISE_DEVELOPMENT_PIC
-                                ]
-                        ]));
-        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_DEVELOPMENT));
-        $this->set('page_title', '发展战略');
-        $this->render('display');
-    }
-
-    /**
-     * [走进朗豪]-[朗豪风采]的控制器
-     *
-     * @return void
-     */
-    public function lanham ()
-    {
-        $this->set('pics', 
-                $this->Variable->find('all', 
-                        [
-                                'conditions' => [
-                                        'name' => Variable::ENTERPRISE_LANHAM_PIC
-                                ]
-                        ]));
-        $this->set('data', $this->getPageData(Variable::ENTERPRISE_LANHAM));
-        $this->set('page_title', '朗豪风采');
-        $this->render('display');
-    }
-
-    /**
-     * 管理工具 [走进朗豪]-[企业简介]的控制器
-     *
-     * @return void
-     */
-    public function admin_index ()
+    public function admin_index ($type = CompanyController::TYPE_DESCRIPTION)
     {
         $this->set('isAdmin', true);
         
         if (! empty($this->data)) {
             $this->Variable->save($this->data);
         }
-        $this->set('pics', 
-                $this->Variable->find('all', 
-                        [
-                                'conditions' => [
-                                        'name' => Variable::ENTERPRISE_DESCRIPTION_PIC
-                                ]
-                        ]));
-        $data = $this->getPagedata(Variable::ENTERPRISE_DESCRIPTION);
-        if (empty($data)) {
-            $data = [
-                    'Variable' => [
-                            'id' => 0,
-                            'name' => Variable::ENTERPRISE_DESCRIPTION,
-                            'value' => ''
-                    ]
-            ];
-        }
-        $this->set('params', $this->request->params);
-        $this->index();
-    }
-
-    public function admin_index_edit ()
-    {
-        $this->set('isAdmin', true);
-        $this->layout = 'mLayer';
-        $this->set('data', $this->getPageData(Variable::ENTERPRISE_DESCRIPTION));
-        $this->set('page_title', '企业简介');
-        $this->set('params', 
-                [
-                        'controller' => $this->request->params['controller'],
-                        'action' => 'index'
-                ]);
-        $this->render('admin_edit');
+        $this->index($type);
     }
 
     /**
-     * 管理工具 [走进朗豪]-[企业简介] 管理照片时的弹出层的控制器。
+     * 管理用页面 - 修改正文内容的控制器
+     * AJAX服务器端
+     *
+     * @param string $type            
+     */
+    public function admin_index_edit (
+            $type = CompanyController::TYPE_DESCRIPTION)
+    {
+        $this->set('isAdmin', true);
+        $this->layout = 'mLayer';
+        
+        switch ($type) {
+            case CompanyController::TYPE_DESCRIPTION:
+                $name = Variable::ENTERPRISE_DESCRIPTION;
+                $page_title = '企业简介';
+                break;
+            case CompanyController::TYPE_CULTURE:
+                $name = Variable::ENTERPRISE_CULTURE;
+                $page_title = '企业文化';
+                break;
+            case CompanyController::TYPE_DEVELOPMENT:
+                $name = Variable::ENTERPRISE_DEVELOPMENT;
+                $page_title = '发展战略';
+                break;
+            case CompanyController::TYPE_LANHAM:
+                $name = Variable::ENTERPRISE_LANHAM;
+                $page_title = '朗豪风采';
+                break;
+            default:
+                $name = Variable::ENTERPRISE_DESCRIPTION;
+                $page_title = '企业简介';
+                break;
+        }
+        $this->set('type', $type);
+        $this->set('name', $name);
+        $this->set('data', $this->getPageData($name));
+        $this->set('page_title', $page_title);
+    }
+
+    /**
+     * 管理用页面 - 修改图片的控制器
      * AJAX服务器端
      *
      * @return void
      */
-    public function admin_index_editpic ()
+    public function admin_index_editpic (
+            $type = CompanyController::TYPE_DESCRIPTION)
     {
         $this->set('isAdmin', true);
         
         $this->layout = 'mLayer';
+        
+        switch ($type) {
+            case CompanyController::TYPE_DESCRIPTION:
+                $pics = Variable::ENTERPRISE_DESCRIPTION_PIC;
+                break;
+            case CompanyController::TYPE_CULTURE:
+                $pics = Variable::ENTERPRISE_CULTURE_PIC;
+                break;
+            case CompanyController::TYPE_DEVELOPMENT:
+                $pics = Variable::ENTERPRISE_DEVELOPMENT_PIC;
+                break;
+            case CompanyController::TYPE_LANHAM:
+                $pics = Variable::ENTERPRISE_LANHAM_PIC;
+                break;
+            default:
+                $pics = Variable::ENTERPRISE_DESCRIPTION_PIC;
+                break;
+        }
         if (! empty($this->data)) {
             if ($this->data['Post_action'] === '删除') {
                 $this->delPicture();
             } elseif ($this->data['Post_action'] === '增加图片') {
-                $this->addPicture(Variable::ENTERPRISE_DESCRIPTION_PIC);
+                $this->addPicture($pics);
             } else {
                 $this->log('admin_index_editpic: 非法的action');
             }
             $this->redirect(
                     [
                             'controller' => 'company',
-                            'action' => 'index'
+                            'action' => 'index',
+                            $type
                     ]);
         }
-        $this->set('pics', 
-                $this->Variable->find('all', 
-                        [
-                                'conditions' => [
-                                        'name' => Variable::ENTERPRISE_DESCRIPTION_PIC
-                                ]
-                        ]));
-        $this->render('admin_editpic');
+        $this->set('pics', $this->getPageData($pics, 'all'));
     }
 
     /**
-     * 管理工具 [走进朗豪]-[企业文化]的控制器
+     * 取得页面数据
      *
-     * @return void
+     * @param unknown $varName
+     *            Variable表中的变量名称
+     * @param string $findMethod
+     *            模型中的findMethod
+     *            
+     * @return unknown
      */
-    public function admin_culture ()
-    {
-        $this->set('isAdmin', true);
-        
-        if (! empty($this->data)) {
-            $this->Variable->save($this->data);
-        }
-        
-        $this->data = $this->getPagedata(Variable::ENTERPRISE_CULTURE);
-        if (empty($this->data)) {
-            $this->data = [
-                    'Variable' => [
-                            'id' => 0,
-                            'name' => Variable::ENTERPRISE_CULTURE,
-                            'value' => ''
-                    ]
-            ];
-        }
-        $this->set('params', $this->request->params);
-        $this->culture();
-    }
-
-    public function admin_culture_edit ()
-    {
-        $this->set('isAdmin', true);
-        $this->layout = 'mLayer';
-        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_CULTURE));
-        $this->set('page_title', '企业文化');
-        $this->set('params', 
-                [
-                        'controller' => $this->request->params['controller'],
-                        'action' => 'culture'
-                ]);
-        $this->render('admin_edit');
-    }
-
-    public function admin_culture_editpic ()
-    {
-        $this->set('isAdmin', true);
-        
-        $this->layout = 'mLayer';
-        if (! empty($this->data)) {
-            if ($this->data['Post_action'] === '删除') {
-                $this->delPicture();
-            } elseif ($this->data['Post_action'] === '增加图片') {
-                $this->addPicture(Variable::ENTERPRISE_CULTURE_PIC);
-            } else {
-                $this->log('admin_index_editpic: 非法的action');
-            }
-            $this->redirect(
-                    [
-                            'controller' => 'company',
-                            'action' => 'culture'
-                    ]);
-        }
-        $this->set('pics', 
-                $this->Variable->find('all', 
-                        [
-                                'conditions' => [
-                                        'name' => Variable::ENTERPRISE_CULTURE_PIC
-                                ]
-                        ]));
-        $this->render('admin_editpic');
-    }
-
-    /**
-     * 管理工具 [走进朗豪]-[发展战略]的控制器
-     *
-     * @return void
-     */
-    public function admin_development ()
-    {
-        $this->set('isAdmin', true);
-        
-        if (! empty($this->data)) {
-            $this->Variable->save($this->data);
-        }
-        $this->data = $this->getPagedata(Variable::ENTERPRISE_DEVELOPMENT);
-        if (empty($this->data)) {
-            $this->data = [
-                    'Variable' => [
-                            'id' => 0,
-                            'name' => Variable::ENTERPRISE_DEVELOPMENT,
-                            'value' => ''
-                    ]
-            ];
-        }
-        $this->set('params', $this->request->params);
-        $this->set('page_title', '发展战略');
-        $this->development();
-    }
-
-    public function admin_development_edit ()
-    {
-        $this->set('isAdmin', true);
-        $this->layout = 'mLayer';
-        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_DEVELOPMENT));
-        $this->set('page_title', '发展战略');
-        $this->set('params', 
-                [
-                        'controller' => $this->request->params['controller'],
-                        'action' => 'development'
-                ]);
-        $this->render('admin_edit');
-    }
-
-    public function admin_development_editpic ()
-    {
-        $this->set('isAdmin', true);
-        
-        $this->layout = 'mLayer';
-        if (! empty($this->data)) {
-            if ($this->data['Post_action'] === '删除') {
-                $this->delPicture();
-            } elseif ($this->data['Post_action'] === '增加图片') {
-                $this->addPicture(Variable::ENTERPRISE_DEVELOPMENT_PIC);
-            } else {
-                $this->log('admin_index_editpic: 非法的action');
-            }
-            $this->redirect(
-                    [
-                            'controller' => 'company',
-                            'action' => 'development'
-                    ]);
-        }
-        $this->set('pics', 
-                $this->Variable->find('all', 
-                        [
-                                'conditions' => [
-                                        'name' => Variable::ENTERPRISE_DEVELOPMENT_PIC
-                                ]
-                        ]));
-        $this->render('admin_editpic');
-    }
-
-    /**
-     * 管理工具 [走进朗豪]-[朗豪风采]的控制器
-     *
-     * @return void
-     */
-    public function admin_lanham ()
-    {
-        $this->set('isAdmin', true);
-        
-        if (isset($this->data) && ! empty($this->data['Variable']['value'])) {
-            $this->Variable->save($this->data);
-        }
-        $this->set('params', $this->request->params);
-        $this->set('page_title', '朗豪风采');
-        $this->lanham();
-    }
-
-    public function admin_lanham_edit ()
-    {
-        $this->set('isAdmin', true);
-        $this->layout = 'mlayer';
-        $this->set('data', $this->getPagedata(Variable::ENTERPRISE_LANHAM));
-        $this->set('page_title', '朗豪风采');
-        $this->set('params', 
-                [
-                        'controller' => $this->request->params['controller'],
-                        'action' => 'lanham'
-                ]);
-        $this->render('admin_edit');
-    }
-
-    /**
-     * 管理工具 [走进朗豪]-[朗豪风采] 管理照片时的弹出层的控制器。
-     * AJAX服务器端
-     *
-     * @return void
-     */
-    public function admin_lanham_editpic ()
-    {
-        $this->set('isAdmin', true);
-        
-        $this->layout = 'mLayer';
-        if (! empty($this->data)) {
-            if ($this->data['Post_action'] === '删除') {
-                $this->delPicture();
-            } elseif ($this->data['Post_action'] === '增加图片') {
-                $this->addPicture(Variable::ENTERPRISE_LANHAM_PIC);
-            } else {
-                $this->log('admin_lanham_editpic: 非法的action');
-            }
-            $this->redirect(
-                    [
-                            'controller' => 'company',
-                            'action' => 'lanham'
-                    ]);
-        }
-        $this->set('pics', $this->Variable->find('companyPicList'));
-        $this->render('admin_editpic');
-    }
-
     private function getPageData ($varName, $findMethod = 'first')
     {
         return $this->Variable->find($findMethod, 
@@ -426,9 +233,14 @@ class CompanyController extends AppController
                 ]);
     }
 
+    /**
+     * 删除图片
+     */
     private function delPicture ()
     {
-        empty($this->data) && exit();
+        if (empty($this->data)) {
+            return;
+        }
         
         $this->Variable->delete($this->data['Variable']['id']);
         $npic = $this->Variable->find('count', 
@@ -444,15 +256,23 @@ class CompanyController extends AppController
         }
     }
 
-    private function addPicture ($name)
+    /**
+     * 追加图片
+     *
+     * @param unknown $varName
+     *            Variable表中的变量名称
+     */
+    private function addPicture ($varName)
     {
-        empty($this->data) && exit();
+        if (empty($this->data['Variable']['file']['tmp_name'])) {
+            return;
+        }
         
         $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
                  $this->data['Variable']['file']['name'];
         $d = [
                 'Variable' => [
-                        'name' => $name,
+                        'name' => $varName,
                         'value' => $this->data['Variable']['file']['name']
                 ]
         ];

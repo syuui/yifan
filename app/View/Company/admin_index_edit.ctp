@@ -1,4 +1,6 @@
 <?php
+App::uses('Variable', 'Model');
+
 $this->start('page_title');
 echo $page_title;
 $this->end();
@@ -12,8 +14,9 @@ echo $this->Form->create('',
                 ],
                 'type' => 'POST',
                 'url' => [
-                        'controller' => $params['controller'],
-                        'action' => $params['action']
+                        'controller' => 'company',
+                        'action' => 'index',
+                        $type
                 ]
         ]);
 $this->end('form_s');
@@ -22,15 +25,15 @@ echo $this->Form->inputs(
         [
                 'Variable.id' => [
                         'type' => 'hidden',
-                        'value' => $data['Variable']['id']
+                        'value' => empty($data['Variable']['id']) ? '' : $data['Variable']['id']
                 ],
                 'Variable.name' => [
                         'type' => 'hidden',
-                        'value' => $data['Variable']['name']
+                        'value' => empty($data['Variable']['name']) ? $name : $data['Variable']['name']
                 ],
                 'Variable.value' => [
                         'type' => 'textarea',
-                        'value' => $data['Variable']['value'],
+                        'value' => empty($data['Variable']['value']) ? '' : $data['Variable']['value'],
                         'label' => false,
                         'class' => 'txa_nobutton',
                         'div' => false

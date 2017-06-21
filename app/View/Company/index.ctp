@@ -1,6 +1,6 @@
 <?php
 $this->start('sidebar');
-echo $this->Element('sidebar/expert');
+echo $this->Element('sidebar/company');
 $this->end();
 
 $this->start('page_title');
@@ -8,9 +8,9 @@ echo $page_title;
 $this->end();
 
 $this->start('breadcrumb');
-$this->Html->addCrumb('专家风采', 
+$this->Html->addCrumb('走进朗豪', 
         [
-                'controller' => 'expert',
+                'controller' => 'company',
                 'action' => 'index'
         ]);
 $this->Html->addCrumb($page_title);

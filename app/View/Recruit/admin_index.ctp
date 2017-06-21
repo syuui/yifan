@@ -13,6 +13,17 @@ $this->start('breadcrumb');
 $this->Html->addCrumb($page_title);
 echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
+
+echo $this->Html->link('增加职位', '#', 
+        [
+                'onclick' => 'mLayerAction(\'' . $this->Html->url(
+                        [
+                                'controller' => 'recruit',
+                                'action' => 'savejob'
+                        ]) . '\');',
+                'class' => 'addButton'
+        ]);
+
 ?>
 				
 <?php
@@ -31,30 +42,30 @@ if (empty($data)) {
     
     foreach ($data as $d) {
         echo "<div class=\"recruit-list\">";
-        echo $this->Html->link($d['Recruit']['title'], 
+        
+        echo $this->Html->link($d['Recruit']['title'], "#", 
                 [
-                        'controller' => 'recruit',
-                        'action' => 'jobdetail',
-                        $d['Recruit']['id']
-                ], 
-                [
+                        'onclick' => "mLayerAction('" . $this->Html->url(
+                                [
+                                        'controller' => 'recruit',
+                                        'action' => 'savejob',
+                                        $d['Recruit']['id']
+                                ]) . "');",
                         'class' => 'recruit-list-title'
                 ]);
-        
         echo $this->Html->div('recruit-list-location', 
                 $d['Recruit']['location']);
         echo $this->Html->div('recruit-list-number', $d['Recruit']['number']);
-        
-        echo $this->Html->link('详情', 
+        echo $this->Html->link('详情', "#", 
                 [
-                        'controller' => 'recruit',
-                        'action' => 'jobdetail',
-                        $d['Recruit']['id']
-                ], 
-                [
+                        'onclick' => "mLayerAction('" . $this->Html->url(
+                                [
+                                        'controller' => 'recruit',
+                                        'action' => 'savejob',
+                                        $d['Recruit']['id']
+                                ]) . "');",
                         'class' => 'recruit-list-detail'
                 ]);
-        
         echo "</div>";
     }
 }

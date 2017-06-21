@@ -18,7 +18,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 App::uses('AppController', 'Controller');
-App::uses('VariableModel', 'Model');
+App::uses('Variable', 'Model');
 
 /**
  * Static content controller
@@ -69,7 +69,8 @@ class RecruitController extends AppController
     ];
 
     var $helpers = [
-            'Paginator'
+            'Paginator',
+            'Form'
     ];
 
     var $layout = 'default_r';
@@ -104,14 +105,7 @@ class RecruitController extends AppController
 
     public function strategy ()
     {
-        $this->set('data', 
-                $this->Variable->find('first', 
-                        [
-                                'conditions' => [
-                                        'Variable.name' => Variable::RECRUIT_STRATEGY
-                                ],
-                                'limit' => 1
-                        ]));
+        $this->set('data', $this->getPageData(Variable::RECRUIT_STRATEGY));
     }
 
     public function entry ()
@@ -129,29 +123,30 @@ class RecruitController extends AppController
     public function admin_index ()
     {
         $this->set('isAdmin', true);
-        
         $this->index();
-        $this->render('index');
     }
 
     public function admin_strategy ()
     {
-        $this->Helper = [
-                'form'
-        ];
         $this->set('isAdmin', true);
+        if (! empty($this->data)) {
+            $this->Variable->save($this->data);
+        }
+        $this->strategy();
+        $this->render('strategy');
+    }
+
+    public function admin_strategy_edit ()
+    {
+        $this->set('isAdmin', true);
+        
+        $this->layout = 'mLayer';
         
         if (! empty($this->data)) {
             $this->Variable->save($this->data);
         }
         
-        $this->data = $this->Variable->find('first', 
-                [
-                        'conditions' => [
-                                'Variable.name' => Variable::RECRUIT_STRATEGY
-                        ],
-                        'limit' => 1
-                ]);
+        $this->data = $this->getPageData(Variable::RECRUIT_STRATEGY);
         if (empty($this->data)) {
             $this->data = [
                     'Variable' => [
@@ -264,5 +259,25 @@ class RecruitController extends AppController
             $options['limit'] = $limit;
         }
         return $this->Recruit->find('all', $options);
+    }
+
+    /**
+     * 取得页面数据
+     *
+     * @param unknown $varName
+     *            Variable表中的变量名称
+     * @param string $findMethod
+     *            模型中的findMethod
+     *            
+     * @return unknown
+     */
+    private function getPageData ($varName, $findMethod = 'first')
+    {
+        return $this->Variable->find($findMethod, 
+                [
+                        'conditions' => [
+                                'Variable.name' => $varName
+                        ]
+                ]);
     }
 }
