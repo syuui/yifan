@@ -32,6 +32,8 @@ App::uses('VariableModel', 'Model');
 class ProjectController extends AppController
 {
 
+    const UPLOAD_IMAGE = 'projects';
+
     /**
      * This controller uses following compnonets
      *
@@ -47,8 +49,7 @@ class ProjectController extends AppController
      * @var array
      */
     public $uses = [
-            'Post',
-            'Sector',
+            'Project',
             'Image'
     ];
 
@@ -60,7 +61,7 @@ class ProjectController extends AppController
      * @var array
      */
     var $paginate = [
-            'Post' => [
+            'Project' => [
                     'conditions' => '',
                     'recursive' => 0,
                     'fields' => '',
@@ -84,37 +85,24 @@ class ProjectController extends AppController
      */
     public function index ()
     {
-        $this->paginate['Post']['limit'] = Configure::read(
+        $this->paginate['Project']['limit'] = Configure::read(
                 'project_page_length');
         $this->Paginator->settings = $this->paginate;
         
-        $this->set('data', $this->Paginator->paginate('Post'));
+        $this->set('data', $this->Paginator->paginate('Project'));
     }
 
-    public function postdetail ($id = null)
+    public function detail ($id = null)
     {
         if (! empty($id)) {
             $this->set('data', 
-                    $this->Post->find('first', 
+                    $this->Project->find('first', 
                             [
                                     'conditions' => [
                                             'id' => $id
                                     ]
                             ]));
-            $this->set('sectors', 
-                    $this->Sector->find('all', 
-                            [
-                                    'conditions' => [
-                                            'post_id' => $id
-                                    ]
-                            ]));
         }
-    }
-
-    public function admin_postdetail ($id = null)
-    {
-        $this->set('isAdmin', true);
-        $this->postdetail($id);
     }
 
     public function admin_index ()
@@ -124,15 +112,15 @@ class ProjectController extends AppController
         $this->render('index');
     }
 
-    public function admin_savepost ($id = null)
+    public function admin_detail ($id = null)
     {
         $this->set('isAdmin', true);
         
         if (! empty($this->data)) {
             if ($this->data['Post_action'] === "保存") {
-                $this->Post->save($this->data['Post']);
-            } elseif ($this->data['Post_action'] === "删除文章") {
-                $this->Post->delete($this->data['Post']['id']);
+                $this->Project->save($this->data['Project']);
+            } elseif ($this->data['Post_action'] === "删除") {
+                $this->Project->delete($this->data['Project']['id']);
             }
             $this->redirect(
                     [
@@ -141,114 +129,144 @@ class ProjectController extends AppController
                     ]);
         }
         
-        // Get records for Edit/Delete Page
-        if (! empty($id)) {
-            $this->set('data', 
-                    $this->Post->find('first', 
-                            [
-                                    'conditions' => [
-                                            'id' => $id
-                                    ]
-                            ]));
-            $this->set('sectors', 
-                    $this->Sector->find('all', 
-                            [
-                                    'conditions' => [
-                                            'post_id' => $id
-                                    ]
-                            ]));
-            $this->log('Edit Post');
-        } else {
-            // Prepare blank record for Add Page
-            $this->set('data', 
-                    [
-                            'Post' => [
-                                    'id' => '',
-                                    'title' => ''
-                            ]
-                    ]);
-            
-            $this->log('Add Post');
-        }
+        $this->set('pics', 
+                $this->Image->find('all', 
+                        [
+                                'conditions' => [
+                                        'project_id' => $id
+                                ]
+                        ]));
+        $this->detail($id);
+        $this->set('id', $id);
+        $this->render('detail');
     }
 
-    public function admin_savesector ()
+    public function admin_edit ($id = null)
+    {
+        $this->set('isAdmin', true);
+        $this->layout = 'mLayer';
+        
+        $data = $this->Project->find('first', 
+                [
+                        'conditions' => [
+                                'id' => $id
+                        ]
+                ]);
+        if (empty($data)) {
+            $data = [
+                    'Project' => [
+                            'id' => '',
+                            'title' => '',
+                            'content' => ''
+                    ]
+            ];
+        }
+        $this->set('data', $data);
+        $this->set('id', $id);
+    }
+
+    /**
+     * 管理用页面 - 修改图片的控制器
+     * AJAX服务器端
+     *
+     * @return void
+     */
+    public function admin_editpic ($project_id)
     {
         $this->set('isAdmin', true);
         
-        if (! isset($this->data['Sector_action'])) {
-            $this->log('Project: admin_savesector: Bad Sector_action');
-            
-            // TODO: Error
-        }
+        $this->layout = 'mLayer';
         
-        switch ($this->data['Sector_action']) {
-            case "保存":
-                if (! empty($this->data['Sector']['id'])) {
-                    $this->Sector->save($this->data['Sector']);
-                } else {
-                    ;
-                    // TODO: error
-                }
-                break;
-            case "删除":
-                if (! empty($this->data['Sector']['id'])) {
-                    $this->Sector->delete($this->data['Sector']['id']);
-                } else {
-                    ;
-                    // TODO: error
-                }
-                break;
-            
-            case "增加节":
-                if (! empty($this->data['Sector']['post_id'])) {
-                    $sql = "SELECT MAX(`Sector`.`seq`) AS `maxseq` " .
-                             "FROM `sectors` as `Sector` WHERE `Sector`.`post_id` = " .
-                             $this->data['Sector']['post_id'] . " Limit 1";
-                    $r = $this->Sector->query($sql);
-                    
-                    $d = [
-                            'Sector' => [
-                                    'post_id' => $this->data['Sector']['post_id'],
-                                    'seq' => $r[0][0]['maxseq'] + 10
-                            ]
-                    ];
-                    $this->Sector->save($d);
-                } else {
-                    $this->log(
-                            'Project: admin_savesector: bad post_id:' .
-                                     $this->data['Secotr']['post_id']);
-                    // TODO: error
-                }
-                break;
-            
-            default:
-                // TODO: error
-                break;
+        if (! empty($this->data)) {
+            if ($this->data['Post_action'] === '删除') {
+                $this->delPicture();
+            } elseif ($this->data['Post_action'] === '增加图片') {
+                $this->addPicture($project_id);
+            } else {
+                $this->log('admin_index_editpic: 非法的action');
+            }
+            $this->redirect(
+                    [
+                            'controller' => 'project',
+                            'action' => 'project_detail',
+                            $project_id
+                    ]);
         }
-        
-        $id = $this->data['Sector']['post_id'];
-        $this->data = null;
-        $this->postdetail($id);
-        $this->render('admin_postdetail');
+        $this->set('pics', 
+                $this->Image->find('all', 
+                        [
+                                'conditions' => [
+                                        'project_id' => $project_id
+                                ]
+                        ]));
     }
 
     public function getProjectList ($limit = 0)
     {
         $options = [
                 'fields' => [
-                        'Post.id',
-                        'Post.title'
+                        'Project.id',
+                        'Project.title'
                 ]
         ];
         if ($limit != 0) {
             $options['limit'] = $limit;
         }
-        return $this->Post->find('all', $options);
+        return $this->Project->find('all', $options);
     }
 
     public function admin_getProjectList ($limit = 0)
     {
         return $this->getProjectList($limit);
+    }
+
+    /**
+     * 删除图片
+     */
+    private function delPicture ()
+    {
+        if (empty($this->data)) {
+            return;
+        }
+        
+        $this->Image->delete($this->data['Image']['id']);
+        $npic = $this->Image->find('count', 
+                [
+                        'conditions' => [
+                                'Image.id' => $this->data['Variable']['id']
+                        ]
+                ]);
+        if ($npic <= 0) {
+            $imgPath = WWW_ROOT . 'img\\' . ProjectController::UPLOAD_IMAGE .
+                     '\\' . $this->data['Variable']['filename'];
+            unlink($imgPath);
+        }
+    }
+
+    /**
+     * 追加图片
+     *
+     * @param unknown $varName
+     *            Variable表中的变量名称
+     */
+    private function addPicture ($id)
+    {
+        if (empty($this->data['Image']['file']['tmp_name'])) {
+            return;
+        }
+        
+        $imgPath = WWW_ROOT . 'img\\' . ProjectController::UPLOAD_IMAGE . '\\' .
+                 $this->data['Image']['file']['name'];
+        $d = [
+                'Image' => [
+                        'project_id' => $id,
+                        'filename' => $this->data['Image']['file']['name']
+                ]
+        ];
+        $this->Image->save($d);
+        
+        if (! file_exists($imgPath)) {
+            copy($this->data['Image']['file']['tmp_name'], $imgPath);
+        }
     }
 }

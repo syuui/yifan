@@ -21,7 +21,7 @@ $this->end();
 $url = $this->Html->url(
         [
                 'controller' => 'expert',
-                'action' => 'index_editpic',
+                'action' => 'editpic',
                 $type
         ]);
 
@@ -31,7 +31,8 @@ echo $this->Html->link('编辑图片', '#',
                 'class' => 'submit'
         ]);
 foreach ($pics as $p) {
-    $img = '/img/' . Uploaditem::UPLOAD_IMAGE . '/' . $p['Variable']['value'];
+    $img = '/img/' . ExpertController::UPLOAD_IMAGE . '/' .
+             $p['Variable']['value'];
     
     echo $this->Html->div('piclist_pic', 
             $this->Html->image($img, 
@@ -48,7 +49,7 @@ foreach ($pics as $p) {
 $url = $this->Html->url(
         [
                 'controller' => 'expert',
-                'action' => 'index_edit',
+                'action' => 'edit',
                 $type
         ]);
 $options = [

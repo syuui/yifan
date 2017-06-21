@@ -40,7 +40,8 @@ if (isset($pics)) {
                         'type' => 'hidden',
                         'value' => $p['Variable']['value']
                 ]);
-        $img = '/img/' . Uploaditem::UPLOAD_IMAGE . '/' . $p['Variable']['value'];
+        $img = '/img/' . CompanyController::UPLOAD_IMAGE . '/' .
+                 $p['Variable']['value'];
         echo $this->Html->image($img, 
                 [
                         'class' => 'piclist-small'

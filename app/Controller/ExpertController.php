@@ -45,6 +45,8 @@ class ExpertController extends AppController
 
     const TYPE_OPENING = 'P';
 
+    const UPLOAD_IMAGE = 'posts';
+
     /**
      * 此控制器中使用以下模型
      *
@@ -145,7 +147,7 @@ class ExpertController extends AppController
      *
      * @param string $type            
      */
-    public function admin_index_edit ($type = ExpertController::TYPE_LESSION)
+    public function admin_edit ($type = ExpertController::TYPE_LESSION)
     {
         $this->set('isAdmin', true);
         $this->layout = 'mLayer';
@@ -192,7 +194,7 @@ class ExpertController extends AppController
      *
      * @return void
      */
-    public function admin_index_editpic ($type = ExpertController::TYPE_LESSION)
+    public function admin_editpic ($type = ExpertController::TYPE_LESSION)
     {
         $this->set('isAdmin', true);
         
@@ -294,7 +296,7 @@ class ExpertController extends AppController
             return;
         }
         
-        $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+        $imgPath = WWW_ROOT . 'img\\' . ExpertController::UPLOAD_IMAGE . '\\' .
                  $this->data['Variable']['file']['name'];
         $d = [
                 'Variable' => [

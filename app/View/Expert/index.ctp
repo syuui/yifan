@@ -18,13 +18,13 @@ echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
 foreach ($pics as $p) {
-    $url = Uploaditem::UPLOAD_IMAGE . '/' . $p['Variable']['value'];
+    $url = ExpertController::UPLOAD_IMAGE . '/' . $p['Variable']['value'];
     echo $this->Html->div('piclist_pic', 
             $this->Html->image($url, 
                     [
                             'alt' => $p['Variable']['value'],
                             'onclick' => "window.open('" . '/img/' .
-                                     Uploaditem::UPLOAD_IMAGE . '/' .
+                                     ExpertController::UPLOAD_IMAGE . '/' .
                                      $p['Variable']['value'] . "');"
                     ]));
 }

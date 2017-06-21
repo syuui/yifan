@@ -41,6 +41,8 @@ class CompanyController extends AppController
 
     const TYPE_LANHAM = 'L';
 
+    const UPLOAD_IMAGE = 'posts';
+
     /**
      * 此控制器中使用以下模型
      *
@@ -131,8 +133,7 @@ class CompanyController extends AppController
      *
      * @param string $type            
      */
-    public function admin_index_edit (
-            $type = CompanyController::TYPE_DESCRIPTION)
+    public function admin_edit ($type = CompanyController::TYPE_DESCRIPTION)
     {
         $this->set('isAdmin', true);
         $this->layout = 'mLayer';
@@ -171,8 +172,7 @@ class CompanyController extends AppController
      *
      * @return void
      */
-    public function admin_index_editpic (
-            $type = CompanyController::TYPE_DESCRIPTION)
+    public function admin_editpic ($type = CompanyController::TYPE_DESCRIPTION)
     {
         $this->set('isAdmin', true);
         
@@ -250,8 +250,8 @@ class CompanyController extends AppController
                         ]
                 ]);
         if ($npic <= 0) {
-            $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
-                     $this->data['Variable']['value'];
+            $imgPath = WWW_ROOT . 'img\\' . CompanyController::UPLOAD_IMAGE .
+                     '\\' . $this->data['Variable']['value'];
             unlink($imgPath);
         }
     }
@@ -268,7 +268,7 @@ class CompanyController extends AppController
             return;
         }
         
-        $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+        $imgPath = WWW_ROOT . 'img\\' . CompanyController::UPLOAD_IMAGE . '\\' .
                  $this->data['Variable']['file']['name'];
         $d = [
                 'Variable' => [

@@ -18,11 +18,11 @@ if (count($data) == 0) {
     echo Configure::read('MSG00010001');
 } else {
     foreach ($data as $d) {
-        $lst[] = $this->Html->link($d['Post']['title'], 
+        $lst[] = $this->Html->link($d['Project']['title'], 
                 [
                         'controller' => 'project',
-                        'action' => 'postdetail',
-                        $d['Post']['id']
+                        'action' => 'detail',
+                        $d['Project']['id']
                 ]);
     }
     echo $this->Html->nestedList($lst, 

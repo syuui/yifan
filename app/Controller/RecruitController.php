@@ -167,30 +167,21 @@ class RecruitController extends AppController
         $this->autoRender = false;
         
         // Add/Modify/Delete a job
-        if (isset($this->data) && ! empty($this->data)) {
-            if (isset($this->data['Recruit']['id']) &
-                     ! empty($this->data['Recruit']['id'])) {
-                if ($this->data['Recruit']['action'] == 'E') {
-                    $this->Recruit->save($this->data);
-                    
-                    $this->log('Save Recruit: ' . $this->data['Recruit']['id']);
-                } elseif ($this->data['Recruit']['action'] == 'D') {
-                    $this->Recruit->delete($this->data['Recruit']['id']);
-                    
-                    $this->log(
-                            'Delete Recruit: ' . $this->data['Recruit']['id']);
-                } else {
-                    
-                    $this->log(
-                            'admin_savenews: 非法的action (' .
-                                     $this->data['Recruit']['action'] . ')');
-                }
-            } else {
+        if (! empty($this->data)) {
+            
+            if ($this->data['Post_action'] == '确定') {
                 $this->Recruit->save($this->data);
-                
-                $this->log('Add Recruit :' . $this->Recruit->getInsertID());
+            } elseif ($this->data['Post_action'] == '删除') {
+                $this->Recruit->delete($this->data['Recruit']['id']);
+            } else {
+                $this->log(
+                        'admin_savenews: 非法的action (' .
+                                 $this->data['Recruit']['action'] . ')');
             }
-            return;
+            $this->redirect([
+                    'controller' => 'recruit',
+                    'action' => 'index'
+            ]);
         }
         
         // Get news for Edit/Delete Page
@@ -198,7 +189,9 @@ class RecruitController extends AppController
             $this->set('data', 
                     $this->Recruit->find('first', 
                             [
-                                    'conditions' => 'id=' . $id
+                                    'conditions' => [
+                                            'id=' . $id
+                                    ]
                             ]));
             $this->log('Edit Recruit');
         } else {
@@ -214,8 +207,6 @@ class RecruitController extends AppController
                                     'public' => true
                             ]
                     ]);
-            
-            $this->log('Add Recruit');
         }
         $this->render();
     }

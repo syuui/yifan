@@ -14,11 +14,6 @@ $inputs = $this->Form->Inputs(
                         'type' => 'hidden',
                         'value' => $data['Recruit']['id']
                 ],
-                'Recruit.action' => [
-                        'type' => 'hidden',
-                        'value' => 'E',
-                        'id' => 'currentAction'
-                ],
                 'Recruit.title' => [
                         'value' => $data['Recruit']['title'],
                         'label' => '职位名称',
@@ -54,20 +49,20 @@ $inputs = $this->Form->Inputs(
                 'fieldset' => false,
                 'legend' => false
         ]);
-$buttons = $this->Form->button('确定', 
+$buttons = $this->Form->submit('确定', 
         [
                 'label' => false,
                 'div' => false,
                 'class' => 'submit',
-                'type' => 'button',
-                'id' => 'saveItem'
-        ]) . $this->Form->button('删除', 
+                'id' => 'saveItem',
+                'name' => 'Post.action'
+        ]) . $this->Form->submit('删除', 
         [
                 'label' => false,
                 'div' => false,
                 'class' => 'reset',
-                'type' => 'button',
-                'id' => 'deleteItem'
+                'id' => 'deleteItem',
+                'name' => 'Post.action'
         ]);
 
 echo $form_s;

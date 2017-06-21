@@ -28,10 +28,10 @@ App::uses('AppModel', 'Model');
  *
  * @package app.Model
  */
-class Post extends AppModel
+class Project extends AppModel
 {
 
-    public $useTable = 'posts';
+    public $useTable = 'projects';
 
     /**
      * 验证规则
@@ -41,6 +41,8 @@ class Post extends AppModel
      * @var array
      */
     public $validate = [];
+
+    
 
     /**
      * 排序顺序
@@ -58,7 +60,7 @@ class Post extends AppModel
      *
      * @var string
      */
-    public $name = 'Post';
+    public $name = 'Project';
 
     /**
      * 虚字段
@@ -71,11 +73,10 @@ class Post extends AppModel
     public $virtualFields = [];
 
     public $hasMany = [
-            'Sector' => [
-                    'className' => 'Sector',
-                    'foreignKey' => 'post_id',
-                    'order' => 'Sector.seq ASC',
-                    'dependent' => true
+            'Image' => [
+                    'className' => 'Image',
+                    'foreignKey' => 'project_id',
+                    'order' => 'Image.updated DESC'
             ]
     ];
 
@@ -92,15 +93,4 @@ class Post extends AppModel
     public $findMethods = [
             'max' => true
     ];
-
-    protected function _findMax ($state, $query, $results = array())
-    {
-        if ($state === 'before') {
-            $sql = "SELECT MAX(`Post`.`seq`) AS maxseq FROM `posts` AS `POST` WHERE `Post`.`post_id` = " .
-                     $query['post_id'];
-            $this->log("Custom SQL: $sql" );
-            return $this->query($sql);
-        }
-        return $results;
-    }
 }

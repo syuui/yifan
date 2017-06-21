@@ -14,14 +14,15 @@ $this->Html->addCrumb($page_title);
 echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
+$url = $this->Html->url(
+        [
+                'controller' => 'recruit',
+                'action' => 'savejob'
+        ]);
 echo $this->Html->link('增加职位', '#', 
         [
-                'onclick' => 'mLayerAction(\'' . $this->Html->url(
-                        [
-                                'controller' => 'recruit',
-                                'action' => 'savejob'
-                        ]) . '\');',
-                'class' => 'addButton'
+                'onclick' => "mLayerShow('" . $url . "');",
+                'class' => 'submit'
         ]);
 
 ?>
@@ -45,7 +46,7 @@ if (empty($data)) {
         
         echo $this->Html->link($d['Recruit']['title'], "#", 
                 [
-                        'onclick' => "mLayerAction('" . $this->Html->url(
+                        'onclick' => "mLayerShow('" . $this->Html->url(
                                 [
                                         'controller' => 'recruit',
                                         'action' => 'savejob',
@@ -58,7 +59,7 @@ if (empty($data)) {
         echo $this->Html->div('recruit-list-number', $d['Recruit']['number']);
         echo $this->Html->link('详情', "#", 
                 [
-                        'onclick' => "mLayerAction('" . $this->Html->url(
+                        'onclick' => "mLayerShow('" . $this->Html->url(
                                 [
                                         'controller' => 'recruit',
                                         'action' => 'savejob',

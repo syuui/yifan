@@ -28,7 +28,7 @@
 Router::connect('/', 
         [
                 'controller' => 'pages',
-                'action' => 'display',
+                'action' => 'index',
                 'home'
         ]);
 /**

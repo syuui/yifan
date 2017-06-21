@@ -49,7 +49,7 @@ class Image extends AppModel
      *
      * @var string
      */
-    public $order = "created DESC";
+    public $order = "updated DESC";
 
     /**
      * 模型名称
@@ -79,4 +79,15 @@ class Image extends AppModel
      * @var string
      */
     public $cacheQueries = true;
+
+    protected function _findMax ($state, $query, $results = array())
+    {
+        if ($state === 'before') {
+            $sql = "SELECT MAX(`Image`.`seq`) AS maxseq FROM `images` AS `Image` WHERE `Image`.`project_id` = " .
+                     $query['project_id'];
+            $this->log("Custom SQL: $sql");
+            return $this->query($sql);
+        }
+        return $results;
+    }
 }

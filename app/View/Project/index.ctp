@@ -13,27 +13,30 @@ $this->Html->addCrumb($page_title);
 echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
-$addLink = $this->Html->link('增加文章', 
+$url = $this->Html->url(
         [
                 'controller' => 'project',
-                'action' => 'admin_savepost'
-        ], [
-                'class' => 'submit'
+                'action' => 'edit'
         ]);
 
 if (isset($isAdmin) && $isAdmin) {
+    $addLink = $this->Html->link('增加文章', '#', 
+            [
+                    'class' => 'submit',
+                    'onclick' => "mLayerShow('" . $url . "');"
+            ]);
     echo $addLink;
 }
 
 if (! empty($data)) {
     foreach ($data as $d) {
-        $div_title = $this->Html->link($d['Post']['title'], 
+        $div_title = $this->Html->link($d['Project']['title'], 
                 [
                         'controller' => 'project',
-                        'action' => 'postdetail',
-                        $d['Post']['id']
+                        'action' => 'detail',
+                        $d['Project']['id']
                 ]);
-        $div_date = date('Y-m-d', strtotime($d['Post']['created']));
+        $div_date = date('Y-m-d', strtotime($d['Project']['created']));
         echo $this->Html->div('projectlist', 
                 $this->Html->div('projectlist_index', $div_title) .
                          $this->Html->div('projectlist_date', $div_date));

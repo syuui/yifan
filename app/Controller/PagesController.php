@@ -50,7 +50,7 @@ class PagesController extends AppController
      * @throws NotFoundException When the view file could not be found
      *         or MissingViewException in debug mode.
      */
-    public function display ()
+    public function index ()
     {
         $path = func_get_args();
         
@@ -81,15 +81,9 @@ class PagesController extends AppController
         }
     }
 
-    public function admin_display ()
+    public function admin_index ()
     {
         $this->set('isAdmin', true);
         $this->render('home', 'toppage');
-    }
-
-    public function admin_tools ()
-    {
-        $this->layout = 'default_l';
-        $this->set('isAdmin', true);
     }
 }
