@@ -20,7 +20,7 @@ if (count($data) == 0) {
     ?>
 <ul class="list_style_2">
 <?php foreach ($data as $d) {        ?>
-    <li><?php echo $this->Html->link($d['Recruit']['title'],['controller'=>'Recruit','action'=>'jobdetail',$d['Recruit']['id']]);?></li>
+    <li><?php echo $this->Html->link($d['recruit']['title'],['controller'=>'Recruit','action'=>'jobdetail',$d['Recruit']['id']]);?></li>
 <?php }    ;?>
 </ul>
 
