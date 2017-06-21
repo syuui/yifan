@@ -46,45 +46,36 @@ $inputs = $this->Form->Inputs(
                 'fieldset' => false,
                 'legend' => false
         ]);
-$buttons = $this->Form->button('确定', 
+$buttons = $this->Form->submit('确定', 
         [
                 'label' => false,
                 'div' => false,
                 'class' => 'submit',
-                'type' => 'button',
-                'id' => 'saveItem'
-        ]) . $this->Form->button('删除', 
+                'id' => 'saveItem',
+                'name' => 'Post.action'
+        ]) . $this->Form->submit('删除', 
         [
                 'label' => false,
                 'div' => false,
                 'class' => 'reset',
-                'type' => 'button',
-                'id' => 'deleteItem'
+                'id' => 'deleteItem',
+                'name' => 'Post.action'
         ]);
 
+$this->start('form_s');
 echo $form_s;
-?>
-<div class="m-layer z-show" id="popup_win">
-	<table>
-		<tbody>
-			<tr>
-				<td><article class="lywrap">
-						<header class="lytt">
-							<h2 class="u-tt"><?php echo isset($data)?'编辑新闻' :'增加新闻';?></h2>
-							<span class="lyclose" onclick="removeLayer();">×</span>
-						</header>
-						<section class="lyct">
-							<p><?php   echo $inputs;   ?></p>
-						</section>
-						<footer class="lybt">
-							<div class="lyother">
-								<p></p>
-							</div>
-							<div class="lybtns"><?php   echo $buttons;  ?></div>
-						</footer>
-					</article></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<?php echo $form_e; ?>
+$this->end();
+
+$this->start('page_title');
+echo empty($data['News']['id']) ? '编辑新闻' : '增加新闻';
+$this->end();
+
+$this->start('buttons');
+echo $buttons;
+$this->end();
+
+$this->start('form_e');
+echo $form_e;
+$this->end();
+
+echo $inputs;

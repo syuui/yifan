@@ -1,46 +1,49 @@
 <?php
-/**
- * Static content controller.
- *
- * This file will render views from views/Company/
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
 App::uses('AppController', 'Controller');
 App::uses('Variable', 'Model');
-App::uses('Uploaditem', 'Model');
 
 /**
- * Static content controller
+ * 走进朗豪 控制器
  *
- * Override this controller by placing a copy in controllers directory of an
- * application
- *
- * @package app.Controller
- * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
+ * @author Wei.ZHOU
+ * @version 1.0
  */
 class CompanyController extends AppController
 {
 
+    /**
+     * 走进朗豪 企业简介 标识符
+     *
+     * @var string
+     */
     const TYPE_DESCRIPTION = 'D';
 
+    /**
+     * 走进朗豪 企业文化 标识符
+     *
+     * @var string
+     */
     const TYPE_CULTURE = 'C';
 
+    /**
+     * 走进朗豪 发展战略 标识符
+     *
+     * @var string
+     */
     const TYPE_DEVELOPMENT = 'V';
 
+    /**
+     * 走进朗豪 朗豪风采 标识符
+     *
+     * @var string
+     */
     const TYPE_LANHAM = 'L';
 
+    /**
+     * 图片文件上传路径
+     * 
+     * @var string
+     */
     const UPLOAD_IMAGE = 'posts';
 
     /**
@@ -136,7 +139,7 @@ class CompanyController extends AppController
     public function admin_edit ($type = CompanyController::TYPE_DESCRIPTION)
     {
         $this->set('isAdmin', true);
-        $this->layout = 'mLayer';
+        $this->layout = 'mlayer';
         
         switch ($type) {
             case CompanyController::TYPE_DESCRIPTION:
@@ -176,7 +179,7 @@ class CompanyController extends AppController
     {
         $this->set('isAdmin', true);
         
-        $this->layout = 'mLayer';
+        $this->layout = 'mlayer';
         
         switch ($type) {
             case CompanyController::TYPE_DESCRIPTION:

@@ -3,18 +3,12 @@ $this->start('sidebar');
 echo $this->Element('sidebar/project');
 $this->end();
 
-$url = $this->Html->url(
-        [
-                'controller' => 'project',
-                'action' => 'admin_savepost'
-        ]);
-
 $this->start('form_s');
 echo $this->Form->create('Project', 
         [
                 'url' => [
                         'controller' => 'project',
-                        'action' => 'project_detail',
+                        'action' => 'detail',
                         $id
                 ],
                 'inputDefaults' => [
@@ -64,4 +58,3 @@ $this->end();
 $this->start('form_e');
 echo $this->Form->end();
 $this->end();
-?>

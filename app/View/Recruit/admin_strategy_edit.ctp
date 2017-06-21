@@ -1,13 +1,16 @@
 <?php
+$page_title = '人才战略';
 $form_s = $this->Form->create('', 
         [
-                'type'=>'POST',
+                'type' => 'POST',
                 'inputDefaults' => [
                         'label' => false,
                         'div' => false
                 ],
-                'url'=>['controller'=>'recruit', 'action'=>'strategy']
-                
+                'url' => [
+                        'controller' => 'recruit',
+                        'action' => 'strategy'
+                ]
         ]);
 $inputs = $this->Form->inputs(
         [
@@ -45,6 +48,10 @@ $form_e = $this->Form->end();
 
 $this->start('form_s');
 echo $form_s;
+$this->end();
+
+$this->start('page_title');
+echo $page_title;
 $this->end();
 
 echo $inputs;

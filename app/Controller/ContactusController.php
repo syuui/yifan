@@ -1,49 +1,52 @@
 <?php
-/**
- * Static content controller.
- *
- * This file will render views from views/pages/
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
 App::uses('AppController', 'Controller');
-App::uses('Uploaditem', 'Model');
 
 /**
- * Static content controller
+ * 联系我们 控制器
  *
- * Override this controller by placing a copy in controllers directory of an
- * application
- *
- * @package app.Controller
- * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
+ * @author Wei.ZHOU
+ * @version 1.0
  */
 class ContactusController extends AppController
 {
 
-    const CONTACTUS_ADDRESS_NAME = 'contactus_address';
-
-    const CONTACTUS_TEL_NAME = 'contactus_tel';
-
-    const CONTACTUS_FAX_NAME = 'contactus_fax';
-
-    const CONTACTUS_MAIL_NAME = 'contactus_mail';
-
-    const CONTACTUS_ZIP_NAME = 'contactus_zip';
+    /**
+     * 配置文件中 联系我们 - 地址 的键
+     *
+     * @var string
+     */
+    const CONTACTUS_ADDRESS_NAME = 'contact_address';
 
     /**
-     * This controller does not use a model
+     * 配置文件中 联系我们 - 电话 的键
+     *
+     * @var string
+     */
+    const CONTACTUS_TEL_NAME = 'contact_tel';
+
+    /**
+     * 配置文件中 联系我们 - 手机 的键
+     *
+     * @var string
+     */
+    const CONTACTUS_MOBILE_NAME = 'contact_mobile';
+
+    /**
+     * 配置文件中 联系我们 - 传真 的键
+     *
+     * @var string
+     */
+    const CONTACTUS_FAX_NAME = 'contact_fax';
+
+    /**
+     * 配置文件中 联系我们 - 邮箱 的键
+     *
+     * @var string
+     */
+    const CONTACTUS_MAIL_NAME = 'contact_mail';
+
+    /**
+     * 此控制器使用下列模型
      *
      * @var array
      */
@@ -52,7 +55,7 @@ class ContactusController extends AppController
     ];
 
     /*
-     * 此controller使用下列helper
+     * 此控制器使用下列助件
      *
      * @var array
      */
@@ -61,15 +64,21 @@ class ContactusController extends AppController
     ];
 
     /**
-     * Specify the layout used in this controller
+     * 此控制器中所有页面使用以下布局
      */
     public $layout = 'default_l';
 
+    /**
+     * 联系我们 页面的控制器
+     */
     public function index ()
     {
         $this->set('data', $this->getContectus());
     }
 
+    /**
+     * 管理员用 联系我们 页面的控制器
+     */
     public function admin_index ()
     {
         $this->index();
@@ -79,12 +88,12 @@ class ContactusController extends AppController
 
     private function getContectus ()
     {
-        $address = Configure::read('contact_address');
-        $tel = Configure::read('contact_tel');
-        $fax = Configure::read('contact_fax');
-        $mail = Configure::read('contact_mail');
-        $zip = Configure::read('contact_zip');
+        $address = Configure::read(ContactusController::CONTACTUS_ADDRESS_NAME);
+        $tel = Configure::read(ContactusController::CONTACTUS_TEL_NAME);
+        $mobile = Configure::read(ContactusController::CONTACTUS_MOBILE_NAME);
+        $fax = Configure::read(ContactusController::CONTACTUS_FAX_NAME);
+        $mail = Configure::read(ContactusController::CONTACTUS_MAIL_NAME);
         
-        return compact('address', 'tel', 'fax', 'mail', 'zip');
+        return compact('address', 'tel', 'mobile', 'fax', 'mail');
     }
 }

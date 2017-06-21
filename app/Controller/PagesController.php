@@ -32,19 +32,19 @@ class PagesController extends AppController
 {
 
     /**
-     * This controller does not use a model
+     * 此控制器不使用任何模型
      *
      * @var array
      */
-    public $uses = array();
+    public $uses = [];
 
     /**
-     * Specify the layout used in this controller
+     * 此页面使用以下布局
      */
     public $layout = 'toppage';
 
     /**
-     * Displays a view
+     * 首页的控制器
      *
      * @return void
      * @throws NotFoundException When the view file could not be found
@@ -81,6 +81,9 @@ class PagesController extends AppController
         }
     }
 
+    /**
+     * 管理员用首页的控制器
+     */
     public function admin_index ()
     {
         $this->set('isAdmin', true);

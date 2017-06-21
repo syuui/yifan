@@ -14,7 +14,6 @@ $this->Html->addCrumb('走进朗豪',
                 'action' => 'index'
         ]);
 $this->Html->addCrumb($page_title);
-echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
 // 编辑图片

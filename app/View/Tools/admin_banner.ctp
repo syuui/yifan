@@ -11,10 +11,9 @@ $this->start('breadcrumb');
 $this->Html->addCrumb('管理工具', 
         [
                 'controller' => 'tools',
-                'action' => 'index'
+                'action' => 'banner'
         ]);
 $this->Html->addCrumb($page_title);
-echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
 $form_s = $this->Form->create('Variable', 

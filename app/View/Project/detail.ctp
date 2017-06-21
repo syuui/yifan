@@ -15,7 +15,6 @@ $this->Html->addCrumb('帮扶项目',
                 'action' => 'index'
         ]);
 $this->Html->addCrumb($page_title);
-echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
 if (isset($isAdmin) && $isAdmin) {}
@@ -41,13 +40,12 @@ if (isset($isAdmin) && $isAdmin) {
                         'class' => 'project_title',
                         'onclick' => "mLayerShow('" . $curl . "');"
                 ]);
+        echo $this->Html->tag('span', 
+                date('Y-m-d', strtotime($data['Project']['updated'])), 
+                [
+                        'class' => 'project_date'
+                ]);
     }
-    
-    echo $this->Html->tag('span', 
-            date('Y-m-d', strtotime($data['Project']['updated'])), 
-            [
-                    'class' => 'project_date'
-            ]);
     
     // 编辑图片
     $purl = $this->Html->url(
@@ -70,21 +68,22 @@ if (isset($isAdmin) && $isAdmin) {
     
     echo $this->Html->link('编辑图片', '#', 
             [
-                    'onclick' => "mLayerShow('" . $curl . "');",
+                    'onclick' => "mLayerShow('" . $purl . "');",
                     'class' => 'submit'
             ]);
 } else {
-    echo $this->Html->tag('span', $data['Project']['title'], 
-            [
-                    'class' => 'project_title'
-            ]);
-    
-    echo $this->Html->tag('span', 
-            date('Y-m-d', strtotime($data['Project']['updated'])), 
-            [
-                    'class' => 'project_date'
-            ]);
-    
+    if (! empty($data['Project']['title'])) {
+        echo $this->Html->tag('span', $data['Project']['title'], 
+                [
+                        'class' => 'project_title'
+                ]);
+        
+        echo $this->Html->tag('span', 
+                date('Y-m-d', strtotime($data['Project']['updated'])), 
+                [
+                        'class' => 'project_date'
+                ]);
+    }
     if (! empty($data['Image'])) {
         foreach ($data['Image'] as $p) {
             $url = ProjectController::UPLOAD_IMAGE . '/' . $p['filename'];

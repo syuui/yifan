@@ -16,7 +16,6 @@ $this->Html->addCrumb('招贤纳士',
                 'action' => 'index'
         ]);
 $this->Html->addCrumb($page_title);
-echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
 $form_s = $this->Form->create('', 

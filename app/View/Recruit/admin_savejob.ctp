@@ -1,4 +1,5 @@
 <?php
+$page_title = '职位信息';
 $form_s = $this->Form->create('Recruit', 
         [
                 'inputDefaults' => [
@@ -64,31 +65,20 @@ $buttons = $this->Form->submit('确定',
                 'id' => 'deleteItem',
                 'name' => 'Post.action'
         ]);
-
+$this->start('form_s');
 echo $form_s;
-?>
-<div class="m-layer z-show" id="popup_win">
-	<table>
-		<tbody>
-			<tr>
-				<td><article class="lywrap">
-						<header class="lytt">
-							<h2 class="u-tt"><?php echo isset($data)?'编辑职位' :'增加职位';?></h2>
-							<span class="lyclose" onclick="removeLayer();">×</span>
-						</header>
-						<section class="lyct">
-							<p><?php   echo $inputs;   ?>
-							</p>
-						</section>
-						<footer class="lybt">
-							<div class="lyother">
-								<p></p>
-							</div>
-							<div class="lybtns"><?php   echo $buttons;  ?></div>
-						</footer>
-					</article></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<?php echo $form_e; ?>
+$this->end();
+
+$this->start('page_title');
+echo $page_title;
+$this->end();
+
+echo $inputs;
+
+$this->start('buttons');
+echo $buttons;
+$this->end();
+
+$this->start('form_e');
+echo $form_e;
+$this->end();

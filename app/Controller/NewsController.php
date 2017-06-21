@@ -1,33 +1,13 @@
 <?php
-/**
- * Static content controller.
- *
- * This file will render views from views/pages/
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
 App::uses('AppController', 'Controller');
 App::uses('News', 'Model');
 
 /**
- * Static content controller
+ * 新闻资讯 控制器
  *
- * Override this controller by placing a copy in controllers directory of an
- * application
- *
- * @package app.Controller
- * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
+ * @author Wei.ZHOU
+ * @version 1.0
+ *         
  */
 class NewsController extends AppController
 {
@@ -107,12 +87,13 @@ class NewsController extends AppController
     /**
      * [新闻资讯]-[新闻内容]的控制器
      *
-     * @param unknown $id            
+     * @param unknown $id
+     *            新闻ID
      */
     public function newsdetail ($id = null)
     {
         if (empty($id) || ! is_numeric($id)) {
-            $this->set('data', []);
+            $this->warning('ID为空');
         } else {
             $this->set('data', 
                     $this->News->find('first', 
@@ -185,44 +166,39 @@ class NewsController extends AppController
      *
      * 新闻数据的增、删、改的逻辑。
      *
-     * @return void
+     * @param unknown $id
+     *            新闻ID
+     * @throws InternalErrorException DEBUG模式下中止运行，商用模式下抛出InternalErrorException
      */
     public function admin_savenews ($id = null)
     {
         $this->set('isAdmin', true);
         
-        $this->layout = false;
-        $this->autoRender = false;
+        $this->layout = 'mlayer';
         
         // 增删改的逻辑
         if (! empty($this->data)) {
-            if (empty($this->data['News']['id'])) {
-                if ($this->data['News']['action'] == 'E') {
-                    // 改
-                    $this->News->save($this->data);
-                } elseif ($this->data['News']['action'] == 'D') {
-                    // 删
-                    $this->News->delete($this->data['News']['id']);
-                } else {
-                    $this->log(
-                            'admin_savenews: 非法的action (' .
-                                     $this->data['News']['action'] . ')');
-                }
-            } else {
-                // 增
+            if ($this->data['Post_action'] === '确定') {
                 $this->News->save($this->data);
+            } elseif ($this->data['Post_action'] === '删除') {
+                $this->News->delete($this->data['News']['id']);
+            } else {
+                $this->warning('非法的action (' . $this->data['Post_action'] . ')');
+                if (Configure::read('debug')) {
+                    die('非法的action (' . $this->data['Post_action'] . ')');
+                } else {
+                    throw new InternalErrorException();
+                }
             }
-            return;
+            $this->redirect(
+                    [
+                            'controller' => 'news',
+                            'action' => 'newsdetail',
+                            $this->data['News']['id']
+                    ]);
         }
         
-        // 为页面准备既有数据
-        if (! empty($id)) {
-            $this->set('data', 
-                    $this->News->find('first', 
-                            [
-                                    'conditions' => 'id=' . $id
-                            ]));
-        } else {
+        if (empty($id)) {
             // 为页面准备空数据
             $this->set('data', 
                     [
@@ -233,8 +209,14 @@ class NewsController extends AppController
                                     'content' => ''
                             ]
                     ]);
+        } else {
+            // 为页面准备既有数据
+            $this->set('data', 
+                    $this->News->find('first', 
+                            [
+                                    'conditions' => 'id=' . $id
+                            ]));
         }
-        $this->render();
     }
 
     /**

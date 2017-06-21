@@ -11,7 +11,6 @@ $this->end();
 
 $this->start('breadcrumb');
 $this->Html->addCrumb($page_title);
-echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 ?>
 				

@@ -59,22 +59,26 @@ echo $this->Html->link('联系我们',
                 'action' => 'index'
         ]);
 ?></li>
-                <?php
-                if (isset($isAdmin) && $isAdmin) {
-                    // 管理员用户
-                    ?>
-    
-			<li><?php
-                    
-                    echo $this->Html->link('管理工具', 
-                            [
-                                    'controller' => 'tools',
-                                    'action' => 'banner'
-                            ]);
-                    ?></li>		
-			<?php
-                }
-                ?>
+<?php
+
+if (isset($isAdmin) && $isAdmin) :
+    // 管理员用户
+    ?>
+<li>
+<?php
+    echo $this->Html->link('管理工具', 
+            [
+                    'controller' => 'tools',
+                    'action' => 'banner'
+            ]);
+    ?></li>
+<?php endif?>
+			
+			
+			
+			
+			
+			
 			<li class="menuright"></li>
 		</ul>
 	</div>

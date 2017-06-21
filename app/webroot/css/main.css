@@ -653,7 +653,7 @@ div.piclist_index .piclist_index_pic img {
 
 div.piclist_pic {
 	display: inline-block;
-    margin: 20px;
+	margin: 20px;
 }
 
 div.piclist_pic img {
@@ -913,4 +913,18 @@ span.project_title {
 	margin-left: 5px;
 	background: url(../img/downarr.gif) 80px no-repeat;
 	font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/*--------------------------------------------------------------------------------
+ * 联系我们
+ *--------------------------------------------------------------------------------*/
+.s-line {
+	margin: 0px 0px 10px 0px;
+}
+
+/*--------------------------------------------------------------------------------
+ * 管理工具
+ *--------------------------------------------------------------------------------*/
+fieldset.tools-group {
+	margin-bottom: 20px;
 }

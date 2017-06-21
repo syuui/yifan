@@ -31,7 +31,6 @@ $this->Html->addCrumb('新闻资讯',
                 'action' => 'index'
         ]);
 $this->Html->addCrumb($title);
-echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
 $url = $this->Html->url(
@@ -41,8 +40,8 @@ $url = $this->Html->url(
         ]);
 $addLink = $this->Html->link('增加新闻', '#', 
         [
-                'onclick' => "mLayerAction('$url');",
-                'class' => 'addButton'
+                'onclick' => "mLayerShow('$url');",
+                'class' => 'submit'
         ]);
 
 ?>
@@ -65,7 +64,7 @@ if (count($data) == 0) {
                     ]);
             $ns[] = $this->Html->link($d['News']['title'], '#', 
                     [
-                            'onclick' => "mLayerAction('$url');"
+                            'onclick' => "mLayerShow('$url');"
                     ]);
         } else {
             $ns[] = $this->Html->link($d['News']['title'], 

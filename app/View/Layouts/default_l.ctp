@@ -25,11 +25,7 @@ echo $this->Html->docType();
 				<!-- 当前位置提示条 -->
 				<div class="page_navi">您现在的位置：
 <?php
-echo $this->Html->link($title, 
-        [
-                'controller' => 'pages',
-                'action' => 'display'
-        ]) . ' &gt; ';
+echo $this->Html->getCrumbs(' > ', Configure::read('c_site_title'));
 echo $this->fetch('breadcrumb');
 ?></div>
 

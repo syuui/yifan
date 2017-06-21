@@ -3,7 +3,7 @@ $this->start('page_title');
 echo isset($picId) ? '修改图片' : '增加图片';
 $this->end();
 
-echo $this->Form->create('Variable', 
+echo $this->Form->create('Image', 
         [
                 'inputDefaults' => [
                         'label' => false

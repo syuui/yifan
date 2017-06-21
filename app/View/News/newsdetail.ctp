@@ -16,7 +16,6 @@ $this->Html->addCrumb('新闻资讯',
                 'action' => 'index'
         ]);
 $this->Html->addCrumb($page_title);
-echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 ?>
 <div class="ele_cnt_txt">

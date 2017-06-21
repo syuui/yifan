@@ -10,13 +10,12 @@ echo $page_title;
 $this->end();
 
 $this->start('breadcrumb');
-$this->Html->addCrumb('职位信息', 
+$this->Html->addCrumb('招贤纳士', 
         [
                 'controller' => 'recruit',
                 'action' => 'index'
         ]);
 $this->Html->addCrumb($page_title);
-echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
 if (! empty($data)) {

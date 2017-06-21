@@ -18,7 +18,6 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 App::uses('Controller', 'Controller');
 
 /**
@@ -27,8 +26,56 @@ App::uses('Controller', 'Controller');
  * Add your application-wide methods in the class below, your controllers
  * will inherit them.
  *
- * @package		app.Controller
- * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
+ * @package app.Controller
+ * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
-class AppController extends Controller {
+class AppController extends Controller
+{
+
+    public function error ($message)
+    {
+        $backtrace = debug_backtrace();
+        array_shift($backtrace);
+        CakeLog::write('error', 
+                $backtrace[0]['class'] . '::' . $backtrace[0]['function'] . ": " .
+                         $message);
+    }
+
+    public function warning ($message)
+    {
+        $backtrace = debug_backtrace();
+        array_shift($backtrace);
+        CakeLog::write('warning', 
+                $backtrace[0]['class'] . '::' . $backtrace[0]['function'] . ": " .
+                         $message);
+    }
+
+    public function debug ($message)
+    {
+        if (Configure::read('debug') >= 2) {
+            $backtrace = debug_backtrace();
+            array_shift($backtrace);
+            CakeLog::write('debug', 
+                    $backtrace[0]['class'] . '::' . $backtrace[0]['function'] .
+                             ": " . $message);
+        }
+    }
+
+    public function beforeFilter ()
+    {
+        parent::beforeFilter();
+        if (! empty($this->request->params['prefix']) &&
+                 $this->request->params['prefix'] === 'admin') {
+            $login = $this->Session->read('login');
+            if (empty($login) || ! $login) {
+                if (! ($this->request->params['controller'] === 'tools' &&
+                         $this->request->params['action'] === 'admin_login'))
+                    $this->redirect(
+                            [
+                                    'controller' => 'tools',
+                                    'action' => 'login'
+                            ]);
+            }
+        }
+    }
 }

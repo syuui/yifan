@@ -1,6 +1,4 @@
 <?php
-App::uses('Variable', 'Model');
-
 $this->start('page_title');
 echo $page_title;
 $this->end();

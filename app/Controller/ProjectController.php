@@ -1,41 +1,32 @@
 <?php
-/**
- * Static content controller.
- *
- * This file will render views from views/pages/
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
 App::uses('AppController', 'Controller');
 App::uses('VariableModel', 'Model');
 
 /**
- * Static content controller
+ * 帮扶项目 控制器
  *
- * Override this controller by placing a copy in controllers directory of an
- * application
- *
- * @package app.Controller
- * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
+ * @author Wei.ZHOU
+ * @version 1.0
  */
 class ProjectController extends AppController
 {
 
+    /**
+     * 帮扶项目 页面中一页最多显示的条数
+     *
+     * @var string
+     */
+    const PROJECT_PAGE_LENGTH = 'project_page_length';
+
+    /**
+     * 图片文件上传路径
+     *
+     * @var string
+     */
     const UPLOAD_IMAGE = 'projects';
 
     /**
-     * This controller uses following compnonets
+     * 此控制器使用以下组件
      *
      * @var array
      */
@@ -44,7 +35,7 @@ class ProjectController extends AppController
     ];
 
     /**
-     * This controller uses following models
+     * 此控制器使用以下模型
      *
      * @var array
      */
@@ -70,31 +61,45 @@ class ProjectController extends AppController
             ]
     ];
 
+    /**
+     * 此控制器使用以下助件
+     *
+     * @var array
+     */
     var $helpers = [
             'Paginator'
     ];
 
+    /**
+     * 此控制器所有页面均使用以下布局
+     *
+     * @var string
+     */
     var $layout = 'default_l';
 
     /**
-     * Displays a view
-     *
-     * @return void
-     * @throws NotFoundException When the view file could not be found
-     *         or MissingViewException in debug mode.
+     * 用户页面 帮扶项目 项目一览 控制器
      */
     public function index ()
     {
         $this->paginate['Project']['limit'] = Configure::read(
-                'project_page_length');
+                ProjectController::PROJECT_PAGE_LENGTH);
         $this->Paginator->settings = $this->paginate;
         
         $this->set('data', $this->Paginator->paginate('Project'));
     }
 
+    /**
+     * 用户页面 帮扶项目详细 控制器
+     *
+     * @param unknown $id
+     *            帮扶项目ID
+     */
     public function detail ($id = null)
     {
-        if (! empty($id)) {
+        if (empty($id)) {
+            $this->warning('ID为空');
+        } else {
             $this->set('data', 
                     $this->Project->find('first', 
                             [
@@ -105,6 +110,9 @@ class ProjectController extends AppController
         }
     }
 
+    /**
+     * 管理页面 帮扶项目 项目一览 控制器
+     */
     public function admin_index ()
     {
         $this->set('isAdmin', true);
@@ -112,6 +120,12 @@ class ProjectController extends AppController
         $this->render('index');
     }
 
+    /**
+     * 管理页面 帮扶项目详细 控制器
+     *
+     * @param unknown $id
+     *            帮扶项目ID
+     */
     public function admin_detail ($id = null)
     {
         $this->set('isAdmin', true);
@@ -121,30 +135,30 @@ class ProjectController extends AppController
                 $this->Project->save($this->data['Project']);
             } elseif ($this->data['Post_action'] === "删除") {
                 $this->Project->delete($this->data['Project']['id']);
+            } else {
+                $this->warning('非法的action (' . $this->data['Post_action'] . ')');
+                if (Configure::read('debug')) {
+                    die('非法的action (' . $this->data['Post_action'] . ')');
+                } else {
+                    throw new InternalErrorException();
+                }
             }
-            $this->redirect(
-                    [
-                            'controller' => 'project',
-                            'action' => 'index'
-                    ]);
         }
         
-        $this->set('pics', 
-                $this->Image->find('all', 
-                        [
-                                'conditions' => [
-                                        'project_id' => $id
-                                ]
-                        ]));
         $this->detail($id);
         $this->set('id', $id);
         $this->render('detail');
     }
 
+    /**
+     * 管理页面 帮扶项目 正文编辑 控制器
+     *
+     * @param unknown $id            
+     */
     public function admin_edit ($id = null)
     {
         $this->set('isAdmin', true);
-        $this->layout = 'mLayer';
+        $this->layout = 'mlayer';
         
         $data = $this->Project->find('first', 
                 [
@@ -171,11 +185,27 @@ class ProjectController extends AppController
      *
      * @return void
      */
-    public function admin_editpic ($project_id)
+    public function admin_editpic ($project_id = null)
     {
+        if (empty($project_id)) {
+            $this->warning('project_id为空');
+            if (Configure::read('debug')) {
+                die('project_id为空');
+            } else {
+                throw new NotFoundException();
+            }
+        }
+        if (! is_numeric($project_id) || $project_id <= 0) {
+            $this->warning('project_id值非法(' . $project_id . ')');
+            if (Configure::read('debug')) {
+                die('project_id值非法(' . $project_id . ')');
+            } else {
+                throw new NotFoundException();
+            }
+        }
         $this->set('isAdmin', true);
         
-        $this->layout = 'mLayer';
+        $this->layout = 'mlayer';
         
         if (! empty($this->data)) {
             if ($this->data['Post_action'] === '删除') {
@@ -183,12 +213,17 @@ class ProjectController extends AppController
             } elseif ($this->data['Post_action'] === '增加图片') {
                 $this->addPicture($project_id);
             } else {
-                $this->log('admin_index_editpic: 非法的action');
+                $this->warning('非法的action (' . $this->data['Post_action'] . ')');
+                if (Configure::read('debug')) {
+                    die('非法的action (' . $this->data['Post_action'] . ')');
+                } else {
+                    throw new InternalErrorException();
+                }
             }
             $this->redirect(
                     [
                             'controller' => 'project',
-                            'action' => 'project_detail',
+                            'action' => 'detail',
                             $project_id
                     ]);
         }
@@ -201,20 +236,42 @@ class ProjectController extends AppController
                         ]));
     }
 
+    /**
+     * 用户页面 帮扶项目一览 控制器
+     *
+     * @param number $limit
+     *            最多显示条数
+     * @return unknown
+     */
     public function getProjectList ($limit = 0)
     {
+        if (! is_numeric($limit) || $limit < 0) {
+            $this->warning('limit值非法(' . $limit . ')');
+            if (Configure::read('debug')) {
+                die('limit值非法(' . $limit . ')');
+            } else {
+                throw new NotFoundException();
+            }
+        }
         $options = [
                 'fields' => [
                         'Project.id',
                         'Project.title'
                 ]
         ];
-        if ($limit != 0) {
+        if ($limit > 0) {
             $options['limit'] = $limit;
         }
         return $this->Project->find('all', $options);
     }
 
+    /**
+     * 管理页面 帮扶项目一览 控制器
+     *
+     * @param number $limit
+     *            最多显示条数
+     * @return unknown
+     */
     public function admin_getProjectList ($limit = 0)
     {
         return $this->getProjectList($limit);
@@ -246,12 +303,13 @@ class ProjectController extends AppController
     /**
      * 追加图片
      *
-     * @param unknown $varName
-     *            Variable表中的变量名称
+     * @param unknown $id
+     *            帮扶项目 ID
      */
-    private function addPicture ($id)
+    private function addPicture ($project_id)
     {
         if (empty($this->data['Image']['file']['tmp_name'])) {
+            $this->warning('没有上传文件');
             return;
         }
         
@@ -259,7 +317,7 @@ class ProjectController extends AppController
                  $this->data['Image']['file']['name'];
         $d = [
                 'Image' => [
-                        'project_id' => $id,
+                        'project_id' => $project_id,
                         'filename' => $this->data['Image']['file']['name']
                 ]
         ];

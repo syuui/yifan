@@ -11,20 +11,21 @@ $this->end();
 
 $this->start('breadcrumb');
 $this->Html->addCrumb($page_title);
-echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 ?>
-地址：<?php echo Configure::read('contact_address') . $this->Tag->br();   ?>
-电话：<?php echo Configure::read('contact_tel') . $this->Tag->br();   ?>
-传真：<?php echo Configure::read('contact_fax') . $this->Tag->br();   ?>
-邮箱：<?php echo Configure::read('contact_mail') . $this->Tag->br();  ?>
 <?php
-echo $this->Tag->br();
-echo $this->Html->image(Configure::read('map_filename'), 
-        [
-                'class' => 'map',
-                'alt' => '地图',
-                'id' => 'mappic',
-                'onclick' => 'window.open($("#mappic").attr("src"));'
-        ]);
+echo $this->Html->div('s-line', '地址：' . $data['address']);
+echo $this->Html->div('s-line', '电话：' . $data['tel']);
+echo $this->Html->div('s-line', '手机：' . $data['mobile']);
+echo $this->Html->div('s-line', '传真：' . $data['fax']);
+echo $this->Html->div('s-line', '邮箱：' . $data['mail']);
+
+echo $this->Html->div('s-line', 
+        $this->Html->image(Configure::read('map_filename'), 
+                [
+                        'class' => 'map',
+                        'alt' => '地图',
+                        'id' => 'mappic',
+                        'onclick' => 'window.open($("#mappic").attr("src"));'
+                ]));
 ?>

@@ -1,50 +1,63 @@
 <?php
-/**
- * Static content controller.
- *
- * This file will render views from views/Company/
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
 App::uses('AppController', 'Controller');
 App::uses('Variable', 'Model');
-App::uses('Uploaditem', 'Model');
 
 /**
- * Static content controller
+ * 专家风采 控制器
  *
- * Override this controller by placing a copy in controllers directory of an
- * application
- *
- * @package app.Controller
- * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
+ * @author Wei.ZHOU
+ * @version 1.0
  */
 class ExpertController extends AppController
 {
 
+    /**
+     * 专家风采 - 专家授课 标识符
+     *
+     * @var string
+     */
     const TYPE_LESSION = 'L';
 
+    /**
+     * 专家风采 - 专家义诊 标识符
+     *
+     * @var string
+     */
     const TYPE_CLINIC = 'C';
 
+    /**
+     * 专家风采 - 专家查房 标识符
+     *
+     * @var string
+     */
     const TYPE_ROUND = 'R';
 
+    /**
+     * 专家风采 - 手术教学 标识符
+     *
+     * @var string
+     */
     const TYPE_OPERATION = 'O';
 
+    /**
+     * 专家风采 - 学术交流 标识符
+     *
+     * @var string
+     */
     const TYPE_COMMUNICATION = 'M';
 
+    /**
+     * 专家风采 - 帮扶中心揭牌 标识符
+     *
+     * @var string
+     */
     const TYPE_OPENING = 'P';
 
+    /**
+     * 图片文件上传路径
+     *
+     * @var string
+     */
     const UPLOAD_IMAGE = 'posts';
 
     /**
@@ -150,7 +163,7 @@ class ExpertController extends AppController
     public function admin_edit ($type = ExpertController::TYPE_LESSION)
     {
         $this->set('isAdmin', true);
-        $this->layout = 'mLayer';
+        $this->layout = 'mlayer';
         
         switch ($type) {
             case ExpertController::TYPE_LESSION:
@@ -192,13 +205,15 @@ class ExpertController extends AppController
      * 管理用页面 - 修改图片的控制器
      * AJAX服务器端
      *
-     * @return void
+     * @param unknown $type
+     *            图片所属的功能标识
+     * @throws InternalErrorException DEBUG模式下中止运行，商用模式下抛出InternalErrorException
      */
     public function admin_editpic ($type = ExpertController::TYPE_LESSION)
     {
         $this->set('isAdmin', true);
         
-        $this->layout = 'mLayer';
+        $this->layout = 'mlayer';
         
         switch ($type) {
             case ExpertController::TYPE_LESSION:
@@ -229,7 +244,12 @@ class ExpertController extends AppController
             } elseif ($this->data['Post_action'] === '增加图片') {
                 $this->addPicture($pics);
             } else {
-                $this->log('admin_index_editpic: 非法的action');
+                $this->warning('非法的action (' . $this->data['Post_action'] . ')');
+                if (Configure::read('debug')) {
+                    die('非法的action (' . $this->data['Post_action'] . ')');
+                } else {
+                    throw new InternalErrorException();
+                }
             }
             $this->redirect(
                     [
@@ -278,7 +298,7 @@ class ExpertController extends AppController
                         ]
                 ]);
         if ($npic <= 0) {
-            $imgPath = WWW_ROOT . 'img\\' . Uploaditem::UPLOAD_IMAGE . '\\' .
+            $imgPath = WWW_ROOT . 'img\\' . ExpertController::UPLOAD_IMAGE . '\\' .
                      $this->data['Variable']['value'];
             unlink($imgPath);
         }

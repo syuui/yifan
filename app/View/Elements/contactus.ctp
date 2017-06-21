@@ -1,4 +1,6 @@
-
+<?php
+App::uses('ContactusController', 'Controller');
+?>
 <!-- 联系我们 -->
 <div class="ele_block">
 	<div class="ele_bdr_l">
@@ -9,24 +11,24 @@
 			</div>
 			<div class="ele_cnt">
 				<div class="culine">
-					<div class="culabel"><?php echo $this->Html->image('address.png',['class'=>'adr_icon'])?></div>
-					<div class="cudetail"><?php echo Configure::read('contact_address');  ?></div>
+					<div class="culabel"><?php echo $this->Html->image('address.png',['class'=>'adr_icon']);   ?></div>
+					<div class="cudetail"><?php echo Configure::read(ContactusController::CONTACTUS_ADDRESS_NAME);  ?></div>
 				</div>
 				<div class="culine">
-					<div class="culabel"><?php echo $this->Html->image('tel.png',['class'=>'adr_icon'])?></div>
-					<div class="cudetail"><?php echo Configure::read('contact_tel');  ?></div>
+					<div class="culabel"><?php echo $this->Html->image('tel.png',['class'=>'adr_icon']);   ?></div>
+					<div class="cudetail"><?php echo Configure::read(ContactusController::CONTACTUS_TEL_NAME);  ?></div>
 				</div>
 				<div class="culine">
-					<div class="culabel"><?php echo $this->Html->image('mobile.png',['class'=>'adr_icon'])?></div>
-					<div class="cudetail"><?php echo Configure::read('contact_mobile');  ?></div>
+					<div class="culabel"><?php echo $this->Html->image('mobile.png',['class'=>'adr_icon']);   ?></div>
+					<div class="cudetail"><?php echo Configure::read(ContactusController::CONTACTUS_MOBILE_NAME);  ?></div>
 				</div>
 				<div class="culine">
-					<div class="culabel"><?php echo $this->Html->image('fax.png',['class'=>'adr_icon'])?></div>
-					<div class="cudetail"><?php echo Configure::read('contact_fax');   ?></div>
+					<div class="culabel"><?php echo $this->Html->image('fax.png',['class'=>'adr_icon']);   ?></div>
+					<div class="cudetail"><?php echo Configure::read(ContactusController::CONTACTUS_FAX_NAME);   ?></div>
 				</div>
 				<div class="culine">
-					<div class="culabel"><?php echo $this->Html->image('mail.png',['class'=>'adr_icon'])?></div>
-					<div class="cudetail"><?php echo Configure::read('contact_mail');  ?></div>
+					<div class="culabel"><?php echo $this->Html->image('mail.png',['class'=>'adr_icon']);   ?></div>
+					<div class="cudetail"><?php echo Configure::read(ContactusController::CONTACTUS_MAIL_NAME);  ?></div>
 				</div>
 			</div>
 		</div>

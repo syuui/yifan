@@ -1,49 +1,29 @@
 <?php
-/**
- * Static content controller.
- *
- * This file will render views from views/pages/
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
 App::uses('AppController', 'Controller');
 App::uses('Uploaditem', 'Model');
 
 /**
- * Static content controller
+ * 管理工具 页面的控制器
  *
- * Override this controller by placing a copy in controllers directory of an
- * application
- *
- * @package app.Controller
- * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
+ * @author Wei.ZHOU
+ * @version 1.0
  */
 class ToolsController extends AppController
 {
 
+    const ADMIN_PASSWORD = 'ZhangYiFan01';
+
     /**
-     * This controller does not use a model
+     * 此控制器使用以下模型
      *
      * @var array
      */
     var $uses = [
-            'Uploaditem',
             'Variable'
     ];
 
     /*
-     * 此controller使用下列helper
+     * 此控制器使用下列助件
      *
      * @var array
      */
@@ -52,15 +32,34 @@ class ToolsController extends AppController
     ];
 
     /**
-     * Specify the layout used in this controller
+     * 此控制器使用以下组件
+     *
+     * @var array
+     */
+    var $components = [
+            'Session'
+    ];
+
+    /**
+     * 此控制器中所用页面均使用以下布局
      */
     public $layout = 'default_l';
 
+    /**
+     * 此控制器中所有功能皆为管理员用
+     */
     public function beforeRender ()
     {
         $this->set('isAdmin', true);
     }
 
+    /**
+     * 网页横幅、LOGO设置页面的控制器
+     *
+     * @param string $type
+     *            L:LOGO
+     *            其它：横幅
+     */
     public function admin_banner ($type = 'B')
     {
         $this->set('type', $type);
@@ -71,21 +70,48 @@ class ToolsController extends AppController
             $tar = WWW_ROOT . 'img\\' . Configure::read('banner_filename');
         }
         
-        if (isset($this->data['Variable']['bannerfile']) &
-                 ! empty($this->data['Variable']['bannerfile'])) {
-            
-            if (empty($this->data['Variable']['bannerfile']['tmp_name'])) {
-                // 没选择任何图片
-                $this->log('没选择任何图片');
-            } else {
-                if (file_exists($tar)) {
-                    unlink($tar);
-                }
-                copy($this->data['Variable']['bannerfile']['tmp_name'], $tar);
-                $this->log("Copy file to $tar");
+        if (! empty($this->data['Variable']['bannerfile']['tmp_name'])) {
+            if (file_exists($tar)) {
+                unlink($tar);
+                $this->warning('图片已存在(' . $tar . ')，删除完毕');
             }
+            copy($this->data['Variable']['bannerfile']['tmp_name'], $tar);
+            $this->warning('拷贝新文件(' . $tar . ')');
         }
         $this->set('page_title', $type === 'L' ? '网站LOGO' : '网站横幅');
+    }
+
+    public function admin_login ()
+    {
+        $this->layout = false;
+        if (! empty($this->data)) {
+            if ($this->data['Login']['username'] === 'lanham' && $this->data['Login']['password'] ===
+                     ToolsController::ADMIN_PASSWORD) {
+                $this->warning('管理员用户登录成功');
+                
+                $this->Session->write('login', true);
+                $this->redirect(
+                        [
+                                'controller' => 'pages',
+                                'action' => 'index'
+                        ]);
+            } else {
+                $this->set('error_message', '错误的用户名/密码');
+                $this->warning(
+                        '管理员用户登录失败：(ID:' . $this->data['Login']['username'] .
+                                 '  PW:' . $this->data['Login']['password']) . ')';
+            }
+        }
+    }
+
+    public function admin_logout ()
+    {
+        $this->Session->delete('login');
+        $this->redirect(
+                [
+                        'controller' => 'tools',
+                        'action' => 'login'
+                ]);
     }
 }
 

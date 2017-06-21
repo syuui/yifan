@@ -1,39 +1,20 @@
 <?php
-/**
- * Static content controller.
- *
- * This file will render views from views/pages/
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
 App::uses('AppController', 'Controller');
 App::uses('Variable', 'Model');
 
 /**
- * Static content controller
+ * 招贤纳士 控制器
  *
- * Override this controller by placing a copy in controllers directory of an
- * application
- *
- * @package app.Controller
- * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
+ * @author Wei.ZHOU
+ * @version 1.0
  */
 class RecruitController extends AppController
 {
 
+    const RECRUIT_PAGE_LENGTH = 'recruit_page_length';
+
     /**
-     * This controller uses following compnonets
+     * 此控制器使用以下组件
      *
      * @var array
      */
@@ -42,7 +23,7 @@ class RecruitController extends AppController
     ];
 
     /**
-     * This controller uses following models
+     * 此控制器使用以下模型
      *
      * @var array
      */
@@ -68,51 +49,82 @@ class RecruitController extends AppController
             ]
     ];
 
+    /**
+     * 此控制器使用以下助件
+     *
+     * @var array
+     */
     var $helpers = [
             'Paginator',
             'Form'
     ];
 
+    /**
+     * 此控制器中所有页面均使用以下布局
+     *
+     * @var string
+     */
     var $layout = 'default_r';
 
     /**
-     * Displays a view
+     * 用户页面 招贤纳士 - 人材招聘 的控制器
      *
      * @return void
-     * @throws NotFoundException When the view file could not be found
-     *         or MissingViewException in debug mode.
      */
     public function index ()
     {
         $this->paginate['Recruit']['limit'] = Configure::read(
-                'recruit_page_length');
+                RecruitController::RECRUIT_PAGE_LENGTH);
         $this->Paginator->settings = $this->paginate;
         $this->set('data', $this->Paginator->paginate('Recruit'));
     }
 
+    /**
+     * 用户页面 招贤纳士 - 人材招聘 - 职位详细 的控制器
+     *
+     * @param unknown $id
+     *            职位ID
+     */
     public function jobdetail ($id = null)
     {
-        if (! empty($id)) {
-            $this->set('data', 
-                    $this->Recruit->find('first', 
-                            [
-                                    'conditions' => [
-                                            'id' => $id
-                                    ]
-                            ]));
+        if (empty($id)) {
+            $this->warning('ID为空');
+        } else {
+            $data = $this->Recruit->find('first', 
+                    [
+                            'conditions' => [
+                                    'id' => $id
+                            ]
+                    ]);
+            if (empty($data)) {
+                if (Configure::read('debug')) {
+                    $this->warning('未检索到ID为' . $id . '的数据');
+                }
+            } else {
+                $this->set('data', $data);
+            }
         }
     }
 
+    /**
+     * 用户页面 招贤纳士 - 人才战略 的控制器
+     */
     public function strategy ()
     {
         $this->set('data', $this->getPageData(Variable::RECRUIT_STRATEGY));
     }
 
+    /**
+     * 用户页面 招贤纳士 - 在线提交 的控制器
+     */
     public function entry ()
     {
         ;
     }
 
+    /**
+     * 管理页面 招贤纳士 - 在线提交 的控制器
+     */
     public function admin_entry ()
     {
         $this->set('isAdmin', true);
@@ -120,12 +132,18 @@ class RecruitController extends AppController
         $this->render('entry');
     }
 
+    /**
+     * 用户页面 招贤纳士 - 人材招聘 的控制器
+     */
     public function admin_index ()
     {
         $this->set('isAdmin', true);
         $this->index();
     }
 
+    /**
+     * 管理页面 招贤纳士 - 人才战略 的控制器
+     */
     public function admin_strategy ()
     {
         $this->set('isAdmin', true);
@@ -136,15 +154,14 @@ class RecruitController extends AppController
         $this->render('strategy');
     }
 
+    /**
+     * 管理页面 招贤纳士 - 人才战略 的更新逻辑
+     */
     public function admin_strategy_edit ()
     {
         $this->set('isAdmin', true);
         
-        $this->layout = 'mLayer';
-        
-        if (! empty($this->data)) {
-            $this->Variable->save($this->data);
-        }
+        $this->layout = 'mlayer';
         
         $this->data = $this->getPageData(Variable::RECRUIT_STRATEGY);
         if (empty($this->data)) {
@@ -159,43 +176,42 @@ class RecruitController extends AppController
         $this->set('data', $this->data);
     }
 
+    /**
+     * 职位信息增删
+     *
+     * @param unknown $id
+     *            职位信息ID
+     * @throws InternalErrorException
+     *         当Post_action非法时，DEBUG模式下中止运行，商用模式下抛出InternalErrorException
+     */
     public function admin_savejob ($id = null)
     {
         $this->set('isAdmin', true);
         
-        $this->layout = false;
-        $this->autoRender = false;
+        $this->layout = 'mlayer';
         
-        // Add/Modify/Delete a job
+        // 职位信息 增删改
         if (! empty($this->data)) {
-            
-            if ($this->data['Post_action'] == '确定') {
+            if ($this->data['Post_action'] === '确定') {
                 $this->Recruit->save($this->data);
-            } elseif ($this->data['Post_action'] == '删除') {
+            } elseif ($this->data['Post_action'] === '删除') {
                 $this->Recruit->delete($this->data['Recruit']['id']);
             } else {
-                $this->log(
-                        'admin_savenews: 非法的action (' .
-                                 $this->data['Recruit']['action'] . ')');
+                $this->warning('非法的action (' . $this->data['Post_action'] . ')');
+                if (Configure::read('debug')) {
+                    die('非法的action (' . $this->data['Post_action'] . ')');
+                } else {
+                    throw new InternalErrorException();
+                }
             }
-            $this->redirect([
-                    'controller' => 'recruit',
-                    'action' => 'index'
-            ]);
+            $this->redirect(
+                    [
+                            'controller' => 'recruit',
+                            'action' => 'index'
+                    ]);
         }
         
-        // Get news for Edit/Delete Page
-        if (! empty($id)) {
-            $this->set('data', 
-                    $this->Recruit->find('first', 
-                            [
-                                    'conditions' => [
-                                            'id=' . $id
-                                    ]
-                            ]));
-            $this->log('Edit Recruit');
-        } else {
-            // Prepare blank record for Add Page
+        if (empty($id)) {
             $this->set('data', 
                     [
                             'Recruit' => [
@@ -207,12 +223,19 @@ class RecruitController extends AppController
                                     'public' => true
                             ]
                     ]);
+        } else {
+            $this->set('data', 
+                    $this->Recruit->find('first', 
+                            [
+                                    'conditions' => [
+                                            'id=' . $id
+                                    ]
+                            ]));
         }
-        $this->render();
     }
 
     /**
-     * Controller for Element newslist.ctp
+     * 用户页面 职位一览 元素的控制器
      *
      * @return unknown
      */
@@ -221,6 +244,11 @@ class RecruitController extends AppController
         return $this->getRecruitList($limit);
     }
 
+    /**
+     * 管理页面 职位一览 元素的控制器
+     *
+     * @return unknown
+     */
     public function admin_getAllRecruitList ($limit = 0)
     {
         return $this->getRecruitList($limit);
@@ -229,10 +257,6 @@ class RecruitController extends AppController
     /**
      * 取得职位信息列表
      *
-     *
-     * @param unknown $type
-     *            新闻类型（企业新闻、行业新闻、所有）。
-     *            $type为null时返回所有新闻列表。
      * @param number $limit
      *            取得件数上限
      * @return unknown

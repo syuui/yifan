@@ -14,7 +14,6 @@ $this->Html->addCrumb('专家风采',
                 'action' => 'index'
         ]);
 $this->Html->addCrumb($page_title);
-echo $this->Html->getCrumbs(' &gt; ', null);
 $this->end();
 
 foreach ($pics as $p) {
