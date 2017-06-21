@@ -7,22 +7,12 @@ $links[] = $this->Html->link('关于我们',
         ]);
 $links[] = $this->Html->link('联系方式', 
         [
-                'controller' => 'company',
-                'action' => 'contactus'
-        ]);
-$links[] = $this->Html->link('信息反馈', 
-        [
-                'controller' => 'company',
+                'controller' => 'contactus',
                 'action' => 'index'
         ]);
 $links[] = $this->Html->link('人才招聘', 
         [
                 'controller' => 'recruit',
-                'action' => 'index'
-        ]);
-$links[] = $this->Html->link('友情链接', 
-        [
-                'controller' => 'company',
                 'action' => 'index'
         ]);
 $str_links = $glue . implode($glue, $links) . $glue;
