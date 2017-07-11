@@ -72,11 +72,17 @@ class ToolsController extends AppController
         
         if (! empty($this->data['Variable']['bannerfile']['tmp_name'])) {
             if (file_exists($tar)) {
-                unlink($tar);
-                $this->warning('图片已存在(' . $tar . ')，删除完毕');
+                if (unlink($tar)) {
+                    $this->info('图片已存在（' . $tar . '），删除完毕');
+                } else {
+                    $this->error('图片已存在（' . $tar . '），删除失败');
+                }
             }
-            copy($this->data['Variable']['bannerfile']['tmp_name'], $tar);
-            $this->warning('拷贝新文件(' . $tar . ')');
+            if (copy($this->data['Variable']['bannerfile']['tmp_name'], $tar)) {
+                $this->info('拷贝新文件(' . $tar . ')，成功');
+            } else {
+                $this->error('拷贝新文件(' . $tar . ')，失败');
+            }
         }
         $this->set('page_title', $type === 'L' ? '网站LOGO' : '网站横幅');
     }
@@ -87,7 +93,7 @@ class ToolsController extends AppController
         if (! empty($this->data)) {
             if ($this->data['Login']['username'] === 'lanham' && $this->data['Login']['password'] ===
                      ToolsController::ADMIN_PASSWORD) {
-                $this->warning('管理员用户登录成功');
+                $this->info('管理员用户登录成功');
                 
                 $this->Session->write('login', true);
                 $this->redirect(
@@ -99,7 +105,7 @@ class ToolsController extends AppController
                 $this->set('error_message', '错误的用户名/密码');
                 $this->warning(
                         '管理员用户登录失败：(ID:' . $this->data['Login']['username'] .
-                                 '  PW:' . $this->data['Login']['password']) . ')';
+                                 '  PW:' . $this->data['Login']['password'] . ')');
             }
         }
     }
@@ -107,6 +113,7 @@ class ToolsController extends AppController
     public function admin_logout ()
     {
         $this->Session->delete('login');
+        $this->info('管理员用户退出登录');
         $this->redirect(
                 [
                         'controller' => 'tools',

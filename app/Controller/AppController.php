@@ -38,6 +38,38 @@ class AppController extends Controller
 
     const PAGE_NOT_FOUND_EXCEPTION = "404";
 
+    public function debug ($message)
+    {
+        if (Configure::read('debug') >= 2) {
+            $backtrace = debug_backtrace();
+            array_shift($backtrace);
+            CakeLog::write('debug', 
+                    $backtrace[0]['class'] . '::' . $backtrace[0]['function'] .
+                             ": " . $message);
+        }
+    }
+
+    public function info ($message)
+    {
+        $backtrace = debug_backtrace();
+        array_shift($backtrace);
+        CakeLog::write('info', 
+                $backtrace[0]['class'] . '::' . $backtrace[0]['function'] . ": " .
+                         $message);
+    }
+
+    public function warning ($message)
+    {
+        $backtrace = debug_backtrace();
+        array_shift($backtrace);
+        CakeLog::write('warning', 
+                $backtrace[0]['class'] . '::' . $backtrace[0]['function'] . ": " .
+                         $message);
+        if (Configure::read('debug')) {
+            die($message);
+        }
+    }
+
     public function error ($message, 
             $method = AppController::INTERNAL_ERROR_EXCEPTION)
     {
@@ -66,42 +98,17 @@ class AppController extends Controller
         }
     }
 
-    public function warning ($message, 
-            $method = AppController::INTERNAL_ERROR_EXCEPTION)
+    public function fatal ($message)
     {
         $backtrace = debug_backtrace();
         array_shift($backtrace);
-        CakeLog::write('warning', 
+        CakeLog::write('fatal', 
                 $backtrace[0]['class'] . '::' . $backtrace[0]['function'] . ": " .
                          $message);
         if (Configure::read('debug')) {
             die($message);
         } else {
-            switch ($method) {
-                case AppController::PAGE_NOT_FOUND_EXCEPTION:
-                    throw new PageNowFoundException();
-                    break;
-                case AppController::CONTINUE_PROECSS:
-                    break;
-                case AppController::INTERNAL_ERROR_EXCEPTION:
-                    
-                    throw new InternalErrorException();
-                    break;
-                default:
-                    throw new InternalErrorException();
-                    break;
-            }
-        }
-    }
-
-    public function debug ($message)
-    {
-        if (Configure::read('debug') >= 2) {
-            $backtrace = debug_backtrace();
-            array_shift($backtrace);
-            CakeLog::write('debug', 
-                    $backtrace[0]['class'] . '::' . $backtrace[0]['function'] .
-                             ": " . $message);
+            throw new InternalErrorException();
         }
     }
 

@@ -127,7 +127,6 @@ class RecruitController extends AppController
      */
     public function admin_entry ()
     {
-        $this->set('isAdmin', true);
         $this->entry();
         $this->render('entry');
     }
@@ -137,7 +136,6 @@ class RecruitController extends AppController
      */
     public function admin_index ()
     {
-        $this->set('isAdmin', true);
         $this->index();
     }
 
@@ -146,9 +144,14 @@ class RecruitController extends AppController
      */
     public function admin_strategy ()
     {
-        $this->set('isAdmin', true);
         if (! empty($this->data)) {
-            $this->Variable->save($this->data);
+            if (! $this->Variable->save($this->data)) {
+                ob_start();
+                var_dump($this->data);
+                $d = ob_get_clean();
+                $this->error("保存数据失败" . PHP_EOL . $d, 
+                        AppController::CONTINUE_PROCESS);
+            }
         }
         $this->strategy();
         $this->render('strategy');
@@ -165,8 +168,6 @@ class RecruitController extends AppController
      */
     public function admin_strategy_edit ()
     {
-        $this->set('isAdmin', true);
-        
         $this->layout = 'mlayer';
         
         $this->data = $this->getPageData(Variable::RECRUIT_STRATEGY);
@@ -192,23 +193,28 @@ class RecruitController extends AppController
      */
     public function admin_savejob ($id = null)
     {
-        $this->set('isAdmin', true);
-        
         $this->layout = 'mlayer';
         
         // 职位信息 增删改
         if (! empty($this->data)) {
             if ($this->data['Post_action'] === '确定') {
-                $this->Recruit->save($this->data);
-            } elseif ($this->data['Post_action'] === '删除') {
-                $this->Recruit->delete($this->data['Recruit']['id']);
-            } else {
-                $this->warning('非法的action (' . $this->data['Post_action'] . ')');
-                if (Configure::read('debug')) {
-                    die('非法的action (' . $this->data['Post_action'] . ')');
-                } else {
-                    throw new InternalErrorException();
+                if (! $this->Recruit->save($this->data)) {
+                    ob_start();
+                    var_dump($this->data);
+                    $d = ob_get_clean();
+                    $this->error("保存数据失败" . PHP_EOL . $d, 
+                            AppController::CONTINUE_PROCESS);
                 }
+            } elseif ($this->data['Post_action'] === '删除') {
+                if (! $this->Recruit->delete($this->data['Recruit']['id'])) {
+                    ob_start();
+                    var_dump($this->data);
+                    $d = ob_get_clean();
+                    $this->error("删除数据失败" . PHP_EOL . $d, 
+                            AppController::CONTINUE_PROCESS);
+                }
+            } else {
+                $this->fatal('非法的action (' . $this->data['Post_action'] . ')');
             }
             $this->redirect(
                     [

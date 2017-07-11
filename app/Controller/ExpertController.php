@@ -146,8 +146,6 @@ class ExpertController extends AppController
      */
     public function admin_index ($type = ExpertController::TYPE_LESSION)
     {
-        $this->set('isAdmin', true);
-        
         if (! empty($this->data)) {
             $this->Variable->save($this->data);
         }
@@ -162,7 +160,6 @@ class ExpertController extends AppController
      */
     public function admin_edit ($type = ExpertController::TYPE_LESSION)
     {
-        $this->set('isAdmin', true);
         $this->layout = 'mlayer';
         
         switch ($type) {
@@ -211,8 +208,6 @@ class ExpertController extends AppController
      */
     public function admin_editpic ($type = ExpertController::TYPE_LESSION)
     {
-        $this->set('isAdmin', true);
-        
         $this->layout = 'mlayer';
         
         switch ($type) {
@@ -244,12 +239,7 @@ class ExpertController extends AppController
             } elseif ($this->data['Post_action'] === '增加图片') {
                 $this->addPicture($pics);
             } else {
-                $this->warning('非法的action (' . $this->data['Post_action'] . ')');
-                if (Configure::read('debug')) {
-                    die('非法的action (' . $this->data['Post_action'] . ')');
-                } else {
-                    throw new InternalErrorException();
-                }
+                $this->fatal('非法的action (' . $this->data['Post_action'] . ')');
             }
             $this->redirect(
                     [
@@ -300,7 +290,15 @@ class ExpertController extends AppController
         if ($npic <= 0) {
             $imgPath = WWW_ROOT . 'img\\' . ExpertController::UPLOAD_IMAGE . '\\' .
                      $this->data['Variable']['value'];
-            unlink($imgPath);
+            if (! unlink($imgPath)) {
+                $this->error('文件（' . $imgPath . '）删除失败', 
+                        AppController::CONTINUE_PROCESS);
+                $this->redirect(
+                        [
+                                'controller' => 'pages',
+                                'action' => 'index'
+                        ]);
+            }
         }
     }
 
@@ -326,8 +324,26 @@ class ExpertController extends AppController
         ];
         $this->Variable->save($d);
         
-        if (! file_exists($imgPath)) {
-            copy($this->data['Variable']['file']['tmp_name'], $imgPath);
+        if (file_exists($imgPath)) {
+            $this->error('文件（' . $imgPath . '）已经存在', 
+                    AppController::CONTINUE_PROCESS);
+            $this->redirect(
+                    [
+                            'controller' => 'pages',
+                            'action' => 'index'
+                    ]);
+        } else {
+            if (copy($this->data['Variable']['file']['tmp_name'], $imgPath)) {
+                $this->Variable->save($d);
+            } else {
+                $this->error('文件（' . $imgPath . '）拷贝失败', 
+                        AppController::CONTINUE_PROCESS);
+                $this->redirect(
+                        [
+                                'controller' => 'pages',
+                                'action' => 'index'
+                        ]);
+            }
         }
     }
 

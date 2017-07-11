@@ -98,7 +98,7 @@ class ProjectController extends AppController
     public function detail ($id = null)
     {
         if (empty($id)) {
-            $this->warning('ID为空', AppController::CONTINUE_PROCESS);
+            $this->warning('ID为空');
             $this->redirect(
                     [
                             'controller' => 'Project',
@@ -212,11 +212,9 @@ class ProjectController extends AppController
     public function admin_sector ($pid = null, $sid = null)
     {
         if (empty($pid)) {
-            $this->warning('project id为空', 
-                    AppController::PAGE_NOT_FOUND_EXCEPTION);
+            $this->warning('project id为空');
         } elseif (! is_numeric($pid) || $pid <= 0) {
-            $this->warning('project id值非法(' . $pid . ')', 
-                    AppController::PAGE_NOT_FOUND_EXCEPTION);
+            $this->warning('project id值非法(' . $pid . ')');
         }
         
         $this->layout = 'mlayer';
@@ -227,12 +225,7 @@ class ProjectController extends AppController
             } elseif ($this->data['Post_action'] === '保存') {
                 $this->addSector($pid);
             } else {
-                $this->warning('非法的action (' . $this->data['Post_action'] . ')');
-                if (Configure::read('debug')) {
-                    die('非法的action (' . $this->data['Post_action'] . ')');
-                } else {
-                    throw new InternalErrorException();
-                }
+                $this->fatal('非法的action (' . $this->data['Post_action'] . ')');
             }
             $this->redirect(
                     [
@@ -279,12 +272,7 @@ class ProjectController extends AppController
     public function getProjectList ($limit = 0)
     {
         if (! is_numeric($limit) || $limit < 0) {
-            $this->warning('limit值非法(' . $limit . ')');
-            if (Configure::read('debug')) {
-                die('limit值非法(' . $limit . ')');
-            } else {
-                throw new NotFoundException();
-            }
+            $this->fatal('limit值非法(' . $limit . ')');
         }
         $options = [
                 'fields' => [
@@ -327,12 +315,8 @@ class ProjectController extends AppController
                 if (unlink($imgPath)) {
                     $this->Psector->delete($this->data['Psector']['id']);
                 } else {
-                    $this->error("删除文件（$imgPath）失败！");
-                    if (Configure::read('debug')) {
-                        die("删除文件（$imgPath）失败！");
-                    } else {
-                        throw new InternalErrorException();
-                    }
+                    $this->error("删除文件（$imgPath）失败！", 
+                            AppController::CONTINUE_PROCESS);
                 }
             } else {
                 $this->Psector->delete($this->data['Psector']['id']);
@@ -374,20 +358,10 @@ class ProjectController extends AppController
         if (! file_exists($imgPath)) {
             if (! mkdir($imgPath, 0700)) {
                 $this->error("创建目录（" . $imgPath . "）失败。");
-                if (Configure::read('debug')) {
-                    die("创建目录（" . $imgPath . "）失败。");
-                } else {
-                    throw new InternalErrorException();
-                }
             }
         } else {
             if (! is_dir($imgPath)) {
                 $this->error($imgPath . "存在且不是目录。");
-                if (Configure::read('debug')) {
-                    die($imgPath . "存在且不是目录。");
-                } else {
-                    throw new InternalErrorException();
-                }
             }
         }
         $imgPath = $imgPath . '\\' . $this->data['Psector']['file']['name'];

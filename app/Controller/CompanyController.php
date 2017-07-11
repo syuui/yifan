@@ -41,7 +41,7 @@ class CompanyController extends AppController
 
     /**
      * 图片文件上传路径
-     * 
+     *
      * @var string
      */
     const UPLOAD_IMAGE = 'posts';
@@ -122,8 +122,6 @@ class CompanyController extends AppController
      */
     public function admin_index ($type = CompanyController::TYPE_DESCRIPTION)
     {
-        $this->set('isAdmin', true);
-        
         if (! empty($this->data)) {
             $this->Variable->save($this->data);
         }
@@ -138,7 +136,6 @@ class CompanyController extends AppController
      */
     public function admin_edit ($type = CompanyController::TYPE_DESCRIPTION)
     {
-        $this->set('isAdmin', true);
         $this->layout = 'mlayer';
         
         switch ($type) {
@@ -177,8 +174,6 @@ class CompanyController extends AppController
      */
     public function admin_editpic ($type = CompanyController::TYPE_DESCRIPTION)
     {
-        $this->set('isAdmin', true);
-        
         $this->layout = 'mlayer';
         
         switch ($type) {
@@ -204,7 +199,7 @@ class CompanyController extends AppController
             } elseif ($this->data['Post_action'] === '增加图片') {
                 $this->addPicture($pics);
             } else {
-                $this->log('admin_index_editpic: 非法的action');
+                $this->fatal('admin_index_editpic: 非法的action');
             }
             $this->redirect(
                     [
@@ -245,7 +240,17 @@ class CompanyController extends AppController
             return;
         }
         
-        $this->Variable->delete($this->data['Variable']['id']);
+        if (! $this->Variable->delete($this->data['Variable']['id'])) {
+            ob_start();
+            var_dump($this->data);
+            $d = ob_get_clean();
+            $this->error("删除数据失败" . PHP_EOL . $d, 
+                    AppController::CONTINUE_PROCESS);
+            $this->redirect([
+                    'controller' => 'company',
+                    'action' => 'index'
+            ]);
+        }
         $npic = $this->Variable->find('count', 
                 [
                         'conditions' => [
@@ -255,7 +260,15 @@ class CompanyController extends AppController
         if ($npic <= 0) {
             $imgPath = WWW_ROOT . 'img\\' . CompanyController::UPLOAD_IMAGE .
                      '\\' . $this->data['Variable']['value'];
-            unlink($imgPath);
+            if (! unlink($imgPath)) {
+                $this->error('文件（' . $imgPath . '）删除失败', 
+                        AppController::CONTINUE_PROCESS);
+                $this->redirect(
+                        [
+                                'controller' => 'pages',
+                                'action' => 'index'
+                        ]);
+            }
         }
     }
 
@@ -268,6 +281,7 @@ class CompanyController extends AppController
     private function addPicture ($varName)
     {
         if (empty($this->data['Variable']['file']['tmp_name'])) {
+            $this->warning('未上传文件');
             return;
         }
         
@@ -279,10 +293,27 @@ class CompanyController extends AppController
                         'value' => $this->data['Variable']['file']['name']
                 ]
         ];
-        $this->Variable->save($d);
         
-        if (! file_exists($imgPath)) {
-            copy($this->data['Variable']['file']['tmp_name'], $imgPath);
+        if (file_exists($imgPath)) {
+            $this->error('文件（' . $imgPath . '）已经存在', 
+                    AppController::CONTINUE_PROCESS);
+            $this->redirect(
+                    [
+                            'controller' => 'pages',
+                            'action' => 'index'
+                    ]);
+        } else {
+            if (copy($this->data['Variable']['file']['tmp_name'], $imgPath)) {
+                $this->Variable->save($d);
+            } else {
+                $this->error('文件（' . $imgPath . '）拷贝失败', 
+                        AppController::CONTINUE_PROCESS);
+                $this->redirect(
+                        [
+                                'controller' => 'pages',
+                                'action' => 'index'
+                        ]);
+            }
         }
     }
 }

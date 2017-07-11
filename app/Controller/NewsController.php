@@ -114,7 +114,6 @@ class NewsController extends AppController
      */
     public function admin_search ()
     {
-        $this->set('isAdmin', true);
         $this->search();
     }
 
@@ -127,7 +126,6 @@ class NewsController extends AppController
      */
     public function admin_newsdetail ($id = null)
     {
-        $this->set('isAdmin', true);
         $this->newsdetail($id);
         $this->render('newsdetail');
     }
@@ -141,7 +139,6 @@ class NewsController extends AppController
      */
     public function admin_index ()
     {
-        $this->set('isAdmin', true);
         $this->set('data', $this->getNewsList(News::NEWSTYPE_ENTERPRISE));
         $this->render('index');
     }
@@ -155,7 +152,6 @@ class NewsController extends AppController
      */
     public function admin_inews ()
     {
-        $this->set('isAdmin', true);
         $this->set('inews', true);
         $this->set('data', $this->getNewsList(News::NEWSTYPE_INDUSTRY));
         $this->render('index');
@@ -172,23 +168,28 @@ class NewsController extends AppController
      */
     public function admin_savenews ($id = null)
     {
-        $this->set('isAdmin', true);
-        
         $this->layout = 'mlayer';
         
         // 增删改的逻辑
         if (! empty($this->data)) {
             if ($this->data['Post_action'] === '确定') {
-                $this->News->save($this->data);
-            } elseif ($this->data['Post_action'] === '删除') {
-                $this->News->delete($this->data['News']['id']);
-            } else {
-                $this->warning('非法的action (' . $this->data['Post_action'] . ')');
-                if (Configure::read('debug')) {
-                    die('非法的action (' . $this->data['Post_action'] . ')');
-                } else {
-                    throw new InternalErrorException();
+                if (! $this->News->save($this->data)) {
+                    ob_start();
+                    var_dump($this->data);
+                    $d = ob_get_clean();
+                    $this->error("保存数据失败" . PHP_EOL . $d, 
+                            AppController::CONTINUE_PROCESS);
                 }
+            } elseif ($this->data['Post_action'] === '删除') {
+                if (! $this->News->delete($this->data['News']['id'])) {
+                    ob_start();
+                    var_dump($this->data);
+                    $d = ob_get_clean();
+                    $this->error("删除数据失败" . PHP_EOL . $d, 
+                            AppController::CONTINUE_PROCESS);
+                }
+            } else {
+                $this->fatal('非法的action (' . $this->data['Post_action'] . ')');
             }
             $this->redirect(
                     [
