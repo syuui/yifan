@@ -42,8 +42,6 @@ class Project extends AppModel
      */
     public $validate = [];
 
-    
-
     /**
      * 排序顺序
      *
@@ -73,10 +71,10 @@ class Project extends AppModel
     public $virtualFields = [];
 
     public $hasMany = [
-            'Image' => [
-                    'className' => 'Image',
+            'Psector' => [
+                    'className' => 'Psector',
                     'foreignKey' => 'project_id',
-                    'order' => 'Image.updated DESC'
+                    'order' => 'Psector.seq ASC'
             ]
     ];
 
@@ -89,8 +87,4 @@ class Project extends AppModel
      * @var string
      */
     public $cacheQueries = true;
-
-    public $findMethods = [
-            'max' => true
-    ];
 }

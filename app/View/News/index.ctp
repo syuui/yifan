@@ -38,16 +38,13 @@ $url = $this->Html->url(
                 'controller' => 'news',
                 'action' => 'admin_savenews'
         ]);
-$addLink = $this->Html->link('增加新闻', '#', 
-        [
-                'onclick' => "mLayerShow('$url');",
-                'class' => 'submit'
-        ]);
 
-?>
-<div class="ele_cnt_txt">
-<?php
-if (isset($isAdmin)) {
+if (isset($isAdmin) && $isAdmin) {
+    $addLink = $this->Html->link('增加新闻', '#', 
+            [
+                    'onclick' => "mLayerShow('$url');",
+                    'class' => 'submit'
+            ]);
     echo $addLink;
 }
 
@@ -80,4 +77,3 @@ if (count($data) == 0) {
                     'class' => 'list_style_2'
             ]);
 }
-?></div>

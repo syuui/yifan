@@ -330,4 +330,25 @@ class ExpertController extends AppController
             copy($this->data['Variable']['file']['tmp_name'], $imgPath);
         }
     }
+
+    public function getAllExpertList ($limit = 0)
+    {
+        $options = [
+                'fields' => [
+                        'Variable.value'
+                ],
+                'conditions' => [
+                        'Variable.name LIKE' => 'expert_%_pic'
+                ]
+        ];
+        if ($limit > 0) {
+            $options['limit'] = $limit;
+        }
+        return $this->Variable->find('all', $options);
+    }
+
+    public function admin_getAllExpertList ($limit = 0)
+    {
+        return $this->getAllExpertList($limit);
+    }
 }

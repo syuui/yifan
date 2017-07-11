@@ -364,6 +364,10 @@ div.spliter {
 	margin-right: 20px;
 }
 
+#popup_win img {
+	width: 100%;
+}
+
 /* 主菜单 */
 
 /*--------------------------------------------------------------------------------
@@ -685,6 +689,7 @@ div.expertlist_index {
 div.expertlist_index .expertlist_index_pic {
 	background: #fff;
 	padding: 0px;
+	margin-bottom: 15px;
 	text-align: center;
 	width: 127px;
 	height: 94px;
@@ -803,6 +808,25 @@ span.project_title {
 .jd-title {
 	background: #f5f5f5;
 	padding: 10px 10px 10px 10px;
+}
+
+.project-sector {
+	width: 100%;
+	margin: 5px;
+}
+
+.project-sector img {
+	width: calc( 100% - 10px );
+}
+
+.project-sector .project-sector-subject {
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+}
+
+.project-sector P {
+	text-indent: 16px;
 }
 /*--------------------------------------------------------------------------------
  * 招贤纳士

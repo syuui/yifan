@@ -28,10 +28,10 @@ App::uses('AppModel', 'Model');
  *
  * @package app.Model
  */
-class Image extends AppModel
+class Psector extends AppModel
 {
 
-    public $useTable = 'images';
+    public $useTable = 'psectors';
 
     /**
      * 验证规则
@@ -58,7 +58,7 @@ class Image extends AppModel
      *
      * @var string
      */
-    public $name = 'Image';
+    public $name = 'Project';
 
     /**
      * 虚字段
@@ -80,14 +80,20 @@ class Image extends AppModel
      */
     public $cacheQueries = true;
 
-    protected function _findMax ($state, $query, $results = array())
+    public $findMethods = [
+            'nextseq' => true
+    ];
+
+    protected function _findNextseq ($state, $query, $results = array())
     {
         if ($state === 'before') {
-            $sql = "SELECT MAX(`Image`.`seq`) AS maxseq FROM `images` AS `Image` WHERE `Image`.`project_id` = " .
-                     $query['project_id'];
-            $this->log("Custom SQL: $sql");
-            return $this->query($sql);
+            $query['fields'] = [
+                    'MAX(Psector.seq) AS MAXSEQ'
+            ];
+            return $query;
         }
-        return $results;
+        
+        $maxseq = empty($results[0][0]['MAXSEQ']) ? 0 : $results[0][0]['MAXSEQ'];
+        return (intval($maxseq / 10) + 1) * 10;
     }
 }

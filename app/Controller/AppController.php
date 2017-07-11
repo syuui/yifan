@@ -32,22 +32,66 @@ App::uses('Controller', 'Controller');
 class AppController extends Controller
 {
 
-    public function error ($message)
+    const INTERNAL_ERROR_EXCEPTION = "500";
+
+    const CONTINUE_PROCESS = "200";
+
+    const PAGE_NOT_FOUND_EXCEPTION = "404";
+
+    public function error ($message, 
+            $method = AppController::INTERNAL_ERROR_EXCEPTION)
     {
         $backtrace = debug_backtrace();
         array_shift($backtrace);
         CakeLog::write('error', 
                 $backtrace[0]['class'] . '::' . $backtrace[0]['function'] . ": " .
                          $message);
+        if (Configure::read('debug')) {
+            die($message);
+        } else {
+            switch ($method) {
+                case AppController::PAGE_NOT_FOUND_EXCEPTION:
+                    throw new PageNowFoundException();
+                    break;
+                case AppController::CONTINUE_PROCESS:
+                    break;
+                case AppController::INTERNAL_ERROR_EXCEPTION:
+                    
+                    throw new InternalErrorException();
+                    break;
+                default:
+                    throw new InternalErrorException();
+                    break;
+            }
+        }
     }
 
-    public function warning ($message)
+    public function warning ($message, 
+            $method = AppController::INTERNAL_ERROR_EXCEPTION)
     {
         $backtrace = debug_backtrace();
         array_shift($backtrace);
         CakeLog::write('warning', 
                 $backtrace[0]['class'] . '::' . $backtrace[0]['function'] . ": " .
                          $message);
+        if (Configure::read('debug')) {
+            die($message);
+        } else {
+            switch ($method) {
+                case AppController::PAGE_NOT_FOUND_EXCEPTION:
+                    throw new PageNowFoundException();
+                    break;
+                case AppController::CONTINUE_PROECSS:
+                    break;
+                case AppController::INTERNAL_ERROR_EXCEPTION:
+                    
+                    throw new InternalErrorException();
+                    break;
+                default:
+                    throw new InternalErrorException();
+                    break;
+            }
+        }
     }
 
     public function debug ($message)
@@ -66,6 +110,7 @@ class AppController extends Controller
         parent::beforeFilter();
         if (! empty($this->request->params['prefix']) &&
                  $this->request->params['prefix'] === 'admin') {
+            $this->set('isAdmin', true);
             $login = $this->Session->read('login');
             if (empty($login) || ! $login) {
                 if (! ($this->request->params['controller'] === 'tools' &&

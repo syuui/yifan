@@ -27,6 +27,7 @@ if (isset($isAdmin) && $isAdmin) {
     echo $addLink;
 }
 
+$ns = [];
 if (! empty($data)) {
     foreach ($data as $d) {
         $div_title = $this->Html->link($d['Project']['title'], 
@@ -36,10 +37,15 @@ if (! empty($data)) {
                         $d['Project']['id']
                 ]);
         $div_date = date('Y-m-d', strtotime($d['Project']['created']));
-        echo $this->Html->div('projectlist', 
+        $ns[] = $this->Html->div('projectlist', 
                 $this->Html->div('projectlist_index', $div_title) .
                          $this->Html->div('projectlist_date', $div_date));
     }
+    
+    echo $this->Html->nestedList($ns, 
+            [
+                    'class' => 'list_style_2'
+            ]);
 } else {
     echo Configure::read('MSG00010001');
 }

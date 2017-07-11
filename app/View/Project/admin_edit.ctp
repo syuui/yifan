@@ -8,7 +8,7 @@ echo $this->Form->create('Project',
         [
                 'url' => [
                         'controller' => 'project',
-                        'action' => 'detail',
+                        'action' => 'edit',
                         $id
                 ],
                 'inputDefaults' => [
@@ -28,12 +28,6 @@ echo $this->Form->input('Project.title',
                 'value' => $data['Project']['title'],
                 'class' => 'txt_button2_title'
         ]);
-echo $this->Form->input('Project.content', 
-        [
-                'label' => '文章内容',
-                'value' => $data['Project']['content'],
-                'class' => 'txa_button'
-        ]);
 
 $this->start('buttons');
 echo $this->Form->submit('保存', 
@@ -47,12 +41,15 @@ echo $this->Form->input('Project.id',
                 'type' => 'hidden',
                 'value' => $data['Project']['id']
         ]);
-echo $this->Form->submit('删除', 
-        [
-                'class' => 'reset',
-                'name' => 'Post.action',
-                'div' => false
-        ]);
+if (! empty($data['Project']['id'])) {
+    echo $this->Form->submit('删除', 
+            [
+                    'class' => 'reset',
+                    'name' => 'Post.action',
+                    'div' => false,
+                    'onclick' => 'return confirm("真的要删除这篇文章吗？");'
+            ]);
+}
 $this->end();
 
 $this->start('form_e');

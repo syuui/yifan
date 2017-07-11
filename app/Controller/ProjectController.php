@@ -41,7 +41,7 @@ class ProjectController extends AppController
      */
     public $uses = [
             'Project',
-            'Image'
+            'Psector'
     ];
 
     /**
@@ -98,7 +98,12 @@ class ProjectController extends AppController
     public function detail ($id = null)
     {
         if (empty($id)) {
-            $this->warning('ID为空');
+            $this->warning('ID为空', AppController::CONTINUE_PROCESS);
+            $this->redirect(
+                    [
+                            'controller' => 'Project',
+                            'action' => 'index'
+                    ]);
         } else {
             $this->set('data', 
                     $this->Project->find('first', 
@@ -115,7 +120,6 @@ class ProjectController extends AppController
      */
     public function admin_index ()
     {
-        $this->set('isAdmin', true);
         $this->index();
         $this->render('index');
     }
@@ -128,90 +132,100 @@ class ProjectController extends AppController
      */
     public function admin_detail ($id = null)
     {
-        $this->set('isAdmin', true);
-        
         if (! empty($this->data)) {
             if ($this->data['Post_action'] === "保存") {
                 $this->Project->save($this->data['Project']);
             } elseif ($this->data['Post_action'] === "删除") {
                 $this->Project->delete($this->data['Project']['id']);
             } else {
-                $this->warning('非法的action (' . $this->data['Post_action'] . ')');
-                if (Configure::read('debug')) {
-                    die('非法的action (' . $this->data['Post_action'] . ')');
-                } else {
-                    throw new InternalErrorException();
-                }
+                $this->error('非法的action (' . $this->data['Post_action'] . ')');
             }
         }
         
         $this->detail($id);
         $this->set('id', $id);
-        $this->render('detail');
     }
 
     /**
-     * 管理页面 帮扶项目 正文编辑 控制器
+     * 管理页面 帮扶项目 控制器
      *
      * @param unknown $id            
      */
     public function admin_edit ($id = null)
     {
-        $this->set('isAdmin', true);
         $this->layout = 'mlayer';
         
-        $data = $this->Project->find('first', 
-                [
-                        'conditions' => [
-                                'id' => $id
+        if (empty($this->data)) {
+            $data = $this->Project->find('first', 
+                    [
+                            'conditions' => [
+                                    'id' => $id
+                            ]
+                    ]);
+            if (empty($data)) {
+                $data = [
+                        'Project' => [
+                                'id' => '',
+                                'title' => ''
                         ]
-                ]);
-        if (empty($data)) {
-            $data = [
-                    'Project' => [
-                            'id' => '',
-                            'title' => '',
-                            'content' => ''
-                    ]
-            ];
+                ];
+            }
+            $this->set('data', $data);
+            $this->set('id', $id);
+        } else {
+            if ($this->data['Post_action'] === '保存') {
+                if (! $this->Project->save($this->data)) {
+                    ob_start();
+                    var_dump($this->data);
+                    $d = ob_get_clean();
+                    $this->error("保存数据失败" . PHP_EOL . $d, 
+                            AppController::CONTINUE_PROCESS);
+                }
+                $this->redirect(
+                        [
+                                'controller' => 'Project',
+                                'action' => 'index'
+                        ]);
+            } elseif ($this->data['Post_action'] === '删除') {
+                if (! $this->Project->delete($this->data['Project']['id'])) {
+                    ob_start();
+                    var_dump($this->data);
+                    $d = ob_get_clean();
+                    $this->error("删除数据失败" . PHP_EOL . $d, 
+                            AppController::CONTINUE_PROCESS);
+                }
+                $this->redirect(
+                        [
+                                'controller' => 'Project',
+                                'action' => 'index'
+                        ]);
+            }
         }
-        $this->set('data', $data);
-        $this->set('id', $id);
     }
 
     /**
-     * 管理用页面 - 修改图片的控制器
+     * 管理用页面 - 修改章节的控制器
      * AJAX服务器端
      *
      * @return void
      */
-    public function admin_editpic ($project_id = null)
+    public function admin_sector ($pid = null, $sid = null)
     {
-        if (empty($project_id)) {
-            $this->warning('project_id为空');
-            if (Configure::read('debug')) {
-                die('project_id为空');
-            } else {
-                throw new NotFoundException();
-            }
+        if (empty($pid)) {
+            $this->warning('project id为空', 
+                    AppController::PAGE_NOT_FOUND_EXCEPTION);
+        } elseif (! is_numeric($pid) || $pid <= 0) {
+            $this->warning('project id值非法(' . $pid . ')', 
+                    AppController::PAGE_NOT_FOUND_EXCEPTION);
         }
-        if (! is_numeric($project_id) || $project_id <= 0) {
-            $this->warning('project_id值非法(' . $project_id . ')');
-            if (Configure::read('debug')) {
-                die('project_id值非法(' . $project_id . ')');
-            } else {
-                throw new NotFoundException();
-            }
-        }
-        $this->set('isAdmin', true);
         
         $this->layout = 'mlayer';
         
         if (! empty($this->data)) {
             if ($this->data['Post_action'] === '删除') {
-                $this->delPicture();
-            } elseif ($this->data['Post_action'] === '增加图片') {
-                $this->addPicture($project_id);
+                $this->delSector();
+            } elseif ($this->data['Post_action'] === '保存') {
+                $this->addSector($pid);
             } else {
                 $this->warning('非法的action (' . $this->data['Post_action'] . ')');
                 if (Configure::read('debug')) {
@@ -224,16 +238,35 @@ class ProjectController extends AppController
                     [
                             'controller' => 'project',
                             'action' => 'detail',
-                            $project_id
+                            $pid
                     ]);
         }
-        $this->set('pics', 
-                $this->Image->find('all', 
-                        [
-                                'conditions' => [
-                                        'project_id' => $project_id
-                                ]
-                        ]));
+        if (empty($sid)) {
+            $this->set('data', 
+                    [
+                            'Psector' => [
+                                    'project_id' => $pid,
+                                    'seq' => $this->Psector->find('nextseq', 
+                                            [
+                                                    'conditions' => [
+                                                            'Psector.project_id' => $pid
+                                                    ]
+                                            ]),
+                                    'message' => '',
+                                    'src' => '',
+                                    'id' => '',
+                                    'type' => 'T'
+                            ]
+                    ]);
+        } else {
+            $this->set('data', 
+                    $this->Psector->find('first', 
+                            [
+                                    'conditions' => [
+                                            'id' => $sid
+                                    ]
+                            ]));
+        }
     }
 
     /**
@@ -278,53 +311,97 @@ class ProjectController extends AppController
     }
 
     /**
-     * 删除图片
+     * 删除章节
      */
-    private function delPicture ()
+    private function delSector ()
     {
-        if (empty($this->data)) {
+        if (empty($this->data['Psector']['id'])) {
             return;
         }
-        
-        $this->Image->delete($this->data['Image']['id']);
-        $npic = $this->Image->find('count', 
-                [
-                        'conditions' => [
-                                'Image.id' => $this->data['Variable']['id']
-                        ]
-                ]);
-        if ($npic <= 0) {
+        if ($this->data['Psector']['type'] === 'P') {
             $imgPath = WWW_ROOT . 'img\\' . ProjectController::UPLOAD_IMAGE .
-                     '\\' . $this->data['Variable']['filename'];
-            unlink($imgPath);
+                     '\\' . $this->data['Psector']['project_id'] . '\\' .
+                     $this->data['Psector']['src'];
+            
+            if (file_exists($imgPath)) {
+                if (unlink($imgPath)) {
+                    $this->Psector->delete($this->data['Psector']['id']);
+                } else {
+                    $this->error("删除文件（$imgPath）失败！");
+                    if (Configure::read('debug')) {
+                        die("删除文件（$imgPath）失败！");
+                    } else {
+                        throw new InternalErrorException();
+                    }
+                }
+            } else {
+                $this->Psector->delete($this->data['Psector']['id']);
+            }
+        } else {
+            $this->Psector->delete($this->data['Psector']['id']);
         }
     }
 
     /**
-     * 追加图片
-     *
-     * @param unknown $id
-     *            帮扶项目 ID
+     * 追加章节
      */
-    private function addPicture ($project_id)
+    private function addSector ($pid)
     {
-        if (empty($this->data['Image']['file']['tmp_name'])) {
-            $this->warning('没有上传文件');
-            return;
+        if ($this->data['Psector']['type'] === 'P') {
+            if (empty($this->data['Psector']['file']['tmp_name'])) {
+                $this->warning('没有上传文件');
+                return;
+            }
+            $d = $this->data;
+            $d['Psector']['src'] = $this->data['Psector']['file']['name'];
+            
+            if ($this->addPicture($pid)) {
+                $this->Psector->save($d);
+            }
+        } else {
+            $this->Psector->save($this->data);
         }
-        
+    }
+
+    private function addPicture ($pid)
+    {
+        if (empty($pid)) {
+            $this->warning("projectid（${pid}）为空");
+            return false;
+        }
         $imgPath = WWW_ROOT . 'img\\' . ProjectController::UPLOAD_IMAGE . '\\' .
-                 $this->data['Image']['file']['name'];
-        $d = [
-                'Image' => [
-                        'project_id' => $project_id,
-                        'filename' => $this->data['Image']['file']['name']
-                ]
-        ];
-        $this->Image->save($d);
-        
+                 $pid;
         if (! file_exists($imgPath)) {
-            copy($this->data['Image']['file']['tmp_name'], $imgPath);
+            if (! mkdir($imgPath, 0700)) {
+                $this->error("创建目录（" . $imgPath . "）失败。");
+                if (Configure::read('debug')) {
+                    die("创建目录（" . $imgPath . "）失败。");
+                } else {
+                    throw new InternalErrorException();
+                }
+            }
+        } else {
+            if (! is_dir($imgPath)) {
+                $this->error($imgPath . "存在且不是目录。");
+                if (Configure::read('debug')) {
+                    die($imgPath . "存在且不是目录。");
+                } else {
+                    throw new InternalErrorException();
+                }
+            }
+        }
+        $imgPath = $imgPath . '\\' . $this->data['Psector']['file']['name'];
+        if (file_exists($imgPath)) {
+            $this->warning("文件已经存在（" . $imgPath . "）");
+            return false;
+        } else {
+            if (copy($this->data['Psector']['file']['tmp_name'], $imgPath)) {
+                return true;
+            } else {
+                $this->warning(
+                        "拷贝文件（" . $this->data['Psector']['file']['name'] . "）失败");
+                return false;
+            }
         }
     }
 }

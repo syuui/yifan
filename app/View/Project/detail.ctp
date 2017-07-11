@@ -17,110 +17,27 @@ $this->Html->addCrumb('帮扶项目',
 $this->Html->addCrumb($page_title);
 $this->end();
 
-if (isset($isAdmin) && $isAdmin) {}
-
-$options = [];
-if (isset($isAdmin) && $isAdmin) {
-    $curl = $this->Html->url(
+if (! empty($data['Project']['title'])) {
+    echo $this->Html->tag('span', $data['Project']['title'], 
             [
-                    'controller' => 'project',
-                    'action' => 'edit',
-                    $id
+                    'class' => 'project_title'
             ]);
-    
-    if (empty($data['Project']['title'])) {
-        echo $this->Html->tag('span', Configure::read('MSG00010001'), 
-                [
-                        'class' => 'project_title',
-                        'onclick' => "mLayerShow('" . $curl . "');"
-                ]);
-    } else {
-        echo $this->Html->tag('span', $data['Project']['title'], 
-                [
-                        'class' => 'project_title',
-                        'onclick' => "mLayerShow('" . $curl . "');"
-                ]);
-        echo $this->Html->tag('span', 
-                date('Y-m-d', strtotime($data['Project']['updated'])), 
-                [
-                        'class' => 'project_date'
-                ]);
-    }
-    
-    // 编辑图片
-    $purl = $this->Html->url(
-            [
-                    'controller' => 'project',
-                    'action' => 'editpic',
-                    $id
-            ]);
-    if (! empty($data['Image'])) {
-        foreach ($data['Image'] as $p) {
-            $src = ProjectController::UPLOAD_IMAGE . '/' . $p['filename'];
-            echo $this->Html->div('piclist_pic', 
-                    $this->Html->image($src, 
-                            [
-                                    'alt' => $p['filename'],
-                                    'onclick' => "mLayerShow('" . $purl . "');"
-                            ]));
-        }
-    }
-    
-    echo $this->Html->link('编辑图片', '#', 
-            [
-                    'onclick' => "mLayerShow('" . $purl . "');",
-                    'class' => 'submit'
-            ]);
-} else {
-    if (! empty($data['Project']['title'])) {
-        echo $this->Html->tag('span', $data['Project']['title'], 
-                [
-                        'class' => 'project_title'
-                ]);
-        
-        echo $this->Html->tag('span', 
-                date('Y-m-d', strtotime($data['Project']['updated'])), 
-                [
-                        'class' => 'project_date'
-                ]);
-    }
-    if (! empty($data['Image'])) {
-        foreach ($data['Image'] as $p) {
-            $url = ProjectController::UPLOAD_IMAGE . '/' . $p['filename'];
-            echo $this->Html->div('piclist_pic', 
-                    $this->Html->image($url, 
-                            [
-                                    'alt' => $p['filename'],
-                                    'onclick' => "window.open('" . '/img/' .
-                                             ProjectController::UPLOAD_IMAGE .
-                                             '/' . $p['filename'] . "');"
-                            ]));
-        }
-    }
 }
+echo $this->Html->tag('span', 
+        date('Y-m-d', strtotime($data['Project']['updated'])), 
+        [
+                'class' => 'project_date'
+        ]);
 
-echo '<div class="ele_cnt_txt">';
-if (isset($isAdmin) && $isAdmin) {
-    if (empty($data['Project']['content'])) {
-        echo $this->Html->tag('span', Configure::read('MSG00010001'), 
-                [
-                        'onclick' => "mLayerShow('" . $curl . "');"
-                ]);
+$basepath = ProjectController::UPLOAD_IMAGE . '/' . $data['Project']['id'] . '/';
+foreach ($data['Psector'] as $s) {
+    if ($s['type'] === 'P') {
+        $divcnt = $this->Html->image($basepath . $s['src']) .
+                 $this->Html->div('project-sector-subject', $s['message']);
     } else {
-        echo $this->Html->tag('span', 
-                $this->Tag->nl2p($data['Project']['content']), 
-                [
-                        'onclick' => "mLayerShow('" . $curl . "');"
-                ]);
+        $divcnt = $this->Tag->nl2p($s['message']);
     }
-} else {
-    if (empty($data['Project']['content'])) {
-        echo $this->Html->tag('span', Configure::read('MSG00010001'));
-    } else {
-        echo $this->Html->tag('span', 
-                $this->Tag->nl2p($data['Project']['content']));
-    }
+    echo $this->Html->div('project-sector', $divcnt);
 }
-echo '</div>';
 
 ?>
