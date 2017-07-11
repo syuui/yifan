@@ -288,7 +288,8 @@ class ExpertController extends AppController
                         ]
                 ]);
         if ($npic <= 0) {
-            $imgPath = WWW_ROOT . 'img\\' . ExpertController::UPLOAD_IMAGE . '\\' .
+            $imgPath = WWW_ROOT . 'img' . DIRECTORY_SEPARATOR .
+                     ExpertController::UPLOAD_IMAGE . DIRECTORY_SEPARATOR .
                      $this->data['Variable']['value'];
             if (! unlink($imgPath)) {
                 $this->error('文件（' . $imgPath . '）删除失败', 
@@ -314,7 +315,8 @@ class ExpertController extends AppController
             return;
         }
         
-        $imgPath = WWW_ROOT . 'img\\' . ExpertController::UPLOAD_IMAGE . '\\' .
+        $imgPath = WWW_ROOT . 'img' . DIRECTORY_SEPARATOR .
+                 ExpertController::UPLOAD_IMAGE . DIRECTORY_SEPARATOR .
                  $this->data['Variable']['file']['name'];
         $d = [
                 'Variable' => [

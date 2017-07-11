@@ -307,8 +307,9 @@ class ProjectController extends AppController
             return;
         }
         if ($this->data['Psector']['type'] === 'P') {
-            $imgPath = WWW_ROOT . 'img\\' . ProjectController::UPLOAD_IMAGE .
-                     '\\' . $this->data['Psector']['project_id'] . '\\' .
+            $imgPath = WWW_ROOT . 'img' . DIRECTORY_SEPARATOR .
+                     ProjectController::UPLOAD_IMAGE . DIRECTORY_SEPARATOR .
+                     $this->data['Psector']['project_id'] . DIRECTORY_SEPARATOR .
                      $this->data['Psector']['src'];
             
             if (file_exists($imgPath)) {
@@ -353,8 +354,8 @@ class ProjectController extends AppController
             $this->warning("projectid（${pid}）为空");
             return false;
         }
-        $imgPath = WWW_ROOT . 'img\\' . ProjectController::UPLOAD_IMAGE . '\\' .
-                 $pid;
+        $imgPath = WWW_ROOT . 'img' . DIRECTORY_SEPARATOR .
+                 ProjectController::UPLOAD_IMAGE . DIRECTORY_SEPARATOR . $pid;
         if (! file_exists($imgPath)) {
             if (! mkdir($imgPath, 0700)) {
                 $this->error("创建目录（" . $imgPath . "）失败。");
@@ -364,7 +365,8 @@ class ProjectController extends AppController
                 $this->error($imgPath . "存在且不是目录。");
             }
         }
-        $imgPath = $imgPath . '\\' . $this->data['Psector']['file']['name'];
+        $imgPath = $imgPath . DIRECTORY_SEPARATOR .
+                 $this->data['Psector']['file']['name'];
         if (file_exists($imgPath)) {
             $this->warning("文件已经存在（" . $imgPath . "）");
             return false;

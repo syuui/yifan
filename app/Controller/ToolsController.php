@@ -65,9 +65,11 @@ class ToolsController extends AppController
         $this->set('type', $type);
         
         if ($type === 'L') {
-            $tar = WWW_ROOT . 'img\\' . Configure::read('logo_filename');
+            $tar = WWW_ROOT . 'img' . DIRECTORY_SEPARATOR .
+                     Configure::read('logo_filename');
         } else {
-            $tar = WWW_ROOT . 'img\\' . Configure::read('banner_filename');
+            $tar = WWW_ROOT . 'img' . DIRECTORY_SEPARATOR .
+                     Configure::read('banner_filename');
         }
         
         if (! empty($this->data['Variable']['bannerfile']['tmp_name'])) {

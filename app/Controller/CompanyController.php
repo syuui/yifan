@@ -246,10 +246,11 @@ class CompanyController extends AppController
             $d = ob_get_clean();
             $this->error("删除数据失败" . PHP_EOL . $d, 
                     AppController::CONTINUE_PROCESS);
-            $this->redirect([
-                    'controller' => 'company',
-                    'action' => 'index'
-            ]);
+            $this->redirect(
+                    [
+                            'controller' => 'company',
+                            'action' => 'index'
+                    ]);
         }
         $npic = $this->Variable->find('count', 
                 [
@@ -258,8 +259,9 @@ class CompanyController extends AppController
                         ]
                 ]);
         if ($npic <= 0) {
-            $imgPath = WWW_ROOT . 'img\\' . CompanyController::UPLOAD_IMAGE .
-                     '\\' . $this->data['Variable']['value'];
+            $imgPath = WWW_ROOT . 'img' . DIRECTORY_SEPARATOR .
+                     CompanyController::UPLOAD_IMAGE . DIRECTORY_SEPARATOR .
+                     $this->data['Variable']['value'];
             if (! unlink($imgPath)) {
                 $this->error('文件（' . $imgPath . '）删除失败', 
                         AppController::CONTINUE_PROCESS);
@@ -285,7 +287,8 @@ class CompanyController extends AppController
             return;
         }
         
-        $imgPath = WWW_ROOT . 'img\\' . CompanyController::UPLOAD_IMAGE . '\\' .
+        $imgPath = WWW_ROOT . 'img' . DIRECTORY_SEPARATOR .
+                 CompanyController::UPLOAD_IMAGE . DIRECTORY_SEPARATOR .
                  $this->data['Variable']['file']['name'];
         $d = [
                 'Variable' => [
