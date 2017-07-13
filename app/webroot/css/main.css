@@ -365,7 +365,8 @@ div.spliter {
 }
 
 #popup_win img {
-	width: 100%;
+	display: block;
+	width: 100px;
 }
 
 /* 主菜单 */

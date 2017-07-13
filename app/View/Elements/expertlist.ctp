@@ -30,7 +30,8 @@ if (count($data) == 0) {
     }
 }
 ?>
-            </div>
+<div class="see-more"><?php echo $this->Html->link('更多',['controller'=>'expert', 'action'=>'index']);?></div>
+			</div>
 		</div>
 	</div>
 	<div class="ele_ftr_l"></div>
